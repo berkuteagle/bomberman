@@ -1,11 +1,7 @@
-import Connection from './connection.js';
-import Level from './level.js';
+import Game from './game.js';
 
-const connection = new Connection();
-const level = new Level();
+const game = new Game();
 
-console.log(connection);
-console.log(level);
+console.log(game);
 
-window.con = connection;
-window.lvl = level;
+window.game = game;

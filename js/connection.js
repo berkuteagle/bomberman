@@ -1,22 +1,30 @@
-import { toBinaryUUID } from './utils.js';
+import EventsQueue from './eventsQueue.js';
 
 const _peer = Symbol('peer');
-const _peers = Symbol('peers');
-const _id = Symbol('id');
+const _events = Symbol('events');
+const _allowed = Symbol('allowed');
 
 export default class Connection {
     constructor() {
+        this[_events] = new EventsQueue();
         const peer = new Peer(null, {});
 
         this[_peer] = peer;
-        this[_peers] = {};
 
-        peer.on('open', id => this[_id] = id);
+        peer.on('open', id => {
+            this[_events].emmit({ event: 'open', id });
+        });
         peer.on('connection', connection => {
-            if (!this[_peers][connection.peer]) {
-                this[_peers][connection.peer] = connection;
+            if (this[_allowed] && !this[_allowed].includes(connection.peer)) {
+                connection.close();
+            } else {
+                this[_events].emmit({ event: 'connection', id: connection.peer });
             }
         });
+    }
+
+    get events() {
+        return this[_events];
     }
 
     get peer() {
@@ -24,18 +32,12 @@ export default class Connection {
     }
 
     get id() {
-        return this[_id];
+        return this[_peer] && this[_peer].id || null;
     }
 
-    get peers() {
-        return Object.keys(this[_peers]);
-    }
-
-    get binary() {
-        return this.peers.map(toBinaryUUID);
-    }
-
-    get binStr() {
-        return toBinaryUUID(this.id).map((i)=>i.toString(2).padStart(8, '0'));
+    freeze(uuids) {
+        if (!this[_allowed]) {
+            this[_allowed] = [...uuids];
+        }
     }
 }
