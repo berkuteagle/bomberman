@@ -1,33 +1,34 @@
 import { toBinaryUUID } from './utils.js';
 
-const p = Symbol('private');
+const _peer = Symbol('peer');
+const _peers = Symbol('peers');
+const _id = Symbol('id');
 
 export default class Connection {
-    constructor(peer = null) {
-        if (!peer) {
-            throw Error('peerjs instance required')
-        }
+    constructor() {
+        const peer = new Peer(null, {});
 
-        this[p] = {peer, peers: {}};
+        this[_peer] = peer;
+        this[_peers] = {};
 
-        this[p].peer.on('open', id => this[p].id = id);
-        this[p].peer.on('connection', connection => {
-            if (!this[p].peers[connection.peer]) {
-                this[p].peers[connection.peer] = connection;
+        peer.on('open', id => this[_id] = id);
+        peer.on('connection', connection => {
+            if (!this[_peers][connection.peer]) {
+                this[_peers][connection.peer] = connection;
             }
         });
     }
 
     get peer() {
-        return this[p].peer;
+        return this[_peer];
     }
 
     get id() {
-        return this[p].id;
+        return this[_id];
     }
 
     get peers() {
-        return Object.keys(this[p].peers);
+        return Object.keys(this[_peers]);
     }
 
     get binary() {

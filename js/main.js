@@ -1,8 +1,11 @@
 import Connection from './connection.js';
+import Level from './level.js';
 
-const peer = new Peer(null, {});
-const connection = new Connection(peer);
+const connection = new Connection();
+const level = new Level();
 
 console.log(connection);
+console.log(level);
 
 window.con = connection;
+window.lvl = level;
