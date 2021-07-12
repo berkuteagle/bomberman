@@ -21,6 +21,10 @@ export default class Player {
         return this[_number];
     }
 
+    get state() {
+        return this[_state];
+    }
+
     set state(newValue) {
         if (newValue === 'ready') {
             this[_state] = newValue;
