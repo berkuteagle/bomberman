@@ -13,6 +13,7 @@ const _events = Symbol('events');
 
 export default class Game {
     constructor() {
+        this[_connection] = new Connection();
         this[_level] = new Level();
         this[_events] = new EventsQueue();
         this[_players] = {};
@@ -39,14 +40,23 @@ export default class Game {
         return this[_state];
     }
 
+    get connection() {
+        return this[_connection];
+    }
+
     addPlayer(uuid) {
         if (!this[_players][uuid]) {
             this[_players][uuid] = new Player(uuid);
         }
     }
 
+    removePlayer(uuid) {
+        if (this[_players][uuid]) {
+            delete this[_players][uuid];
+        }
+    }
+
     async connect() {
-        this[_connection] = new Connection();
         for await (let event of this[_connection].events) {
             switch (event.event) {
                 case 'open':
@@ -57,17 +67,21 @@ export default class Game {
                 case 'connection':
                     this.addPlayer(event.id);
                     break;
+                case 'data':
+                    console.log(event);
+                    break;
+                case 'close':
+                    this.removePlayer(event.id);
+                    break;
             }
             this[_events].emmit(event);
         }
     }
 
     connectTo(uuid) {
-        const connection = this[_connection].peer.connect(uuid);
-        connection.on('open', () => {
-            this.addPlayer(uuid);
-            this[_events].emmit({event: 'connection', id: uuid});
-        })
+        if (this[_connection]) {
+            this[_connection].connect(uuid);
+        }
     }
 
     setReady() {

@@ -10,6 +10,7 @@ const ui = new Ui('.game', game);
             case 'open':
             case 'ready':
             case 'connection':
+            case 'close':
                 ui.drawPlayers(game.players);
                 ui.updateButtons();
         }
