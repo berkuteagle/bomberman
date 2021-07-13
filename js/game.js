@@ -56,6 +56,13 @@ export default class Game {
         }
     }
 
+    readyPlayer(uuid) {
+        if (this[_players][uuid] && this[_players][uuid].state !== 'ready') {
+            this[_players][uuid].state = 'ready';
+            this[_events].emmit({ event: 'ready', id: uuid });
+        }
+    }
+
     async connect() {
         for await (let event of this[_connection].events) {
             switch (event.event) {
@@ -69,6 +76,10 @@ export default class Game {
                     break;
                 case 'data':
                     console.log(event);
+                    if (event.data.data && event.data.data.startsWith('ready')) {
+                        const id = event.data.data.split(',')[1];
+                        this.readyPlayer(id);
+                    }
                     break;
                 case 'close':
                     this.removePlayer(event.id);
@@ -85,10 +96,7 @@ export default class Game {
     }
 
     setReady() {
-        if (this[_players][this[_id]]) {
-            this[_players][this[_id]].state = 'ready';
-            this[_events].emmit({ event: 'ready', id: this[_id] });
-        }
+        this[_connection].send('ready,' + this[_id]);
     }
 
     run() {
