@@ -62,10 +62,18 @@ export default class Game {
         }
     }
 
+    connectTo(uuid) {
+        const connection = this[_connection].peer.connect(uuid);
+        connection.on('open', () => {
+            this.addPlayer(uuid);
+            this[_events].emmit({event: 'connection', id: uuid});
+        })
+    }
+
     setReady() {
         if (this[_players][this[_id]]) {
             this[_players][this[_id]].state = 'ready';
-            this[_events].emmit({event: 'ready', id: this[_id]});
+            this[_events].emmit({ event: 'ready', id: this[_id] });
         }
     }
 

@@ -5,13 +5,21 @@ export default class Ui {
 
         this._rb = this._el.find('button.ready').button();
         this._cb = this._el.find('button.connect').button();
-        
-        this._rb.click(()=>{
+        this._cbt = this._el.find('button.connectTo').button();
+
+        this._rb.click(() => {
             this._game.setReady();
         });
 
-        this._cb.click(()=>{
+        this._cb.click(() => {
             this._game.connect();
+        });
+
+        this._cbt.click(() => {
+            const uuid = this._el.find('input.connectToInput')[0].value;
+            if (uuid) {
+                this._game.connectTo(uuid);
+            }
         });
     }
 
