@@ -72,6 +72,10 @@ export default class Game {
                     this[_state] = 'connected';
                     break;
                 case 'connection':
+                    const plKeys = Object.keys(this[_players]);
+                    if (plKeys.length) {
+                        this[_connection].send('sync,' + plKeys.join(','));
+                    }
                     this.addPlayer(event.id);
                     break;
                 case 'data':
@@ -79,6 +83,13 @@ export default class Game {
                     if (event.data.data && event.data.data.startsWith('ready')) {
                         const id = event.data.data.split(',')[1];
                         this.readyPlayer(id);
+                    } else if (event.data.data && event.data.data.startsWith('sync')) {
+                        const ids = event.data.data.split(',').slice(1);
+                        ids.forEach(uuid => {
+                            if (!this[_players][uuid]) {
+                                this.connectTo(uuid);
+                            }
+                        });
                     }
                     break;
                 case 'close':
