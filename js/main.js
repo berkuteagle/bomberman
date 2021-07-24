@@ -1,23 +1,30 @@
 import Game from './game.js';
-import Ui from './ui.js';
+
 import { vue } from './deps.js';
 import { players, connected } from './store.js';
 
 const game = new Game();
-const ui = new Ui('.game', game);
 
 const app = vue.createApp({
     template: '#app-template',
     setup() {
-
-        const counter = vue.ref(0);
         const connect = () => game.connect();
+        const ready = () => game.setReady();
+        const connectToPeer = () => {
+            if (connectTo.value) {
+                game.connectTo(connectTo.value);
+            }
+        };
+
+        const connectTo = vue.ref('');
 
         return {
+            connectTo,
+            connectToPeer,
             connected,
+            players,
             connect,
-            counter,
-            players
+            ready
         };
     }
 });
@@ -41,8 +48,4 @@ app.mount('#app');
     }
 })();
 
-console.log(game);
-console.log(ui);
-
 window.game = game;
-window.ui = ui;
