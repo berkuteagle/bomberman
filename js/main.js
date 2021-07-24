@@ -31,21 +31,4 @@ const app = vue.createApp({
 
 app.mount('#app');
 
-(async () => {
-    for await (let event of game.events) {
-        switch (event.event) {
-            case 'open':
-            case 'ready':
-            case 'connection':
-            case 'close':
-                players.value = game.players.map(pl => ({
-                    uuid: pl.uuid,
-                    state: pl.state,
-                    stateClass: pl.state === 'ready' ? 'bg-primary' : 'bg-secondary'
-                }));
-                connected.value = game.state === 'connected';
-        }
-    }
-})();
-
 window.game = game;

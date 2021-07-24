@@ -4,6 +4,8 @@ import Player from './player.js';
 import { toBinaryString } from './utils.js';
 import EventsQueue from './eventsQueue.js';
 
+import { players, connected } from './store.js';
+
 const _level = Symbol('level');
 const _players = Symbol('players');
 const _state = Symbol('state');
@@ -47,6 +49,12 @@ export default class Game {
     addPlayer(uuid) {
         if (!this[_players][uuid]) {
             this[_players][uuid] = new Player(uuid);
+
+            players.value = Object.values(this[_players]).map(pl => ({
+                uuid: pl.uuid,
+                state: pl.state,
+                stateClass: pl.state === 'ready' ? 'bg-primary' : 'bg-secondary'
+            }));
         }
     }
 
@@ -59,13 +67,17 @@ export default class Game {
     readyPlayer(uuid) {
         if (this[_players][uuid] && this[_players][uuid].state !== 'ready') {
             this[_players][uuid].state = 'ready';
-            this[_events].emmit({ event: 'ready', id: uuid });
+            this[_events].emmit({ name: 'ready', id: uuid });
         }
     }
 
     async connect() {
+        this[_id] = this[_connection].id;
+        this.addPlayer(this[_id]);
+        this[_state] = 'connected';
+        connected.value = true;
         for await (let event of this[_connection].events) {
-            switch (event.event) {
+            switch (event.name) {
                 case 'open':
                     this[_id] = event.id;
                     this.addPlayer(event.id);
