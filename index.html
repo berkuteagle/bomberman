@@ -11,13 +11,30 @@
 </head>
 
 <body>
-  <p class="lead p-3">WebRTC Bomberman</p>
+  <script type="text/html" id="app-template">
+    <div class="container">
+      <p class="p-3">
+        <h1>Booombers</h1>
+        <h2>WebRTC Game</h2>
+        <button type="button" class="btn btn-primary" :disabled="connected" @click="connect">Connect</button>
+      </p>
+      <p class="p-3">
+        <h3>Players:</h3>
+        <ul class="items list-unstyled">
+          <li v-for="pl in players" :key="pl.uuid">
+            <li>{{ pl.uuid }} <span class="badge" :class="pl.stateClass">{{ pl.state }}</span></li>
+          </li>
+        </ul>
+      </p>
+    </div>
+  </script>
+
+  <div id="app"></div>
 
   <div class="game" style="width: 800px;">
     <div class="container">
       <div class="row mb-3">
         <div class="col">
-          <button type="button" id="connect" class="btn btn-primary">Connect</button>
           <button type="button" id="ready" class="btn btn-primary">Ready</button>
         </div>
       </div>
@@ -28,12 +45,6 @@
         <div class="col-sm-10">
           <input id="connectToInput" class="form-control" type="text" placeholder="UUID">
         </div>
-      </div>
-      <div class="row mb-3">
-        <div class="header">Players:</div>
-        <ul class="items list-unstyled">
-    
-        </ul>
       </div>
     </div>
   </div>
