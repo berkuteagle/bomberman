@@ -3,7 +3,10 @@ import Game from './game.js';
 import { vue } from './deps.js';
 import { players, connected } from './store.js';
 
+import Booombers from '../game/booombers.js';
+
 const game = new Game();
+const booombers = new Booombers();
 
 const app = vue.createApp({
     template: '#app-template',
@@ -29,6 +32,7 @@ const app = vue.createApp({
     }
 });
 
-app.mount('#app');
+//app.mount('#app');
 
 window.game = game;
+window.booombers = booombers;
