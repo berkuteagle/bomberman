@@ -7,7 +7,11 @@ export default class Booombers extends Phaser.Game {
         const config = {
             type: Phaser.AUTO,
             width,
-            height
+            height,
+            scale: {
+                mode: Phaser.Scale.FIT,
+                autoCenter: Phaser.Scale.CENTER_BOTH
+            }
         }
 
         super(config);
