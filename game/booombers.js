@@ -5,9 +5,10 @@ export default class Booombers extends Phaser.Game {
     constructor(width = 800, height = 600) {
 
         const config = {
-            type: Phaser.AUTO,
+            type: Phaser.WEBGL,
             width,
             height,
+            parent: 'booombers',
             scale: {
                 mode: Phaser.Scale.FIT,
                 autoCenter: Phaser.Scale.CENTER_BOTH

@@ -6,7 +6,7 @@ export default class GameScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.setBaseURL('/game/');
+        this.load.setBaseURL('game/');
 
         this.load.image('TilesetInterior', 'assets/TilesetInterior.png');
         this.load.image('TilesetInteriorFloor', 'assets/TilesetInteriorFloor.png');
