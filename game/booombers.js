@@ -2,7 +2,7 @@ import MainScene from './scene/mainScene.js';
 import GameScene from './scene/gameScene.js';
 
 export default class Booombers extends Phaser.Game {
-    constructor(width = 800, height = 600) {
+    constructor(width = 480, height = 480) {
 
         const config = {
             type: Phaser.WEBGL,
@@ -12,7 +12,8 @@ export default class Booombers extends Phaser.Game {
             scale: {
                 mode: Phaser.Scale.FIT,
                 autoCenter: Phaser.Scale.CENTER_BOTH
-            }
+            },
+            backgroundColor: '#141b1b'
         }
 
         super(config);

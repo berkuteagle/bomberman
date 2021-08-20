@@ -21,8 +21,8 @@ export default class GameScene extends Phaser.Scene {
         const tilesInteriorFloor = map.addTilesetImage('TilesetInteriorFloor', 'TilesetInteriorFloor');
         const tilesDungeon = map.addTilesetImage('TilesetDungeon', 'TilesetDungeon');
 
-        map.createLayer('Floor', [tilesInteriorFloor]);
-        map.createLayer('Walls', [tilesInterior]);
-        map.createLayer('Stones', [tilesDungeon]);
+        map.createLayer('Floor', [tilesInteriorFloor], 40, 40);
+        map.createLayer('Walls', [tilesInterior], 40, 40);
+        map.createLayer('Stones', [tilesDungeon], 40, 40);
     }
 }
