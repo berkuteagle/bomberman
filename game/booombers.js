@@ -13,7 +13,13 @@ export default class Booombers extends Phaser.Game {
                 mode: Phaser.Scale.FIT,
                 autoCenter: Phaser.Scale.CENTER_BOTH
             },
-            backgroundColor: '#141b1b'
+            backgroundColor: '#141b1b',
+            physics: {
+                default: 'arcade',
+                arcade: {
+                    debug: false
+                }
+            }
         }
 
         super(config);
@@ -21,5 +27,9 @@ export default class Booombers extends Phaser.Game {
         this.scene.add('Main', new MainScene());
         this.scene.add('Game', new GameScene())
         this.scene.start('Game');
+    }
+
+    create() {
+        this.physics.startSystem(Phaser.Physics.ARCADE);
     }
 }
