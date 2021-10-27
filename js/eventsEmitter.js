@@ -27,7 +27,7 @@ export default class EventsEmitter {
     emmit(event) {
         for (const q of this[_events]) {
             const name = this[_names].get(q);
-            if (event.name === name && _all === name) {
+            if (event.name === name || _all === name) {
                 q.emmit(event);
             }
         }
