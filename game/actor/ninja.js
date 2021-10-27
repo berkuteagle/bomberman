@@ -2,14 +2,22 @@ export default class Ninja extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, texture, frame) {
         super(scene, x, y, texture, frame)
 
-        this._velocity = 80;
-        this._direction = null;
+        this.setDataEnabled();
+
+        this.setData({
+            velocity: 80,
+            acceleration: 100,
+            direction: null
+        });
 
         scene.add.existing(this);
         scene.physics.add.existing(this);
 
-        this.getBody().setCollideWorldBounds(true);
-        this.getBody().setSize(10, 10);
+        this.setCollideWorldBounds(true);
+        this.setCircle(5);
+        this.setOffset(3, 6);
+        this.setDrag(300, 300);
+        this.setMaxVelocity(this.getData('velocity'));
 
         this.anims.create({
             key: 'walk_d',
@@ -70,38 +78,40 @@ export default class Ninja extends Phaser.Physics.Arcade.Sprite {
         this.play('stop_d');
     }
 
-    _setVelocity(direction) {
+    _startWalking(direction) {
         switch (direction) {
             case 'l':
-                this.getBody().setVelocity(-this._velocity, 0);
+                this.setAcceleration(-this.getData('acceleration'), 0);
                 break;
             case 'r':
-                this.getBody().setVelocity(this._velocity, 0);
+                this.setAcceleration(this.getData('acceleration'), 0);
                 break;
             case 'u':
-                this.getBody().setVelocity(0, -this._velocity);
+                this.setAcceleration(0, -this.getData('acceleration'));
                 break;
             case 'd':
-                this.getBody().setVelocity(0, this._velocity);
+                this.setAcceleration(0, this.getData('acceleration'));
                 break;
-            default:
-                this.getBody().setVelocity(0);
         }
+        this.play('walk_' + direction, true);
+        this.setData('direction', direction);
+    }
+
+    _stopWalking() {
+        this.setAcceleration(0);
+        this.play('stop_' + this.getData('direction'));
+        this.setData('direction', null);
     }
 
     walk(direction) {
-        if (this._direction !== direction) {
-            this._setVelocity(direction);
-            this._direction = direction;
-            this.play('walk_' + direction, 8, true);
+        if (this.getData('direction') !== direction) {
+            this._startWalking(direction);
         }
     }
 
     stop(direction) {
-        if (this._direction === direction) {
-            this.getBody().setVelocity(0);
-            this.play('stop_' + this._direction);
-            this._direction = null;
+        if (this.getData('direction') === direction) {
+            this._stopWalking();
         }
     }
 

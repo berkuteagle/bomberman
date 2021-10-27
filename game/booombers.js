@@ -26,10 +26,11 @@ export default class Booombers extends Phaser.Game {
 
         this.scene.add('Main', new MainScene());
         this.scene.add('Game', new GameScene())
+        
         this.scene.start('Game');
     }
 
     create() {
-        this.physics.startSystem(Phaser.Physics.ARCADE);
+        
     }
 }

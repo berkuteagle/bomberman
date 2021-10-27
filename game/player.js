@@ -14,10 +14,42 @@ export default class Player extends Ninja {
         this.keyS.on('down', () => this.walk('d'));
         this.keyD.on('down', () => this.walk('r'));
 
-        this.keyW.on('up', () => this.stop('u'));
-        this.keyA.on('up', () => this.stop('l'));
-        this.keyS.on('up', () => this.stop('d'));
-        this.keyD.on('up', () => this.stop('r'));
+        this.keyW.on('up', () => {
+            if (this.keyA.isDown) {
+                this.walk('l');
+            } else if (this.keyD.isDown) {
+                this.walk('r');
+            } else {
+                this.stop('u');
+            }
+        });
+        this.keyA.on('up', () => {
+            if (this.keyW.isDown) {
+                this.walk('u');
+            } else if (this.keyS.isDown) {
+                this.walk('d');
+            } else {
+                this.stop('l');
+            }
+        });
+        this.keyS.on('up', () => {
+            if (this.keyA.isDown) {
+                this.walk('l');
+            } else if (this.keyD.isDown) {
+                this.walk('r');
+            } else {
+                this.stop('d');
+            }
+        });
+        this.keyD.on('up', () => {
+            if (this.keyW.isDown) {
+                this.walk('u');
+            } else if (this.keyS.isDown) {
+                this.walk('d');
+            } else {
+                this.stop('r');
+            }
+        });
     }
 
     update() {
