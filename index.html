@@ -5,51 +5,15 @@
   <meta charset="utf-8">
   <title>Bomberman</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 
 <body>
-  <script type="text/html" id="app-template">
-    <div class="container">
-      <p class="p-3">
-        <h1>Booombers</h1>
-        <h2>WebRTC Game</h2>
-        <button type="button" class="btn btn-primary me-2" :disabled="connected" @click="connect">Connect</button>
-        <button type="button" class="btn btn-primary me-2" @click="ready">Ready</button>
-      </p>
-      <p class="p-3">
-        <form>
-        <div class="form-group row">
-          <button type="button" class="btn btn-primary col-sm-2" @click="connectToPeer">Connect to</button>
-          <div class="col-sm-10">
-            <input class="form-control" type="text" placeholder="UUID" v-model="connectTo">
-          </div>
-        </div>
-        </form>
-      </p>
-      <p class="p-3">
-        <h3>Players:</h3>
-        <ul class="items list-unstyled">
-          <li v-for="pl in players" :key="pl.uuid">
-            <li>{{ pl.uuid }} <span class="badge" :class="pl.stateClass">{{ pl.state }}</span></li>
-          </li>
-        </ul>
-      </p>
-    </div>
-  </script>
-
-  <div id="app"></div>
   <div id="booombers"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/peerjs@1.3.2/dist/peerjs.min.js" integrity="sha256-A3e36GUv/TuYBaCGPA2Wi9O6Z3EYUo5SfekcFy/0sWo=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.18.0/js/md5.min.js"
     integrity="sha512-Hmp6qDy9imQmd15Ds1WQJ3uoyGCUz5myyr5ijainC1z+tP7wuXcze5ZZR3dF7+rkRALfNy7jcfgS5hH8wJ/2dQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-    crossorigin="anonymous"></script>
   <script src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser-arcade-physics.min.js"></script>
 
   <script src="js/main.js" type="module"></script>
