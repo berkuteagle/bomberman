@@ -1,41 +1,37 @@
-const _uuid = Symbol('uuid');
-const _number = Symbol('number');
-const _state = Symbol('state');
-
 export default class Player {
     constructor(uuid) {
-        this[_uuid] = uuid;
-        this[_number] = null;
-        this[_state] = 'new';
+        this.#uuid = uuid;
+        this.#number = null;
+        this.#state = 'new';
         this.row = 1;
         this.col = 1;
     }
 
     set number(newValue) {
-        if (this[_number] === null) {
-            this[_number] = newValue;
+        if (this.#number === null) {
+            this.#number = newValue;
         }
     }
 
     get number() {
-        return this[_number];
+        return this.#number;
     }
 
     get state() {
-        return this[_state];
+        return this.#state;
     }
 
     set state(newValue) {
         if (newValue === 'ready') {
-            this[_state] = newValue;
+            this.#state = newValue;
         }
     }
 
     get ready() {
-        return this[_state] === 'ready';
+        return this.#state === 'ready';
     }
 
     get uuid() {
-        return this[_uuid];
+        return this.#uuid;
     }
 }

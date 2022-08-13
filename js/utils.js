@@ -8,7 +8,7 @@ export function toBinaryUUID(uuid) {
 }
 
 export function toBinaryString(uuid) {
-    return toBinaryUUID(uuid).map((i) => i.toString(2).padStart(8, '0')).join();
+    return toBinaryUUID(uuid).map(i => i.toString(2).padStart(8, '0')).join();
 }
 
 export function argGuard(message) {

@@ -1,26 +1,23 @@
-const _resolver = Symbol('resolver');
-const _buffer = Symbol('buffer');
-
 export default class EventsQueue {
     constructor() {
-        this[_buffer] = [];
+        this.#buffer = [];
     }
 
     async *[Symbol.asyncIterator]() {
         while (true) {
-            if (this[_buffer].length) {
-                yield this[_buffer].shift();
+            if (this.#buffer.length) {
+                yield this.#buffer.shift();
             }
-            const event = await new Promise(resolve => { this[_resolver] = resolve; });
+            const event = await new Promise(resolve => { this.#resolver = resolve; });
             yield event;
         }
     }
 
     emmit(event) {
-        if (this[_resolver]) {
-            this[_resolver](event);
+        if (this.#resolver) {
+            this.#resolver(event);
         } else {
-            this[_buffer].push(event);
+            this.#buffer.push(event);
         }
     }
 }
