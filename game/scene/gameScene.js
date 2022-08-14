@@ -1,4 +1,5 @@
 import Player from '../player.js';
+import { KeyboardPlayerControl } from '../player_control.js';
 
 export default class GameScene extends Phaser.Scene {
     constructor() {
@@ -42,6 +43,8 @@ export default class GameScene extends Phaser.Scene {
         stoneLayer.setCollision(739);
 
         this.player = new Player(this, 64, 64);
+        this.player_control = new KeyboardPlayerControl(this.player, this);
+        
         this.physics.add.collider(this.player, wallsLayer);
         this.physics.add.collider(this.player, stoneLayer);
     }

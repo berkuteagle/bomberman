@@ -2,6 +2,9 @@ import EventsEmitter from '../eventsEmitter.js';
 import { argGuard } from '../utils.js';
 
 export default class Node extends EventsEmitter {
+
+    #peer;
+
     constructor(options = {}) {
         super();
 

@@ -1,8 +1,11 @@
 export default class Player {
+
+    #uuid;
+    #number = null;
+    #state = 'new';
+
     constructor(uuid) {
         this.#uuid = uuid;
-        this.#number = null;
-        this.#state = 'new';
         this.row = 1;
         this.col = 1;
     }

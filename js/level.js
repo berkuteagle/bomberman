@@ -15,10 +15,12 @@ function getIdx(row, col, width) {
 }
 
 export default class Level {
-    constructor() {
-        this.#height = 13;
-        this.#width = 31;
 
+    #height = 13;
+    #width = 31;
+    #state;
+    
+    constructor() {
         this.#state = Array(this.#height * this.#width).fill(0);
         this.clear();
     }

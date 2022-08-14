@@ -1,67 +1,109 @@
-const _peer = Symbol('peer');
-const _notify = Symbol('notify');
-const _init = Symbol('init');
+const MSG_SEPARATOR = '@@';
+const DATA_HEADER = '#D#';
+const SERVICE_HEADER = '#S#';
+const PING_MSG = '#PING#';
+const PONG_MSG = '#PONG#';
+
+function makeMessage(data, type) {
+    switch (type) {
+        case 'data': return DATA_HEADER + MSG_SEPARATOR + JSON.stringify(data);
+        case 'service': return SERVICE_HEADER + MSG_SEPARATOR + data;
+        default:
+            return PING_HEADER;
+    }
+}
 
 export default class Transport extends EventTarget {
 
+    #peer = null;
+
     start() {
-        if (this[_peer] && !this[_peer].destroyed) {
-            if (this[_peer].disconnected) {
-                this[_peer].reconnect();
+        if (this.#peer && !this.#peer.destroyed) {
+            if (this.#peer.disconnected) {
+                this.#peer.reconnect();
             }
         } else {
-            this[_init]();
+            this.#init();
         }
     }
 
     stop() {
-        if (this[_peer] && !this[_peer].disconnected && !this[_peer].destroyed) {
-            this[_peer].disconnect();
+        if (this.#peer && !this.#peer.disconnected && !this.#peer.destroyed) {
+            this.#peer.disconnect();
         }
     }
 
-    [_init]() {
-        this[_peer] = new Peer();
-        this[_peer].on('open', id => {
-            this[_notify]('start', id);
+    #init() {
+        this.#peer = new Peer();
+        this.#peer.on('open', id => {
+            this.#notify('start', id);
         });
-        this[_peer].on('connection', connection => {
+        this.#peer.on('connection', connection => {
             connection.on('open', () => {
-                this[_notify]('connect', connection.id);
+                this.#notify('connect', connection.id);
 
                 connection.on('data', data => {
-                    this[_notify]('message', { id: connection.id, message: data });
+                    this.#on_data(connection.id, data);
                 });
                 connection.on('close', () => {
-                    this[_notify]('disconnect', connection.id);
+                    this.#notify('disconnect', connection.id);
                 })
             });
         });
     }
 
-    [_notify](name, detail) {
+    /**
+     * 
+     * @param {String} uuid 
+     * @param {String} data 
+     */
+    #on_data(uuid, data) {
+        if (data === PING_MSG) {
+            this.#send(uuid, PONG_MSG);
+        } else if (data.startsWith(SERVICE_HEADER)) {
+            const cmd = data.split(MSG_SEPARATOR)[1];
+            console.log(cmd);
+        } else if (data.startsWith(DATA_HEADER)) {
+            const msg = data.split(MSG_SEPARATOR)[1] || '';
+            let msg_data;
+            try {
+                msg_data = JSON.parse(msg);
+            } catch {
+                msg_data = '';
+            }
+            this.#notify('message', { id: uuid, message: msg_data });
+        }
+
+    }
+
+    #notify(name, detail) {
         this.dispatchEvent(new CustomEvent(name, { detail }));
     }
 
     broadcast(message) {
-        for (let peer of this[_peer].connections) {
-            peer.send(message);
+        const msg = makeMessage(message, 'data');
+        for (let peer of this.#peer.connections) {
+            peer.send(msg);
         }
     }
 
     send(uuid, message) {
-        const peer = this[_peer].connections[uuid];
+        this.#send(uuid, makeMessage(message, 'data'));
+    }
+
+    #send(uuid, data) {
+        const peer = this.#peer.connections[uuid];
         if (peer) {
-            peer.send(message);
+            peer.send(data);
         }
     }
 
     connect(uuid) {
-        this[_peer].connect(uuid);
+        this.#peer.connect(uuid);
     }
 
     disconnect(uuid) {
-        const peer = this[_peer].connections[uuid];
+        const peer = this.#peer.connections[uuid];
         if (peer) {
             peer.close();
         }

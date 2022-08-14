@@ -1,7 +1,7 @@
 export default class EventsQueue {
-    constructor() {
-        this.#buffer = [];
-    }
+    
+    #buffer = [];
+    #resolver;
 
     async *[Symbol.asyncIterator]() {
         while (true) {
