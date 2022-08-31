@@ -1,17 +1,18 @@
-const _network = Symbol('network');
-const _buffer = Symbol('buffer');
-const _transport = Symbol('transport');
-const _uuid = Symbol('uuid');
-const _handlers = Symbol('handlers');
+import Transport from './transport.js';
 
 export default class Node {
-    constructor(transport) {
-        this[_transport] = transport;
 
-        this[_network] = new Set();
-        this[_buffer] = new Map();
+    #transport = null;
+    #network = null;
+    #buffer = null;
+    #uuid = null;
+    #handlers = null;
 
-        this[_handlers] = {
+    constructor() {
+        this.#transport = new Transport();
+        this.#network = new Set();
+        this.#buffer = new Map();
+        this.#handlers = {
             connect: e => this._onConnect(e),
             disconnect: e => this._onDisconnect(e),
             message: e => this._onMessage(e),
@@ -20,27 +21,35 @@ export default class Node {
     }
 
     start() {
-        this[_transport].addEventListener('connect', this[_handlers].connect);
-        this[_transport].addEventListener('disconnect', this[_handlers].disconnect);
-        this[_transport].addEventListener('message', this[_handlers].message);
-        this[_transport].addEventListener('start', this[_handlers].start);
-        this[_transport].start();
+        this.#transport.addEventListener('connect', this.#handlers.connect);
+        this.#transport.addEventListener('disconnect', this.#handlers.disconnect);
+        this.#transport.addEventListener('message', this.#handlers.message);
+        this.#transport.addEventListener('start', this.#handlers.start);
+        this.#transport.start();
     }
 
     stop() {
-        this[_transport].removeEventListener('connect', this[_handlers].connect);
-        this[_transport].removeEventListener('disconnect', this[_handlers].disconnect);
-        this[_transport].removeEventListener('message', this[_handlers].message);
-        this[_transport].removeEventListener('start', this[_handlers].start);
-        this[_transport].stop();
+        this.#transport.removeEventListener('connect', this.#handlers.connect);
+        this.#transport.removeEventListener('disconnect', this.#handlers.disconnect);
+        this.#transport.removeEventListener('message', this.#handlers.message);
+        this.#transport.removeEventListener('start', this.#handlers.start);
+        this.#transport.stop();
+    }
+
+    connect(uuid) {
+        this.#transport.connect(uuid);
+    }
+
+    disconnect(uuid) {
+        this.#transport.disconnect(uuid);
     }
 
     _onConnect(event) {
-        this[_network].add(event.detail);
+        this.#network.add(event.detail);
     }
 
     _onDisconnect(event) {
-        this[_network].delete(event.detail);
+        this.#network.delete(event.detail);
     }
 
     _onMessage(event) {
@@ -48,10 +57,10 @@ export default class Node {
     }
 
     _onStart(event) {
-        this[_uuid] = event.detail;
+        this.#uuid = event.detail;
     }
 
     get uuid() {
-        return this[_uuid];
+        return this.#uuid;
     }
 }

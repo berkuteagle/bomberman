@@ -39,16 +39,20 @@ export default class Transport extends EventTarget {
             this.#notify('start', id);
         });
         this.#peer.on('connection', connection => {
-            connection.on('open', () => {
-                this.#notify('connect', connection.id);
+            this.#subscribe(connection);
+        });
+    }
+
+    #subscribe(connection) {
+        connection.on('open', () => {
+            this.#notify('connect', connection.peer);
 
                 connection.on('data', data => {
-                    this.#on_data(connection.id, data);
+                    this.#on_data(connection.peer, data);
                 });
                 connection.on('close', () => {
-                    this.#notify('disconnect', connection.id);
+                    this.#notify('disconnect', connection.peer);
                 })
-            });
         });
     }
 
@@ -99,7 +103,7 @@ export default class Transport extends EventTarget {
     }
 
     connect(uuid) {
-        this.#peer.connect(uuid);
+        this.#subscribe(this.#peer.connect(uuid));
     }
 
     disconnect(uuid) {
