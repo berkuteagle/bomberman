@@ -1,7 +1,12 @@
+import Player from './player.js';
+
 export default class PlayerControl {
 
     #player;
 
+    /**
+     * @param {Player} player 
+     */
     constructor(player) {
         this.#player = player;
     }
@@ -9,64 +14,48 @@ export default class PlayerControl {
     get player() {
         return this.#player;
     }
+
+    update() {
+        throw new Error('method "update" must be implemented');
+    }
 }
 
 export class KeyboardPlayerControl extends PlayerControl {
 
-    #keyW;
-    #keyA;
-    #keyS;
-    #keyD;
+    #cursors;
 
     constructor(player, scene) {
         super(player);
 
-        this.#keyW = scene.input.keyboard.addKey('W');
-        this.#keyA = scene.input.keyboard.addKey('A');
-        this.#keyS = scene.input.keyboard.addKey('S');
-        this.#keyD = scene.input.keyboard.addKey('D');
+        this.#cursors = scene.input.keyboard.addKeys({
+            up: Phaser.Input.Keyboard.KeyCodes.W,
+            down: Phaser.Input.Keyboard.KeyCodes.S,
+            left: Phaser.Input.Keyboard.KeyCodes.A,
+            right: Phaser.Input.Keyboard.KeyCodes.D
+        });
+    }
 
-        this.#keyW.on('down', () => this.player.walk('u'));
-        this.#keyA.on('down', () => this.player.walk('l'));
-        this.#keyS.on('down', () => this.player.walk('d'));
-        this.#keyD.on('down', () => this.player.walk('r'));
-
-        this.#keyW.on('up', () => {
-            if (this.#keyA.isDown) {
-                this.player.walk('l');
-            } else if (this.#keyD.isDown) {
-                this.player.walk('r');
-            } else {
-                this.player.stop('u');
-            }
-        });
-        this.#keyA.on('up', () => {
-            if (this.#keyW.isDown) {
-                this.player.walk('u');
-            } else if (this.#keyS.isDown) {
-                this.player.walk('d');
-            } else {
-                this.player.stop('l');
-            }
-        });
-        this.#keyS.on('up', () => {
-            if (this.#keyA.isDown) {
-                this.player.walk('l');
-            } else if (this.#keyD.isDown) {
-                this.player.walk('r');
-            } else {
-                this.player.stop('d');
-            }
-        });
-        this.#keyD.on('up', () => {
-            if (this.#keyW.isDown) {
-                this.player.walk('u');
-            } else if (this.#keyS.isDown) {
-                this.player.walk('d');
-            } else {
-                this.player.stop('r');
-            }
-        });
+    update() {
+        if (this.#cursors.left.isDown && !this.#cursors.right.isDown) {
+            this.player.walk('l');
+        } else if (this.#cursors.right.isDown && !this.#cursors.left.isDown) {
+            this.player.walk('r');
+        } else {
+            this.player.stop('h');
+        }
+        if (this.#cursors.up.isDown && !this.#cursors.down.isDown) {
+            this.player.walk('u');
+        } else if (this.#cursors.down.isDown && !this.#cursors.up.isDown) {
+            this.player.walk('d');
+        } else {
+            this.player.stop('v');
+        }
+        if (!this.#cursors.left.isDown &&
+            !this.#cursors.right.isDown &&
+            !this.#cursors.up.isDown &&
+            !this.#cursors.down.isDown) {
+            this.player.stop();
+        }
     }
 }
 

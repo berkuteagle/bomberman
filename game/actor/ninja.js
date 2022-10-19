@@ -7,7 +7,7 @@ export default class Ninja extends Phaser.Physics.Arcade.Sprite {
         this.setData({
             velocity: 80,
             acceleration: 100,
-            direction: null
+            direction: 'd'
         });
 
         scene.add.existing(this);
@@ -78,40 +78,38 @@ export default class Ninja extends Phaser.Physics.Arcade.Sprite {
         this.play('stop_d');
     }
 
-    _startWalking(direction) {
+    walk(direction) {
+        const currentDirection = this.getData('direction');
+        const acceleration = this.getData('acceleration');
         switch (direction) {
             case 'l':
-                this.setAcceleration(-this.getData('acceleration'), 0);
+                this.setAccelerationX(-acceleration * (currentDirection === 'r' ? 3 : 1));
                 break;
             case 'r':
-                this.setAcceleration(this.getData('acceleration'), 0);
+                this.setAccelerationX(acceleration * (currentDirection === 'l' ? 3 : 1));
                 break;
             case 'u':
-                this.setAcceleration(0, -this.getData('acceleration'));
+                this.setAccelerationY(-acceleration * (currentDirection === 'd' ? 3 : 1));
                 break;
             case 'd':
-                this.setAcceleration(0, this.getData('acceleration'));
+                this.setAccelerationY(acceleration * (currentDirection === 'u' ? 3 : 1));
                 break;
         }
         this.play('walk_' + direction, true);
         this.setData('direction', direction);
     }
 
-    _stopWalking() {
-        this.setAcceleration(0);
-        this.play('stop_' + this.getData('direction'));
-        this.setData('direction', null);
-    }
-
-    walk(direction) {
-        if (this.getData('direction') !== direction) {
-            this._startWalking(direction);
-        }
-    }
-
     stop(direction) {
-        if (this.getData('direction') === direction) {
-            this._stopWalking();
+        switch (direction) {
+            case 'h':
+                this.setAccelerationX(0);
+                break;
+            case 'v':
+                this.setAccelerationY(0);
+                break;
+            default:
+                this.setAcceleration(0, 0);
+                this.play('stop_' + this.getData('direction'));
         }
     }
 
