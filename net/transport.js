@@ -3,13 +3,20 @@ const DATA_HEADER = '#D#';
 const SERVICE_HEADER = '#S#';
 const PING_MSG = '#PING#';
 const PONG_MSG = '#PONG#';
+const SERVICE_MSG_TYPE = 'service';
+const DATA_MSG_TYPE = 'data';
 
+/**
+ * @param {string} data 
+ * @param {SERVICE_MSG_TYPE|DATA_MSG_TYPE} type 
+ * @returns string
+ */
 function makeMessage(data, type) {
     switch (type) {
-        case 'data': return DATA_HEADER + MSG_SEPARATOR + JSON.stringify(data);
-        case 'service': return SERVICE_HEADER + MSG_SEPARATOR + data;
+        case DATA_MSG_TYPE: return DATA_HEADER + MSG_SEPARATOR + JSON.stringify(data);
+        case SERVICE_MSG_TYPE: return SERVICE_HEADER + MSG_SEPARATOR + data;
         default:
-            return PING_HEADER;
+            throw new Error('Message type must be defined.');
     }
 }
 
@@ -47,12 +54,12 @@ export default class Transport extends EventTarget {
         connection.on('open', () => {
             this.#notify('connect', connection.peer);
 
-                connection.on('data', data => {
-                    this.#on_data(connection.peer, data);
-                });
-                connection.on('close', () => {
-                    this.#notify('disconnect', connection.peer);
-                })
+            connection.on('data', data => {
+                this.#on_data(connection.peer, data);
+            });
+            connection.on('close', () => {
+                this.#notify('disconnect', connection.peer);
+            })
         });
     }
 
@@ -62,11 +69,13 @@ export default class Transport extends EventTarget {
      * @param {String} data 
      */
     #on_data(uuid, data) {
-        if (data === PING_MSG) {
-            this.#send(uuid, PONG_MSG);
-        } else if (data.startsWith(SERVICE_HEADER)) {
+        if (data.startsWith(SERVICE_HEADER)) {
             const cmd = data.split(MSG_SEPARATOR)[1];
-            console.log(cmd);
+            if (cmd === PING_MSG) {
+                this.#send(uuid, makeMessage(PONG_MSG, SERVICE_MSG_TYPE));
+            } else {
+                console.log(cmd);
+            }
         } else if (data.startsWith(DATA_HEADER)) {
             const msg = data.split(MSG_SEPARATOR)[1] || '';
             let msg_data;
@@ -76,6 +85,8 @@ export default class Transport extends EventTarget {
                 msg_data = '';
             }
             this.#notify('message', { id: uuid, message: msg_data });
+        } else {
+            throw new Error('Unknown message type');
         }
 
     }
@@ -85,14 +96,14 @@ export default class Transport extends EventTarget {
     }
 
     broadcast(message) {
-        const msg = makeMessage(message, 'data');
+        const msg = makeMessage(message, DATA_MSG_TYPE);
         for (let peer of this.#peer.connections) {
             peer.send(msg);
         }
     }
 
     send(uuid, message) {
-        this.#send(uuid, makeMessage(message, 'data'));
+        this.#send(uuid, makeMessage(message, DATA_MSG_TYPE));
     }
 
     #send(uuid, data) {
@@ -100,6 +111,10 @@ export default class Transport extends EventTarget {
         if (peer) {
             peer.send(data);
         }
+    }
+
+    ping(uuid) {
+        this.#send(uuid, makeMessage(PING_MSG, SERVICE_MSG_TYPE));
     }
 
     connect(uuid) {
