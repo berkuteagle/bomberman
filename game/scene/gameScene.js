@@ -29,6 +29,8 @@ export default class GameScene extends Phaser.Scene {
     }
 
     create() {
+        this.scene.run('UI');
+
         const map = this.make.tilemap({ key: 'map' });
         const tilesInterior = map.addTilesetImage('TilesetInterior', 'TilesetInterior');
         const tilesInteriorFloor = map.addTilesetImage('TilesetInteriorFloor', 'TilesetInteriorFloor');
@@ -39,18 +41,30 @@ export default class GameScene extends Phaser.Scene {
         const wallsLayer = map.createLayer('Walls', [tilesInterior], 40, 40);
         const stoneLayer = map.createLayer('Stones', [tilesDungeon], 40, 40);
 
-        wallsLayer.setCollision([162, 166, 163, 184, 210, 244, 215, 179, 291, 262, 279, 195, 245, 276, 273, 274, 246, 278, 198, 280, 275, 261, 193, 310, 307, 311 ]);
+        wallsLayer.setCollision([162, 166, 163, 184, 210, 244, 215, 179, 291, 262, 279, 195, 245, 276, 273, 274, 246, 278, 198, 280, 275, 261, 193, 310, 307, 311]);
         stoneLayer.setCollision(739);
 
         this.player = new Player(this, 64, 64);
         this.player_control = new KeyboardPlayerControl(this.player, this);
-        
+
         this.physics.add.collider(this.player, wallsLayer);
         this.physics.add.collider(this.player, stoneLayer);
+
+        this.sys.events.on('wake', this.wake, this);
     }
 
     update() {
         this.player.update();
         this.player_control.update();
+        super.update();
+    }
+
+    openMenu() {
+        this.scene.sleep('UI');
+        this.scene.switch('Menu');
+    }
+
+    wake() {
+        this.scene.run('UI');
     }
 }

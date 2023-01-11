@@ -1,5 +1,7 @@
-import MainScene from './scene/mainScene.js';
-import GameScene from './scene/gameScene.js';
+import GameScene from './scene/GameScene.js';
+import UIScene from './scene/UIScene.js';
+import BootScene from './scene/BootScene.js';
+import MenuScene from './scene/MenuScene.js';
 
 export default class Booombers extends Phaser.Game {
     constructor(width = 480, height = 480) {
@@ -13,6 +15,7 @@ export default class Booombers extends Phaser.Game {
                 mode: Phaser.Scale.FIT,
                 autoCenter: Phaser.Scale.CENTER_BOTH
             },
+            scene: [BootScene, GameScene, MenuScene, UIScene],
             backgroundColor: '#141b1b',
             physics: {
                 default: 'arcade',
@@ -23,14 +26,5 @@ export default class Booombers extends Phaser.Game {
         }
 
         super(config);
-
-        this.scene.add('Main', new MainScene());
-        this.scene.add('Game', new GameScene())
-        
-        this.scene.start('Game');
-    }
-
-    create() {
-        
     }
 }
