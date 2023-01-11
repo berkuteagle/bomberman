@@ -29,7 +29,12 @@ export default class GameScene extends Phaser.Scene {
     }
 
     create() {
-        this.scene.run('UI');
+        this.scene.launch('UI');
+
+        this.data.set({
+            level: 0,
+            lives: 3
+        });
 
         const map = this.make.tilemap({ key: 'map' });
         const tilesInterior = map.addTilesetImage('TilesetInterior', 'TilesetInterior');
