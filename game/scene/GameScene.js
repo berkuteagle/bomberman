@@ -1,5 +1,7 @@
 import Player from '../player.js';
 import { KeyboardPlayerControl } from '../player_control.js';
+import BombsGroup from '../object/BombsGroup.js';
+import Bomb from '../object/Bomb.js';
 
 export default class GameScene extends Phaser.Scene {
     constructor() {
@@ -51,6 +53,13 @@ export default class GameScene extends Phaser.Scene {
 
         this.player = new Player(this, 64, 64);
         this.player_control = new KeyboardPlayerControl(this.player, this);
+
+        //todo
+        this.opponents = null;
+        //todo
+        this.enemies = null;
+        
+        this.bombs_group = new BombsGroup(this, [new Bomb(this, 3000)]);
 
         this.physics.add.collider(this.player, wallsLayer);
         this.physics.add.collider(this.player, stoneLayer);
