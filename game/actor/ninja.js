@@ -5,19 +5,17 @@ export default class Ninja extends Phaser.Physics.Arcade.Sprite {
         this.setDataEnabled();
 
         this.setData({
-            velocity: 80,
-            acceleration: 100,
+            velocity: 60,
             direction: 'd'
         });
 
         scene.add.existing(this);
         scene.physics.add.existing(this);
-
         this.setCollideWorldBounds(true);
+
         this.setCircle(5);
         this.setOffset(3, 6);
         this.setDrag(300, 300);
-        this.setMaxVelocity(this.getData('velocity'));
 
         this.anims.create({
             key: 'walk_d',
@@ -79,20 +77,19 @@ export default class Ninja extends Phaser.Physics.Arcade.Sprite {
     }
 
     walk(direction) {
-        const currentDirection = this.getData('direction');
-        const acceleration = this.getData('acceleration');
+        const currentVelocity = this.getData('velocity');
         switch (direction) {
             case 'l':
-                this.setAccelerationX(-acceleration * (currentDirection === 'r' ? 3 : 1));
+                this.setVelocityX(-currentVelocity);
                 break;
             case 'r':
-                this.setAccelerationX(acceleration * (currentDirection === 'l' ? 3 : 1));
+                this.setVelocityX(currentVelocity);
                 break;
             case 'u':
-                this.setAccelerationY(-acceleration * (currentDirection === 'd' ? 3 : 1));
+                this.setVelocityY(-currentVelocity);
                 break;
             case 'd':
-                this.setAccelerationY(acceleration * (currentDirection === 'u' ? 3 : 1));
+                this.setVelocityY(currentVelocity);
                 break;
         }
         this.play('walk_' + direction, true);
@@ -102,13 +99,13 @@ export default class Ninja extends Phaser.Physics.Arcade.Sprite {
     stop(direction) {
         switch (direction) {
             case 'h':
-                this.setAccelerationX(0);
+                this.setVelocityX(0);
                 break;
             case 'v':
-                this.setAccelerationY(0);
+                this.setVelocityY(0);
                 break;
             default:
-                this.setAcceleration(0, 0);
+                this.setVelocity(0, 0);
                 this.play('stop_' + this.getData('direction'));
         }
     }
