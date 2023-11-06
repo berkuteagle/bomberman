@@ -1,3 +1,5 @@
+import { Peer } from 'https://cdn.jsdelivr.net/npm/peerjs/+esm';
+
 const MSG_SEPARATOR = '@@';
 const DATA_HEADER = '#D#';
 const SERVICE_HEADER = '#S#';

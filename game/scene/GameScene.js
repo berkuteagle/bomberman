@@ -1,13 +1,32 @@
-import Player from '../player.js';
-import { KeyboardPlayerControl } from '../player_control.js';
-import BombsGroup from '../object/BombsGroup.js';
-import Bomb from '../object/Bomb.js';
+import { createWorld } from 'https://cdn.jsdelivr.net/npm/bitecs/+esm';
+import { Scene } from 'https://cdn.jsdelivr.net/npm/phaser/+esm';
 
-export default class GameScene extends Phaser.Scene {
+
+import { createArcadeSpriteSystem } from '../system/ArcadeSprite.js';
+import { createBombSystem } from '../system/Bomb.js';
+import { createPlayerSystem } from '../system/Player.js';
+
+import { createBomb } from '../entity/Bomb.js';
+import { createPlayer } from '../entity/Player.js';
+
+// import Player from '../player.js';
+// import { KeyboardPlayerControl } from '../player_control.js';
+
+const TEXTURES = [
+    'GreenNinja',
+    'Bomb'
+];
+
+export default class GameScene extends Scene {
+
+    #world = null;
+    #bombSystem = null;
+    #spriteSystem = null;
+    #playerSystem = null;
+    #cursors = null;
+
     constructor() {
-        super({
-            key: 'Game'
-        });
+        super('Game');
     }
 
     preload() {
@@ -17,7 +36,6 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('TilesetInteriorFloor', 'assets/TilesetInteriorFloor.png');
         this.load.image('TilesetDungeon', 'assets/TilesetDungeon.png');
 
-        this.load.image('GreenNinjaSprite', 'assets/GreenNinjaSpriteSheet.png');
         this.load.spritesheet(
             'GreenNinja',
             'assets/GreenNinjaSpriteSheet.png',
@@ -27,10 +45,28 @@ export default class GameScene extends Phaser.Scene {
             }
         );
 
+        this.load.spritesheet(
+            'Bomb',
+            'assets/Bomb.png',
+            {
+                frameWidth: 16,
+                frameHeight: 16
+            }
+        );
+
         this.load.tilemapTiledJSON('map', 'game.json');
     }
 
+    init() {
+        this.#cursors = this.input.keyboard.createCursorKeys();
+    }
+
     create() {
+        this.#world = createWorld();
+
+        createPlayer(this.#world, 64, 64);
+        createBomb(this.#world, 64, 80);
+
         this.scene.launch('UI');
 
         this.data.set({
@@ -51,25 +87,29 @@ export default class GameScene extends Phaser.Scene {
         wallsLayer.setCollision([162, 166, 163, 184, 210, 244, 215, 179, 291, 262, 279, 195, 245, 276, 273, 274, 246, 278, 198, 280, 275, 261, 193, 310, 307, 311]);
         stoneLayer.setCollision(739);
 
-        this.player = new Player(this, 64, 64);
-        this.player_control = new KeyboardPlayerControl(this.player, this);
+        const staticGroup = this.physics.add.staticGroup();
+        const group = this.physics.add.group({ collideWorldBounds: true });
 
-        //todo
-        this.opponents = null;
-        //todo
-        this.enemies = null;
-        
-        this.bombs_group = new BombsGroup(this, [new Bomb(this, 3000)]);
+        this.physics.add.collider(group, group);
+        this.physics.add.collider(group, staticGroup);
+        this.physics.add.collider(group, wallsLayer);
+        this.physics.add.collider(group, stoneLayer);
 
-        this.physics.add.collider(this.player, wallsLayer);
-        this.physics.add.collider(this.player, stoneLayer);
+        this.#spriteSystem = createArcadeSpriteSystem(group, staticGroup, TEXTURES);
+        this.#playerSystem = createPlayerSystem(this.#cursors);
+        this.#bombSystem = createBombSystem();
 
         this.sys.events.on('wake', this.wake, this);
     }
 
     update() {
-        this.player.update();
-        this.player_control.update();
+
+        if (this.#world) {
+            this.#playerSystem(this.#world);
+            this.#spriteSystem(this.#world);
+            this.#bombSystem(this.#world);
+        }
+
         super.update();
     }
 

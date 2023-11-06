@@ -1,19 +1,21 @@
-import GameScene from './scene/GameScene.js';
-import UIScene from './scene/UIScene.js';
-import BootScene from './scene/BootScene.js';
-import MenuScene from './scene/MenuScene.js';
+import { Game, Scale, WEBGL } from 'https://cdn.jsdelivr.net/npm/phaser/+esm';
 
-export default class Booombers extends Phaser.Game {
+import BootScene from './scene/BootScene.js';
+import GameScene from './scene/GameScene.js';
+import MenuScene from './scene/MenuScene.js';
+import UIScene from './scene/UIScene.js';
+
+export default class Booombers extends Game {
     constructor(width = 480, height = 480) {
 
         const config = {
-            type: Phaser.WEBGL,
+            type: WEBGL,
             width,
             height,
             parent: 'booombers',
             scale: {
-                mode: Phaser.Scale.FIT,
-                autoCenter: Phaser.Scale.CENTER_BOTH
+                mode: Scale.FIT,
+                autoCenter: Scale.CENTER_BOTH
             },
             scene: [BootScene, GameScene, MenuScene, UIScene],
             backgroundColor: '#141b1b',

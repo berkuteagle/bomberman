@@ -1,13 +1,15 @@
-export default class MenuScene extends Phaser.Scene {
+import { Scene } from 'https://cdn.jsdelivr.net/npm/phaser/+esm';
+
+export default class MenuScene extends Scene {
     constructor() {
         super({
             key: 'Menu'
         });
     }
 
-    preload() {}
+    preload() { }
 
-    create() {}
+    create() { }
 
     closeMenu() {
         this.scene.switch('Game');

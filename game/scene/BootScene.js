@@ -1,11 +1,13 @@
-export default class BootScene extends Phaser.Scene {
+import { Scene } from 'https://cdn.jsdelivr.net/npm/phaser/+esm';
+
+export default class BootScene extends Scene {
     constructor() {
         super({
             key: 'Boot'
         });
     }
 
-    preload() {}
+    preload() { }
 
     create() {
         this.scene.start('Game');

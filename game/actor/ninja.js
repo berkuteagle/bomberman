@@ -1,4 +1,6 @@
-export default class Ninja extends Phaser.Physics.Arcade.Sprite {
+import { Physics } from 'https://cdn.jsdelivr.net/npm/phaser/+esm';
+
+export default class Ninja extends Physics.Arcade.Sprite {
     constructor(scene, x, y, texture, frame) {
         super(scene, x, y, texture, frame)
 
