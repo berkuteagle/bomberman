@@ -23,11 +23,7 @@ const ANIMATIONS = [
     'GreenNinja_walk_up', //2
     'GreenNinja_walk_left', //3
     'GreenNinja_walk_right', //4
-    'GreenNinja_stop_down', //5
-    'GreenNinja_stop_up', //6
-    'GreenNinja_stop_left', //7
-    'GreenNinja_stop_right', //8
-    'Bomb' //9
+    'Bomb' //5
 ];
 
 export class GameScene extends Scene {
@@ -79,34 +75,6 @@ export class GameScene extends Scene {
 
     create() {
         this.#world = createWorld();
-
-        this.anims.create({
-            key: 'GreenNinja_stop_down',
-            frames: this.anims.generateFrameNumbers('GreenNinja', { frames: [0] }),
-            frameRate: 8,
-            repeat: -1
-        });
-
-        this.anims.create({
-            key: 'GreenNinja_stop_up',
-            frames: this.anims.generateFrameNumbers('GreenNinja', { frames: [1] }),
-            frameRate: 8,
-            repeat: -1
-        });
-
-        this.anims.create({
-            key: 'GreenNinja_stop_left',
-            frames: this.anims.generateFrameNumbers('GreenNinja', { frames: [2] }),
-            frameRate: 8,
-            repeat: -1
-        });
-
-        this.anims.create({
-            key: 'GreenNinja_stop_right',
-            frames: this.anims.generateFrameNumbers('GreenNinja', { frames: [3] }),
-            frameRate: 8,
-            repeat: -1
-        });
 
         this.anims.create({
             key: 'GreenNinja_walk_down',

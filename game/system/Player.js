@@ -45,21 +45,7 @@ export const createPlayerSystem = (cursors) => {
                 !cursors.down.isDown) {
                 Velocity.x[entity] = 0;
                 Velocity.y[entity] = 0;
-
-                switch (Direction.dir[entity]) {
-                    case DirectionType.UP:
-                        Animation.animation[entity] = Player.stop_up[entity];
-                        break;
-                    case DirectionType.DOWN:
-                        Animation.animation[entity] = Player.stop_down[entity];
-                        break;
-                    case DirectionType.LEFT:
-                        Animation.animation[entity] = Player.stop_left[entity];
-                        break;
-                    case DirectionType.RIGHT:
-                        Animation.animation[entity] = Player.stop_right[entity];
-                        break;
-                }
+                Animation.animation[entity] = 0;
             }
         }
 

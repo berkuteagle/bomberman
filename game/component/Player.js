@@ -5,9 +5,5 @@ export const Player = defineComponent({
     walk_down: Types.ui8,
     walk_left: Types.ui8,
     walk_right: Types.ui8,
-    stop_up: Types.ui8,
-    stop_down: Types.ui8,
-    stop_left: Types.ui8,
-    stop_right: Types.ui8,
     velocity: Types.ui32
 });

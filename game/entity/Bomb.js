@@ -15,7 +15,7 @@ import {
  * @param {Number} textureIndex
  * @param {Number} animationIndex
  */
-export const createBomb = (world, x = 0, y = 0, textureIndex = 1, animationIndex = 9) => {
+export const createBomb = (world, x = 0, y = 0, textureIndex = 1, animationIndex = 5) => {
     const bomb = addEntity(world);
 
     addComponent(world, Bomb, bomb);

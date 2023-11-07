@@ -34,10 +34,6 @@ export const createPlayer = (world, x = 0, y = 0, textureIndex = 0, animationInd
     Player.walk_down[player] = 1;
     Player.walk_left[player] = 3;
     Player.walk_right[player] = 4;
-    Player.stop_up[player] = 6;
-    Player.stop_down[player] = 5;
-    Player.stop_left[player] = 7;
-    Player.stop_right[player] = 8;
     Player.velocity[player] = 50;
     Position.x[player] = x;
     Position.y[player] = y;

@@ -43,7 +43,12 @@ export const createArcadeSpriteSystem = (group, staticGroup, textures, animation
             }
 
             if (hasComponent(world, Animation, entry)) {
-                sprite.play(animations[Animation.animation[entry]], true);
+                const animationIndex = Animation.animation[entry];
+                if (animationIndex) {
+                    sprite.play(animations[animationIndex], true);
+                } else {
+                    sprite.stop();
+                }
             }
 
             Position.x[entry] = sprite.x;
