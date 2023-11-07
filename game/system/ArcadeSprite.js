@@ -1,10 +1,14 @@
 import { defineQuery, defineSystem, enterQuery, exitQuery, hasComponent } from 'https://cdn.jsdelivr.net/npm/bitecs/+esm';
-import { ArcadeSprite } from '../component/ArcadeSprite.js';
-import { Player } from '../component/Player.js';
-import { Position } from '../component/Position.js';
-import { Velocity } from '../component/Velocity.js';
 
-export const createArcadeSpriteSystem = (group, staticGroup, textures) => {
+import {
+    Animation,
+    ArcadeSprite,
+    Player,
+    Position,
+    Velocity
+} from '../component.js';
+
+export const createArcadeSpriteSystem = (group, staticGroup, textures, animations) => {
     const spritesMap = new Map();
 
     const entriesQueryAll = defineQuery([ArcadeSprite, Position]);
@@ -28,11 +32,18 @@ export const createArcadeSpriteSystem = (group, staticGroup, textures) => {
         }
 
         for (const entry of entriesQueryAll(world)) {
-            if (hasComponent(world, Velocity, entry)) {
-                const sprite = spritesMap.get(entry);
-                if (!sprite) continue;
+            const sprite = spritesMap.get(entry);
+            if (!sprite) continue;
 
-                sprite.setVelocity(Velocity.x[entry], Velocity.y[entry]);
+            if (hasComponent(world, Velocity, entry)) {
+                sprite.setVelocity(
+                    Velocity.x[entry],
+                    Velocity.y[entry]
+                );
+            }
+
+            if (hasComponent(world, Animation, entry)) {
+                sprite.play(animations[Animation.animation[entry]], true);
             }
         }
 

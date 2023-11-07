@@ -1,9 +1,11 @@
 import { Game, Scale, WEBGL } from 'https://cdn.jsdelivr.net/npm/phaser/+esm';
 
-import BootScene from './scene/BootScene.js';
-import GameScene from './scene/GameScene.js';
-import MenuScene from './scene/MenuScene.js';
-import UIScene from './scene/UIScene.js';
+import {
+    BootScene,
+    GameScene,
+    MenuScene,
+    UIScene
+} from './scene.js';
 
 export default class Booombers extends Game {
     constructor(width = 480, height = 480) {

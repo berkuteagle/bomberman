@@ -1,6 +1,6 @@
 import { defineQuery, defineSystem, enterQuery, exitQuery } from 'https://cdn.jsdelivr.net/npm/bitecs/+esm';
-import { Sprite } from '../component/ArcadeSprite.js';
-import { Position } from '../component/Position.js';
+
+import { Position, Sprite } from '../component.js';
 
 export const createSpriteSystem = (scene, textures) => {
     const spritesMap = new Map();

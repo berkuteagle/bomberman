@@ -1,6 +1,6 @@
 import { Scene } from 'https://cdn.jsdelivr.net/npm/phaser/+esm';
 
-export default class MenuScene extends Scene {
+export class MenuScene extends Scene {
     constructor() {
         super({
             key: 'Menu'

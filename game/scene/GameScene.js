@@ -1,23 +1,36 @@
 import { createWorld } from 'https://cdn.jsdelivr.net/npm/bitecs/+esm';
 import { Scene } from 'https://cdn.jsdelivr.net/npm/phaser/+esm';
 
+import {
+    createArcadeSpriteSystem,
+    createBombSystem,
+    createPlayerSystem
+} from '../system.js';
 
-import { createArcadeSpriteSystem } from '../system/ArcadeSprite.js';
-import { createBombSystem } from '../system/Bomb.js';
-import { createPlayerSystem } from '../system/Player.js';
-
-import { createBomb } from '../entity/Bomb.js';
-import { createPlayer } from '../entity/Player.js';
-
-// import Player from '../player.js';
-// import { KeyboardPlayerControl } from '../player_control.js';
+import {
+    createBomb,
+    createPlayer
+} from '../entity.js';
 
 const TEXTURES = [
     'GreenNinja',
     'Bomb'
 ];
 
-export default class GameScene extends Scene {
+const ANIMATIONS = [
+    'Dummy', //0
+    'GreenNinja_walk_down', //1
+    'GreenNinja_walk_up', //2
+    'GreenNinja_walk_left', //3
+    'GreenNinja_walk_right', //4
+    'GreenNinja_stop_down', //5
+    'GreenNinja_stop_up', //6
+    'GreenNinja_stop_left', //7
+    'GreenNinja_stop_right', //8
+    'Bomb' //9
+];
+
+export class GameScene extends Scene {
 
     #world = null;
     #bombSystem = null;
@@ -54,7 +67,7 @@ export default class GameScene extends Scene {
             }
         );
 
-        this.load.tilemapTiledJSON('map', 'game.json');
+        this.load.tilemapTiledJSON('map', 'assets/game.json');
     }
 
     init() {
@@ -63,6 +76,69 @@ export default class GameScene extends Scene {
 
     create() {
         this.#world = createWorld();
+
+        this.anims.create({
+            key: 'GreenNinja_stop_down',
+            frames: this.anims.generateFrameNumbers('GreenNinja', { frames: [0] }),
+            frameRate: 8,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'GreenNinja_stop_up',
+            frames: this.anims.generateFrameNumbers('GreenNinja', { frames: [1] }),
+            frameRate: 8,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'GreenNinja_stop_left',
+            frames: this.anims.generateFrameNumbers('GreenNinja', { frames: [2] }),
+            frameRate: 8,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'GreenNinja_stop_right',
+            frames: this.anims.generateFrameNumbers('GreenNinja', { frames: [3] }),
+            frameRate: 8,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'GreenNinja_walk_down',
+            frames: this.anims.generateFrameNumbers('GreenNinja', { frames: [0, 4, 8, 12] }),
+            frameRate: 8,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'GreenNinja_walk_up',
+            frames: this.anims.generateFrameNumbers('GreenNinja', { frames: [1, 5, 9, 13] }),
+            frameRate: 8,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'GreenNinja_walk_left',
+            frames: this.anims.generateFrameNumbers('GreenNinja', { frames: [2, 6, 10, 14] }),
+            frameRate: 8,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'GreenNinja_walk_right',
+            frames: this.anims.generateFrameNumbers('GreenNinja', { frames: [3, 7, 11, 15] }),
+            frameRate: 8,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'Bomb',
+            frames: this.anims.generateFrameNumbers('Bomb'),
+            frameRate: 8,
+            repeat: -1
+        });
 
         createPlayer(this.#world, 64, 64);
         createBomb(this.#world, 64, 80);
@@ -95,7 +171,7 @@ export default class GameScene extends Scene {
         this.physics.add.collider(group, wallsLayer);
         this.physics.add.collider(group, stoneLayer);
 
-        this.#spriteSystem = createArcadeSpriteSystem(group, staticGroup, TEXTURES);
+        this.#spriteSystem = createArcadeSpriteSystem(group, staticGroup, TEXTURES, ANIMATIONS);
         this.#playerSystem = createPlayerSystem(this.#cursors);
         this.#bombSystem = createBombSystem();
 

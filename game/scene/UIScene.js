@@ -1,6 +1,6 @@
 import { Scene } from 'https://cdn.jsdelivr.net/npm/phaser/+esm';
 
-export default class UIScene extends Scene {
+export class UIScene extends Scene {
     constructor() {
         super({
             key: 'UI'

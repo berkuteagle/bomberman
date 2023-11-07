@@ -1,6 +1,6 @@
 import { Scene } from 'https://cdn.jsdelivr.net/npm/phaser/+esm';
 
-export default class BootScene extends Scene {
+export class BootScene extends Scene {
     constructor() {
         super({
             key: 'Boot'
