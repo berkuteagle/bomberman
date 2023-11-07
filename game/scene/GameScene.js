@@ -4,8 +4,9 @@ import { Input, Scene } from 'https://cdn.jsdelivr.net/npm/phaser/+esm';
 import {
     createArcadeSpriteSystem,
     createBombSystem,
+    createExplosionSystem,
     createPlayerSystem,
-    createShooterSystem
+    createSapperSystem
 } from '../system.js';
 
 import {
@@ -30,9 +31,10 @@ export class GameScene extends Scene {
 
     #world = null;
     #bombSystem = null;
+    #explosionSystem = null;
     #spriteSystem = null;
     #playerSystem = null;
-    #shooterSystem = null;
+    #sapperSystem = null;
     #cursors = null;
     #shooterKey = null;
 
@@ -49,7 +51,7 @@ export class GameScene extends Scene {
 
         this.load.spritesheet(
             'GreenNinja',
-            'assets/GreenNinjaSpriteSheet.png',
+            'assets/GreenNinja.png',
             {
                 frameWidth: 16,
                 frameHeight: 16
@@ -143,8 +145,9 @@ export class GameScene extends Scene {
 
         this.#spriteSystem = createArcadeSpriteSystem(group, staticGroup, TEXTURES, ANIMATIONS);
         this.#playerSystem = createPlayerSystem(this.#cursors);
-        this.#shooterSystem = createShooterSystem(this.#shooterKey);
-        this.#bombSystem = createBombSystem();
+        this.#sapperSystem = createSapperSystem(this.#shooterKey);
+        this.#bombSystem = createBombSystem(this.time);
+        this.#explosionSystem = createExplosionSystem();
 
         this.sys.events.on('wake', this.wake, this);
     }
@@ -154,8 +157,9 @@ export class GameScene extends Scene {
         if (this.#world) {
             this.#playerSystem(this.#world);
             this.#spriteSystem(this.#world);
-            this.#shooterSystem(this.#world);
+            this.#sapperSystem(this.#world);
             this.#bombSystem(this.#world);
+            this.#explosionSystem(this.#world);
         }
 
         super.update();

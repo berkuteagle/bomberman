@@ -62,7 +62,7 @@ export const createArcadeSpriteSystem = (group, staticGroup, textures, animation
 
             const fromGroup = hasComponent(world, Velocity, entry) ? group : staticGroup;
 
-            fromGroup.killAndHide(sprite);
+            fromGroup.remove(sprite, true);
             spritesMap.delete(entry);
         }
 

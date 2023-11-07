@@ -3,10 +3,13 @@ import { addComponent, addEntity } from 'https://cdn.jsdelivr.net/npm/bitecs/+es
 import {
     Animation,
     ArcadeSprite,
+    Destructible,
     Direction,
     DirectionType,
+    ExplosionType,
     Player,
     Position,
+    Sapper,
     Shooter,
     Velocity
 } from '../component.js';
@@ -29,7 +32,12 @@ export const createPlayer = (world, x = 0, y = 0, textureIndex = 0, animationInd
     addComponent(world, Animation, player);
     addComponent(world, Direction, player);
     addComponent(world, Shooter, player);
+    addComponent(world, Destructible, player);
+    addComponent(world, Sapper, player);
 
+    Sapper.count[player] = 3;
+    Sapper.power[player] = 1;
+    Sapper.type[player] = ExplosionType.DEFAULT;
     Player.walk_up[player] = 2;
     Player.walk_down[player] = 1;
     Player.walk_left[player] = 3;
@@ -42,4 +50,5 @@ export const createPlayer = (world, x = 0, y = 0, textureIndex = 0, animationInd
     ArcadeSprite.texture[player] = textureIndex;
     Animation.animation[player] = animationIndex;
     Direction.dir[player] = DirectionType.DOWN;
+    Destructible.health[player] = 10;
 }

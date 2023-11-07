@@ -3,7 +3,9 @@ import { addComponent, addEntity } from 'https://cdn.jsdelivr.net/npm/bitecs/+es
 import {
     Animation,
     ArcadeSprite,
-    Bomb,
+    Belong,
+    Duration,
+    Explosive,
     Position
 } from '../component.js';
 
@@ -15,17 +17,20 @@ import {
  * @param {Number} textureIndex
  * @param {Number} animationIndex
  */
-export const createBomb = (world, x = 0, y = 0, textureIndex = 1, animationIndex = 5) => {
+export const createBomb = (world, x = 0, y = 0, sapper) => {
     const bomb = addEntity(world);
 
-    addComponent(world, Bomb, bomb);
     addComponent(world, Position, bomb);
     addComponent(world, ArcadeSprite, bomb);
     addComponent(world, Animation, bomb);
+    addComponent(world, Explosive, bomb);
+    addComponent(world, Duration, bomb);
+    addComponent(world, Belong, bomb);
 
-    Bomb.timer[bomb] = 3000;
+    Belong.owner[bomb] = sapper;
+    Duration.timeout[bomb] = 3000;
     Position.x[bomb] = x;
     Position.y[bomb] = y;
-    ArcadeSprite.texture[bomb] = textureIndex;
-    Animation.animation[bomb] = animationIndex;
+    ArcadeSprite.texture[bomb] = 1;
+    Animation.animation[bomb] = 5;
 }

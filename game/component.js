@@ -1,9 +1,15 @@
 export { Animation } from './component/Animation.js';
 export { ArcadeSprite } from './component/ArcadeSprite.js';
-export { Bomb } from './component/Bomb.js';
+export { Belong } from './component/Belong.js';
+export { Destructible } from './component/Destructible.js';
 export { Direction, DirectionType } from './component/Direction.js';
+export { Duration } from './component/Duration.js';
+export { Explosion, ExplosionType } from './component/Explosion.js';
+export { Explosive } from './component/Explosive.js';
+export { Flammable } from './component/Flammable.js';
 export { Player } from './component/Player.js';
 export { Position } from './component/Position.js';
+export { Sapper } from './component/Sapper.js';
 export { Shooter } from './component/Shooter.js';
 export { Sprite } from './component/Sprite.js';
 export { Velocity } from './component/Velocity.js';
