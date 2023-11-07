@@ -7,6 +7,7 @@ import {
     DirectionType,
     Player,
     Position,
+    Shooter,
     Velocity
 } from '../component.js';
 
@@ -27,6 +28,7 @@ export const createPlayer = (world, x = 0, y = 0, textureIndex = 0, animationInd
     addComponent(world, Velocity, player);
     addComponent(world, Animation, player);
     addComponent(world, Direction, player);
+    addComponent(world, Shooter, player);
 
     Player.walk_up[player] = 2;
     Player.walk_down[player] = 1;

@@ -45,6 +45,9 @@ export const createArcadeSpriteSystem = (group, staticGroup, textures, animation
             if (hasComponent(world, Animation, entry)) {
                 sprite.play(animations[Animation.animation[entry]], true);
             }
+
+            Position.x[entry] = sprite.x;
+            Position.y[entry] = sprite.y;
         }
 
         for (const entry of entriesQueryExit(world)) {

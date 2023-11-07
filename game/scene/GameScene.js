@@ -1,14 +1,14 @@
 import { createWorld } from 'https://cdn.jsdelivr.net/npm/bitecs/+esm';
-import { Scene } from 'https://cdn.jsdelivr.net/npm/phaser/+esm';
+import { Input, Scene } from 'https://cdn.jsdelivr.net/npm/phaser/+esm';
 
 import {
     createArcadeSpriteSystem,
     createBombSystem,
-    createPlayerSystem
+    createPlayerSystem,
+    createShooterSystem
 } from '../system.js';
 
 import {
-    createBomb,
     createPlayer
 } from '../entity.js';
 
@@ -36,7 +36,9 @@ export class GameScene extends Scene {
     #bombSystem = null;
     #spriteSystem = null;
     #playerSystem = null;
+    #shooterSystem = null;
     #cursors = null;
+    #shooterKey = null;
 
     constructor() {
         super('Game');
@@ -72,6 +74,7 @@ export class GameScene extends Scene {
 
     init() {
         this.#cursors = this.input.keyboard.createCursorKeys();
+        this.#shooterKey = this.input.keyboard.addKey(Input.Keyboard.KeyCodes.SPACE);
     }
 
     create() {
@@ -141,7 +144,6 @@ export class GameScene extends Scene {
         });
 
         createPlayer(this.#world, 64, 64);
-        createBomb(this.#world, 64, 80);
 
         this.scene.launch('UI');
 
@@ -173,6 +175,7 @@ export class GameScene extends Scene {
 
         this.#spriteSystem = createArcadeSpriteSystem(group, staticGroup, TEXTURES, ANIMATIONS);
         this.#playerSystem = createPlayerSystem(this.#cursors);
+        this.#shooterSystem = createShooterSystem(this.#shooterKey);
         this.#bombSystem = createBombSystem();
 
         this.sys.events.on('wake', this.wake, this);
@@ -183,6 +186,7 @@ export class GameScene extends Scene {
         if (this.#world) {
             this.#playerSystem(this.#world);
             this.#spriteSystem(this.#world);
+            this.#shooterSystem(this.#world);
             this.#bombSystem(this.#world);
         }
 
