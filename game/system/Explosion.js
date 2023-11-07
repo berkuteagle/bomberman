@@ -1,24 +1,28 @@
-import { defineQuery, defineSystem, enterQuery, exitQuery } from 'https://cdn.jsdelivr.net/npm/bitecs/+esm';
+import { defineQuery, defineSystem, enterQuery, exitQuery, removeEntity } from 'https://cdn.jsdelivr.net/npm/bitecs/+esm';
 
-import { Explosion, Position } from '../component.js';
+import { Duration, Explosion, Position } from '../component.js';
 
-export const createExplosionSystem = () => {
-    const entitiesAll = defineQuery([Explosion, Position]);
+export const createExplosionSystem = (time) => {
+    const entitiesAll = defineQuery([Explosion, Position, Duration]);
     const entitiesEnter = enterQuery(entitiesAll);
     const entitiesExit = exitQuery(entitiesAll);
+
+    const startTime = new Map();
 
     return defineSystem(world => {
 
         for (const entity of entitiesEnter(world)) {
-            console.log('Explosion add: ', entity);
+            startTime.set(entity, time.now);
         }
 
         for (const entity of entitiesAll(world)) {
-            console.log('Explosion process: ', entity);
+            if (Duration.timeout[entity] < (time.now - startTime.get(entity))) {
+                removeEntity(world, entity);
+            }
         }
 
         for (const entity of entitiesExit(world)) {
-            console.log('Explosion remove: ', entity);
+            startTime.delete(entity);
         }
 
         return world;

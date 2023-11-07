@@ -1,4 +1,10 @@
-import { defineQuery, defineSystem, enterQuery, exitQuery, hasComponent } from 'https://cdn.jsdelivr.net/npm/bitecs/+esm';
+import {
+    defineQuery,
+    defineSystem,
+    enterQuery,
+    exitQuery,
+    hasComponent
+} from 'https://cdn.jsdelivr.net/npm/bitecs/+esm';
 
 import {
     Animation,

@@ -12,11 +12,9 @@ import {
  * 
  * @param {*} world 
  * @param {Number} x 
- * @param {Number} y 
- * @param {Number} textureIndex
- * @param {Number} animationIndex
+ * @param {Number} y
  */
-export const createExplosion = (world, x = 0, y = 0, textureIndex = 0, animationIndex = 1) => {
+export const createExplosion = (world, x = 0, y = 0) => {
     const explosion = addEntity(world);
 
     addComponent(world, Explosion, explosion);
@@ -29,7 +27,7 @@ export const createExplosion = (world, x = 0, y = 0, textureIndex = 0, animation
     Explosion.power[explosion] = 1;
     Position.x[explosion] = x;
     Position.y[explosion] = y;
-    ArcadeSprite.texture[explosion] = textureIndex;
-    Animation.animation[explosion] = animationIndex;
-    Duration.timeout[explosion] = 1000;
+    ArcadeSprite.texture[explosion] = 3;
+    Animation.animation[explosion] = 6;
+    Duration.timeout[explosion] = 800;
 }

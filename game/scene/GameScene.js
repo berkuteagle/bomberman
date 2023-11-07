@@ -14,17 +14,20 @@ import {
 } from '../entity.js';
 
 const TEXTURES = [
-    'GreenNinja',
-    'Bomb'
+    'Empty', //0
+    'GreenNinja', //1
+    'Bomb', //2
+    'Explosion' //3
 ];
 
 const ANIMATIONS = [
-    'Dummy', //0
+    'Empty', //0
     'GreenNinja_walk_down', //1
     'GreenNinja_walk_up', //2
     'GreenNinja_walk_left', //3
     'GreenNinja_walk_right', //4
-    'Bomb' //5
+    'Bomb', //5
+    'Explosion' //6
 ];
 
 export class GameScene extends Scene {
@@ -64,6 +67,15 @@ export class GameScene extends Scene {
             {
                 frameWidth: 16,
                 frameHeight: 16
+            }
+        );
+
+        this.load.spritesheet(
+            'Explosion',
+            'assets/Explosion.png',
+            {
+                frameWidth: 48,
+                frameHeight: 48
             }
         );
 
@@ -113,6 +125,13 @@ export class GameScene extends Scene {
             repeat: -1
         });
 
+        this.anims.create({
+            key: 'Explosion',
+            frames: this.anims.generateFrameNumbers('Explosion'),
+            frameRate: 12,
+            repeat: 1
+        })
+
         createPlayer(this.#world, 64, 64);
 
         this.scene.launch('UI');
@@ -147,7 +166,7 @@ export class GameScene extends Scene {
         this.#playerSystem = createPlayerSystem(this.#cursors);
         this.#sapperSystem = createSapperSystem(this.#shooterKey);
         this.#bombSystem = createBombSystem(this.time);
-        this.#explosionSystem = createExplosionSystem();
+        this.#explosionSystem = createExplosionSystem(this.time);
 
         this.sys.events.on('wake', this.wake, this);
     }

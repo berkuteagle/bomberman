@@ -31,6 +31,6 @@ export const createBomb = (world, x = 0, y = 0, sapper) => {
     Duration.timeout[bomb] = 3000;
     Position.x[bomb] = x;
     Position.y[bomb] = y;
-    ArcadeSprite.texture[bomb] = 1;
+    ArcadeSprite.texture[bomb] = 2;
     Animation.animation[bomb] = 5;
 }

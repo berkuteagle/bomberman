@@ -18,11 +18,9 @@ import {
  * 
  * @param {*} world 
  * @param {Number} x 
- * @param {Number} y 
- * @param {Number} textureIndex
- * @param {Number} animationIndex
+ * @param {Number} y
  */
-export const createPlayer = (world, x = 0, y = 0, textureIndex = 0, animationIndex = 0) => {
+export const createPlayer = (world, x = 0, y = 0) => {
     const player = addEntity(world);
 
     addComponent(world, Player, player);
@@ -47,8 +45,8 @@ export const createPlayer = (world, x = 0, y = 0, textureIndex = 0, animationInd
     Position.y[player] = y;
     Velocity.x[player] = 0;
     Velocity.y[player] = 0;
-    ArcadeSprite.texture[player] = textureIndex;
-    Animation.animation[player] = animationIndex;
+    ArcadeSprite.texture[player] = 1;
+    Animation.animation[player] = 0;
     Direction.dir[player] = DirectionType.DOWN;
     Destructible.health[player] = 10;
 }
