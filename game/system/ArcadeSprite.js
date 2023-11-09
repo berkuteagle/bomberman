@@ -14,8 +14,7 @@ import {
     Velocity
 } from '../component.js';
 
-export const createArcadeSpriteSystem = (group, staticGroup, textures, animations) => {
-    const spritesMap = new Map();
+export const createArcadeSpriteSystem = (animations) => {
 
     const entriesQueryAll = defineQuery([ArcadeSprite, Position]);
     const entriesQueryEnter = enterQuery(entriesQueryAll);
@@ -23,9 +22,12 @@ export const createArcadeSpriteSystem = (group, staticGroup, textures, animation
 
     return defineSystem(world => {
 
+        const { spriteGroups, spritesMap, texturesMap } = world;
+
         for (const entry of entriesQueryEnter(world)) {
-            const toGroup = hasComponent(world, Velocity, entry) ? group : staticGroup;
-            const sprite = toGroup.get(Position.x[entry], Position.y[entry], textures[ArcadeSprite.texture[entry]]);
+            const toGroup = spriteGroups.get(ArcadeSprite.group[entry]);
+            const texture = texturesMap.get(ArcadeSprite.texture[entry]);
+            const sprite = toGroup.get(Position.x[entry], Position.y[entry], texture);
 
             spritesMap.set(entry, sprite);
 
@@ -33,8 +35,11 @@ export const createArcadeSpriteSystem = (group, staticGroup, textures, animation
                 sprite.setCircle(5);
                 sprite.setOffset(3, 6);
                 sprite.setDrag(300, 300);
-                sprite.setDepth(10);
             }
+
+            sprite.setDepth(ArcadeSprite.depth[entry]);
+
+            // sprite.setImmovable(!hasComponent(world, Velocity, entry));
         }
 
         for (const entry of entriesQueryAll(world)) {
@@ -66,7 +71,7 @@ export const createArcadeSpriteSystem = (group, staticGroup, textures, animation
             const sprite = spritesMap.get(entry);
             if (!sprite) continue;
 
-            const fromGroup = hasComponent(world, Velocity, entry) ? group : staticGroup;
+            const fromGroup = spriteGroups.get(ArcadeSprite.group[entry]);
 
             fromGroup.remove(sprite, true);
             spritesMap.delete(entry);

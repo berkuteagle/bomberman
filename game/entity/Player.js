@@ -14,6 +14,8 @@ import {
     Velocity
 } from '../component.js';
 
+import { SPRITE_GROUPS, TEXTURES } from '../constants.js';
+
 /**
  * 
  * @param {*} world 
@@ -45,7 +47,9 @@ export const createPlayer = (world, x = 0, y = 0) => {
     Position.y[player] = y;
     Velocity.x[player] = 0;
     Velocity.y[player] = 0;
-    ArcadeSprite.texture[player] = 1;
+    ArcadeSprite.texture[player] = TEXTURES.PLAYER;
+    ArcadeSprite.group[player] = SPRITE_GROUPS.PLAYER;
+    ArcadeSprite.depth[player] = 10;
     Animation.animation[player] = 0;
     Direction.dir[player] = DirectionType.DOWN;
     Destructible.health[player] = 10;

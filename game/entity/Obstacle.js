@@ -8,6 +8,8 @@ import {
     Position
 } from '../component.js';
 
+import { SPRITE_GROUPS } from '../constants.js';
+
 /**
  * 
  * @param {*} world 
@@ -37,6 +39,8 @@ export const createObstacle = (
     Position.x[obstacle] = x;
     Position.y[obstacle] = y;
     ArcadeSprite.texture[obstacle] = textureIndex;
+    ArcadeSprite.group[obstacle] = SPRITE_GROUPS.STATIC;
+    ArcadeSprite.depth[obstacle] = 0;
 
     if (animationIndex || destructibleHealth && destructibleAnimationIndex) {
         addComponent(world, Animation, obstacle);

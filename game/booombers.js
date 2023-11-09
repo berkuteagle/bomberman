@@ -2,6 +2,7 @@ import { Game, Scale, WEBGL } from 'https://cdn.jsdelivr.net/npm/phaser/+esm';
 
 import {
     BootScene,
+    GameOver,
     GameScene,
     MenuScene,
     UIScene
@@ -19,7 +20,7 @@ export default class Booombers extends Game {
                 mode: Scale.FIT,
                 autoCenter: Scale.CENTER_BOTH
             },
-            scene: [BootScene, GameScene, MenuScene, UIScene],
+            scene: [BootScene, GameScene, MenuScene, UIScene, GameOver],
             backgroundColor: '#141b1b',
             physics: {
                 default: 'arcade',

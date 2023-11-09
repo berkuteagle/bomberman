@@ -13,12 +13,7 @@ import {
     createPlayer
 } from '../entity.js';
 
-const TEXTURES = [
-    'Empty', //0
-    'GreenNinja', //1
-    'Bomb', //2
-    'Explosion' //3
-];
+import { SPRITE_GROUPS, TEXTURES } from '../constants.js';
 
 const ANIMATIONS = [
     'Empty', //0
@@ -62,6 +57,15 @@ export class GameScene extends Scene {
         );
 
         this.load.spritesheet(
+            'DarkNinja',
+            'assets/DarkNinja.png',
+            {
+                frameWidth: 16,
+                frameHeight: 16
+            }
+        );
+
+        this.load.spritesheet(
             'Bomb',
             'assets/Bomb.png',
             {
@@ -88,7 +92,11 @@ export class GameScene extends Scene {
     }
 
     create() {
-        this.#world = createWorld();
+        const worldData = {
+            spriteGroups: new Map(),
+            spritesMap: new Map(),
+            texturesMap: new Map()
+        };
 
         this.anims.create({
             key: 'GreenNinja_walk_down',
@@ -130,7 +138,32 @@ export class GameScene extends Scene {
             frames: this.anims.generateFrameNumbers('Explosion'),
             frameRate: 12,
             repeat: 1
-        })
+        });
+
+        const static_group = this.physics.add.staticGroup();
+        const group = this.physics.add.group();
+        const bombs_group = this.physics.add.group();
+        const damage_group = this.physics.add.group();
+
+        group.defaults = {
+            setCollideWorldBounds: true
+        };
+
+        bombs_group.defaults = {
+            setImmovable: true
+        };
+
+        worldData.spriteGroups.set(SPRITE_GROUPS.PLAYER, group);
+        worldData.spriteGroups.set(SPRITE_GROUPS.STATIC, static_group);
+        worldData.spriteGroups.set(SPRITE_GROUPS.BOMBS, bombs_group);
+        worldData.spriteGroups.set(SPRITE_GROUPS.DAMAGE, damage_group);
+
+        worldData.texturesMap.set(TEXTURES.PLAYER, 'GreenNinja');
+        worldData.texturesMap.set(TEXTURES.PLAYER_DARK, 'DarkNinja');
+        worldData.texturesMap.set(TEXTURES.BOMB, 'Bomb');
+        worldData.texturesMap.set(TEXTURES.EXPLOSION, 'Explosion');
+
+        this.#world = createWorld(worldData);
 
         createPlayer(this.#world, 64, 64);
 
@@ -154,15 +187,17 @@ export class GameScene extends Scene {
         wallsLayer.setCollision([162, 166, 163, 184, 210, 244, 215, 179, 291, 262, 279, 195, 245, 276, 273, 274, 246, 278, 198, 280, 275, 261, 193, 310, 307, 311]);
         stoneLayer.setCollision(739);
 
-        const staticGroup = this.physics.add.staticGroup();
-        const group = this.physics.add.group({ collideWorldBounds: true });
-
-        this.physics.add.collider(group, group);
-        this.physics.add.collider(group, staticGroup);
+        this.physics.add.collider(group, bombs_group);
+        this.physics.add.collider(group, static_group);
         this.physics.add.collider(group, wallsLayer);
         this.physics.add.collider(group, stoneLayer);
 
-        this.#spriteSystem = createArcadeSpriteSystem(group, staticGroup, TEXTURES, ANIMATIONS);
+        this.physics.add.overlap(group, damage_group, () => {
+            this.scene.sleep('UI');
+            this.scene.switch('GameOver');
+        }, null, null);
+
+        this.#spriteSystem = createArcadeSpriteSystem(ANIMATIONS);
         this.#playerSystem = createPlayerSystem(this.#cursors);
         this.#sapperSystem = createSapperSystem(this.#shooterKey);
         this.#bombSystem = createBombSystem(this.time);

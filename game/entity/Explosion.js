@@ -8,6 +8,8 @@ import {
     Position
 } from '../component.js';
 
+import { SPRITE_GROUPS, TEXTURES } from '../constants.js';
+
 /**
  * 
  * @param {*} world 
@@ -27,7 +29,9 @@ export const createExplosion = (world, x = 0, y = 0) => {
     Explosion.power[explosion] = 1;
     Position.x[explosion] = x;
     Position.y[explosion] = y;
-    ArcadeSprite.texture[explosion] = 3;
+    ArcadeSprite.texture[explosion] = TEXTURES.EXPLOSION;
+    ArcadeSprite.group[explosion] = SPRITE_GROUPS.DAMAGE;
+    ArcadeSprite.depth[explosion] = 15;
     Animation.animation[explosion] = 6;
     Duration.timeout[explosion] = 800;
 }
