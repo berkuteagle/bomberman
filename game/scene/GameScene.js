@@ -1,19 +1,19 @@
-import { createWorld } from 'https://cdn.jsdelivr.net/npm/bitecs/+esm';
-import { Input, Scene } from 'https://cdn.jsdelivr.net/npm/phaser/+esm';
+import { createWorld } from '../bitecs.js';
+import { Input, Scene } from '../phaser.js';
 
 import {
-    createArcadeSpriteSystem,
     createBombSystem,
     createExplosionSystem,
-    createPlayerSystem,
     createSapperSystem
-} from '../system.js';
+} from '../ecs/system.js';
 
-import {
-    createPlayer
-} from '../entity.js';
+import { AnimationSceneFeature } from '../ecs/animation.js';
+import { createKeyboardCursorSystem } from '../ecs/input.js';
+import { MovementSceneFeature } from '../ecs/movement.js';
+import { createPlayer, createPlayerSystem } from '../ecs/player.js';
+import { SpriteSceneFeature } from '../ecs/sprite.js';
 
-import { SPRITE_GROUPS, TEXTURES } from '../constants.js';
+import { SPRITE_GROUPS, TEXTURES } from '../ecs/constants.js';
 
 const ANIMATIONS = [
     'Empty', //0
@@ -30,115 +30,118 @@ export class GameScene extends Scene {
     #world = null;
     #bombSystem = null;
     #explosionSystem = null;
-    #spriteSystem = null;
     #playerSystem = null;
     #sapperSystem = null;
-    #cursors = null;
     #shooterKey = null;
+
+    #cursorSystem = null;
+
+    #spriteFeature;
+    #animationFeature;
+    #movementFeature;
 
     constructor() {
         super('Game');
+
+        this.#world = createWorld();
+
+        const texturesMap = new Map();
+
+        texturesMap.set(TEXTURES.PLAYER, 'GreenNinja');
+        texturesMap.set(TEXTURES.PLAYER_DARK, 'DarkNinja');
+        texturesMap.set(TEXTURES.BOMB, 'Bomb');
+        texturesMap.set(TEXTURES.EXPLOSION, 'Explosion');
+
+        this.#spriteFeature = new SpriteSceneFeature(this, this.#world, {
+            defaultConfig: {
+                frameWidth: 16,
+                frameHeight: 16
+            },
+            spritesheets: [
+                {
+                    key: 'GreenNinja',
+                    path: 'assets/GreenNinja.png'
+                }, {
+                    key: 'DarkNinja',
+                    path: 'assets/DarkNinja.png'
+                }, {
+                    key: 'Bomb',
+                    path: 'assets/Bomb.png'
+                }, {
+                    key: 'Explosion',
+                    path: 'assets/Explosion.png',
+                    config: {
+                        frameWidth: 48,
+                        frameHeight: 48
+                    }
+                }
+            ]
+        });
+
+        this.#animationFeature = new AnimationSceneFeature(this, this.#world, {
+            spritesMap: this.#spriteFeature.spritesMap,
+            animations: [
+                {
+                    key: 'GreenNinja_walk_down',
+                    texture: 'GreenNinja',
+                    frames: [0, 4, 8, 12],
+                    frameRate: 8,
+                    repeat: -1
+                }, {
+                    key: 'GreenNinja_walk_up',
+                    texture: 'GreenNinja',
+                    frames: [1, 5, 9, 13],
+                    frameRate: 8,
+                    repeat: -1
+                }, {
+                    key: 'GreenNinja_walk_left',
+                    texture: 'GreenNinja',
+                    frames: [2, 6, 10, 14],
+                    frameRate: 8,
+                    repeat: -1
+                }, {
+                    key: 'GreenNinja_walk_right',
+                    texture: 'GreenNinja',
+                    frames: [3, 7, 11, 15],
+                    frameRate: 8,
+                    repeat: -1
+                }, {
+                    key: 'Bomb',
+                    frameRate: 8,
+                    repeat: -1
+                }, {
+                    key: 'Explosion',
+                    frameRate: 12,
+                    repeat: 1
+                }
+            ]
+        });
+
+        this.#movementFeature = new MovementSceneFeature(this, this.#world, { spritesMap: this.#spriteFeature.spritesMap });
     }
 
     preload() {
         this.load.setBaseURL('game/');
 
+        this.#spriteFeature.preload();
+        this.#animationFeature.preload();
+
         this.load.image('TilesetInterior', 'assets/TilesetInterior.png');
         this.load.image('TilesetInteriorFloor', 'assets/TilesetInteriorFloor.png');
         this.load.image('TilesetDungeon', 'assets/TilesetDungeon.png');
-
-        this.load.spritesheet(
-            'GreenNinja',
-            'assets/GreenNinja.png',
-            {
-                frameWidth: 16,
-                frameHeight: 16
-            }
-        );
-
-        this.load.spritesheet(
-            'DarkNinja',
-            'assets/DarkNinja.png',
-            {
-                frameWidth: 16,
-                frameHeight: 16
-            }
-        );
-
-        this.load.spritesheet(
-            'Bomb',
-            'assets/Bomb.png',
-            {
-                frameWidth: 16,
-                frameHeight: 16
-            }
-        );
-
-        this.load.spritesheet(
-            'Explosion',
-            'assets/Explosion.png',
-            {
-                frameWidth: 48,
-                frameHeight: 48
-            }
-        );
 
         this.load.tilemapTiledJSON('map', 'assets/game.json');
     }
 
     init() {
-        this.#cursors = this.input.keyboard.createCursorKeys();
         this.#shooterKey = this.input.keyboard.addKey(Input.Keyboard.KeyCodes.SPACE);
     }
 
     create() {
         const worldData = {
             spriteGroups: new Map(),
-            spritesMap: new Map(),
             texturesMap: new Map()
         };
-
-        this.anims.create({
-            key: 'GreenNinja_walk_down',
-            frames: this.anims.generateFrameNumbers('GreenNinja', { frames: [0, 4, 8, 12] }),
-            frameRate: 8,
-            repeat: -1
-        });
-
-        this.anims.create({
-            key: 'GreenNinja_walk_up',
-            frames: this.anims.generateFrameNumbers('GreenNinja', { frames: [1, 5, 9, 13] }),
-            frameRate: 8,
-            repeat: -1
-        });
-
-        this.anims.create({
-            key: 'GreenNinja_walk_left',
-            frames: this.anims.generateFrameNumbers('GreenNinja', { frames: [2, 6, 10, 14] }),
-            frameRate: 8,
-            repeat: -1
-        });
-
-        this.anims.create({
-            key: 'GreenNinja_walk_right',
-            frames: this.anims.generateFrameNumbers('GreenNinja', { frames: [3, 7, 11, 15] }),
-            frameRate: 8,
-            repeat: -1
-        });
-
-        this.anims.create({
-            key: 'Bomb',
-            frames: this.anims.generateFrameNumbers('Bomb'),
-            frameRate: 8,
-            repeat: -1
-        });
-
-        this.anims.create({
-            key: 'Explosion',
-            frames: this.anims.generateFrameNumbers('Explosion'),
-            frameRate: 12,
-            repeat: 1
-        });
 
         const static_group = this.physics.add.staticGroup();
         const group = this.physics.add.group();
@@ -163,7 +166,9 @@ export class GameScene extends Scene {
         worldData.texturesMap.set(TEXTURES.BOMB, 'Bomb');
         worldData.texturesMap.set(TEXTURES.EXPLOSION, 'Explosion');
 
-        this.#world = createWorld(worldData);
+        this.#spriteFeature.create();
+        this.#animationFeature.create();
+        this.#movementFeature.create();
 
         createPlayer(this.#world, 64, 64);
 
@@ -197,20 +202,25 @@ export class GameScene extends Scene {
             this.scene.switch('GameOver');
         }, null, null);
 
-        this.#spriteSystem = createArcadeSpriteSystem(ANIMATIONS);
-        this.#playerSystem = createPlayerSystem(this.#cursors);
+        this.#playerSystem = createPlayerSystem();
         this.#sapperSystem = createSapperSystem(this.#shooterKey);
         this.#bombSystem = createBombSystem(this.time);
         this.#explosionSystem = createExplosionSystem(this.time);
+        this.#cursorSystem = createKeyboardCursorSystem(this);
 
         this.sys.events.on('wake', this.wake, this);
     }
 
-    update() {
+    update(...args) {
 
         if (this.#world) {
+            this.#cursorSystem(this.#world);
+
+            this.#spriteFeature.update(...args);
+            this.#movementFeature.update(...args);
+            this.#animationFeature.update(...args);
+
             this.#playerSystem(this.#world);
-            this.#spriteSystem(this.#world);
             this.#sapperSystem(this.#world);
             this.#bombSystem(this.#world);
             this.#explosionSystem(this.#world);
