@@ -4,7 +4,7 @@ import { ANIMATION_STATE, Animation } from '../animation.js';
 import { DIRECTION, Direction, Position } from '../common.js';
 import { Destructible, ExplosionType, Sapper, Shooter } from '../component.js';
 import { MOVEMENT_STATE, Movement, MovementAnimation, Velocity } from '../movement.js';
-import { Sprite, SpriteDepth } from '../sprite.js';
+import { Sprite, SpriteDepth, SpriteGroup } from '../sprite.js';
 
 import { Player } from './Player.js';
 
@@ -14,7 +14,8 @@ import { Player } from './Player.js';
  * @param {Number} x 
  * @param {Number} y
  */
-export function createPlayer(world, x = 0, y = 0) {
+export function createPlayer(scene, x = 0, y = 0) {
+    const world = scene.ecs.world;
     const player = addEntity(world);
 
     addComponent(world, Player, player);
@@ -29,8 +30,10 @@ export function createPlayer(world, x = 0, y = 0) {
     addComponent(world, Movement, player);
     addComponent(world, Sprite, player);
     addComponent(world, SpriteDepth, player);
+    addComponent(world, SpriteGroup, player);
 
-    Sprite.key[player] = 0;
+    Sprite.texture[player] = scene.ecs.getTextureIndex('GreenNinja');
+    SpriteGroup.key[player] = scene.ecs.getGroupIndex('Player');
     SpriteDepth.depth[player] = 10;
     Sapper.count[player] = 3;
     Sapper.power[player] = 1;
@@ -42,8 +45,13 @@ export function createPlayer(world, x = 0, y = 0) {
     Velocity.y[player] = 0;
     Direction.current[player] = DIRECTION.DOWN;
     Destructible.health[player] = 10;
-    Animation.key[player] = 1;
+    Animation.key[player] = scene.ecs.getAnimationIndex('GreenNinja_walk_down');
     Animation.state[player] = ANIMATION_STATE.STOP;
     Movement.state[player] = MOVEMENT_STATE.STOP;
-    MovementAnimation.keys[player] = [1, 0, 2, 3];
+    MovementAnimation.keys[player] = [
+        scene.ecs.getAnimationIndex('GreenNinja_walk_up'),
+        scene.ecs.getAnimationIndex('GreenNinja_walk_down'),
+        scene.ecs.getAnimationIndex('GreenNinja_walk_left'),
+        scene.ecs.getAnimationIndex('GreenNinja_walk_right')
+    ];
 }

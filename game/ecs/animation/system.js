@@ -3,7 +3,7 @@ import { Changed, defineQuery, defineSystem, exitQuery } from '../../bitecs.js';
 import { Sprite } from '../sprite.js';
 import { Animation, ANIMATION_STATE } from './Animation.js';
 
-export const createAnimationSystem = (animationsMap, spritesMap) => {
+export const createAnimationSystem = () => {
 
     const allEntities = defineQuery([Animation, Sprite]);
     const allChangedEntities = defineQuery([Changed(Animation), Sprite]);
@@ -12,8 +12,8 @@ export const createAnimationSystem = (animationsMap, spritesMap) => {
     return defineSystem(world => {
 
         for (const entity of allChangedEntities(world)) {
-            const sprite = spritesMap.get(entity);
-            const animation = animationsMap.get(Animation.key[entity]);
+            const sprite = world.scene.ecs.getSprite(entity);
+            const animation = world.scene.ecs.getAnimationKey(Animation.key[entity]);
             const state = Animation.state[entity];
 
             if (state) {
@@ -24,7 +24,7 @@ export const createAnimationSystem = (animationsMap, spritesMap) => {
         }
 
         for (const entity of exitEntities(world)) {
-            spritesMap.get(entity)?.stop();
+            world.scene.ecs.getSprite(entity)?.stop();
         }
 
     });

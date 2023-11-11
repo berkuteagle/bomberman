@@ -1,4 +1,5 @@
-import { Game, Scale, WEBGL } from 'https://cdn.jsdelivr.net/npm/phaser/+esm';
+import ScenePlugin from './ecs/ScenePlugin.js';
+import { Game, Scale, WEBGL } from './phaser.js';
 
 import {
     BootScene,
@@ -20,12 +21,17 @@ export default class Booombers extends Game {
                 mode: Scale.FIT,
                 autoCenter: Scale.CENTER_BOTH
             },
+            plugins: {
+                scene: [
+                    { key: 'ecsPlugin', plugin: ScenePlugin, mapping: 'ecs' }
+                ]
+            },
             scene: [BootScene, GameScene, MenuScene, UIScene, GameOver],
             backgroundColor: '#141b1b',
             physics: {
                 default: 'arcade',
                 arcade: {
-                    debug: false
+                    debug: new URLSearchParams(location.search).has('debug')
                 }
             }
         }

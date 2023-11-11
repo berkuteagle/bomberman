@@ -8,7 +8,7 @@ import { Movement } from './Movement.js';
 import { MovementAnimation } from './MovementAnimation.js';
 import { Velocity } from './Velocity.js';
 
-export const createMovementSystem = (spritesMap) => {
+export const createMovementSystem = () => {
 
     const allEntities = defineQuery([Velocity, Sprite]);
     const allChangedEntities = defineQuery([Changed(Velocity), Sprite]);
@@ -18,15 +18,15 @@ export const createMovementSystem = (spritesMap) => {
     return defineSystem(world => {
 
         for (const entity of enterEntities(world)) {
-            spritesMap.get(entity)?.setVelocity(Velocity.x[entity], Velocity.y[entity]);
+            world.scene.ecs.getSprite(entity)?.setVelocity(Velocity.x[entity], Velocity.y[entity]);
         }
 
         for (const entity of allChangedEntities(world)) {
-            spritesMap.get(entity)?.setVelocity(Velocity.x[entity], Velocity.y[entity]);
+            world.scene.ecs.getSprite(entity)?.setVelocity(Velocity.x[entity], Velocity.y[entity]);
         }
 
         for (const entity of exitEntities(world)) {
-            spritesMap.get(entity)?.setVelocity(0, 0);
+            world.scene.ecs.getSprite(entity)?.setVelocity(0, 0);
         }
 
     });

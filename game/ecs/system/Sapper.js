@@ -15,7 +15,7 @@ export const createSapperSystem = (bombKey) => {
                 if (Sapper.count[entity]) {
                     const x = Math.round(Position.x[entity] / 16) * 16;
                     const y = Math.round(Position.y[entity] / 16) * 16;
-                    createBomb(world, x, y, entity);
+                    createBomb(world, x, y, entity, world.scene);
                 }
             }
         }

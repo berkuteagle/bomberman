@@ -4,7 +4,7 @@ import { Position } from '../common.js';
 import { Belong, Duration, Explosive, Sapper } from '../component.js';
 import { createExplosion } from '../entity.js';
 
-export const createBombSystem = (time) => {
+export const createBombSystem = () => {
     const entitiesAll = defineQuery([Explosive, Duration, Position, Belong]);
     const sappersAll = defineQuery([Sapper]);
     const entitiesEnter = enterQuery(entitiesAll);
@@ -13,6 +13,8 @@ export const createBombSystem = (time) => {
     const startTime = new Map();
 
     return defineSystem(world => {
+
+        const time = world.scene.time;
 
         for (const entity of entitiesEnter(world)) {
             startTime.set(entity, time.now);
@@ -26,7 +28,7 @@ export const createBombSystem = (time) => {
         for (const entity of entitiesAll(world)) {
             if (Duration.timeout[entity] < (time.now - startTime.get(entity))) {
                 removeEntity(world, entity);
-                createExplosion(world, Position.x[entity], Position.y[entity]);
+                createExplosion(world, Position.x[entity], Position.y[entity], world.scene);
             }
         }
 

@@ -1,34 +1,15 @@
-import { pipe } from '../../bitecs.js';
 
 import { BaseSceneFeature } from '../common.js';
 
-import { createEnterSpriteSystem, createExitSpriteSystem, createSpriteDepthSystem, createSpriteGroupSystem, createSpriteSceneSystem } from './system.js';
+import { createEnterSpriteSystem, createExitSpriteSystem, createSpriteDepthSystem, createSpriteGroupSystem, createSpritePositionSystem, createSpriteSceneSystem } from './system.js';
 
 export default class SpriteSceneFeature extends BaseSceneFeature {
-
-    #spritesMap = new Map();
-    #groupsMap = new Map();
-    #texturesMap = new Map();
-    #system = null;
-
-    get spritesMap() {
-        return this.#spritesMap;
-    }
-
-    get texturesMap() {
-        return this.#texturesMap;
-    }
-
-    get groupsMap() {
-        return this.#groupsMap;
-    }
 
     preload() {
 
         const { spritesheets = [], defaultConfig = {} } = this.config;
 
-        spritesheets.forEach(({ key, path, config = {} }, idx) => {
-            this.#texturesMap.set(idx, key);
+        spritesheets.forEach(({ key, path, config = {} }) => {
             this.scene.load.spritesheet(
                 key,
                 path,
@@ -46,25 +27,26 @@ export default class SpriteSceneFeature extends BaseSceneFeature {
 
         const { groups = [] } = this.config;
 
-        groups.forEach((_, idx) => {
-            this.#groupsMap.set(idx, this.scene.physics.add.group());
-        });
+        for (const groupKey of groups) {
+            const group = this.scene.physics.add.group();
 
-        this.#system = pipe(
-            createEnterSpriteSystem(this.scene, this.#spritesMap, this.#texturesMap),
-            createSpriteDepthSystem(this.#spritesMap),
-            createSpriteSceneSystem(this.scene, this.#spritesMap),
-            createSpriteGroupSystem(this.#spritesMap, this.#texturesMap),
-            createExitSpriteSystem(this.#spritesMap)
-        );
+            group.defaults = {
+                setCollideWorldBounds: true
+            };
+
+            this.scene.ecs.addGroup(groupKey, group);
+        }
+
+        this.scene.ecs.addSystem('spriteEnter', createEnterSpriteSystem(), 'preUpdate');
+
+        this.scene.ecs.addSystem('spriteDepth', createSpriteDepthSystem());
+        this.scene.ecs.addSystem('sprite', createSpriteSceneSystem());
+        this.scene.ecs.addSystem('spriteGroup', createSpriteGroupSystem());
+        this.scene.ecs.addSystem('spritePosition', createSpritePositionSystem());
+
+        this.scene.ecs.addSystem('spriteExit', createExitSpriteSystem(), 'postUpdate');
 
         super.create();
     }
 
-    update() {
-
-        this.#system?.(this.world);
-
-        super.update();
-    }
 }

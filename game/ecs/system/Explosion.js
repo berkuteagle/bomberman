@@ -3,7 +3,7 @@ import { defineQuery, defineSystem, enterQuery, exitQuery, removeEntity } from '
 import { Position } from '../common.js';
 import { Duration, Explosion } from '../component.js';
 
-export const createExplosionSystem = (time) => {
+export const createExplosionSystem = () => {
     const entitiesAll = defineQuery([Explosion, Position, Duration]);
     const entitiesEnter = enterQuery(entitiesAll);
     const entitiesExit = exitQuery(entitiesAll);
@@ -11,6 +11,8 @@ export const createExplosionSystem = (time) => {
     const startTime = new Map();
 
     return defineSystem(world => {
+
+        const time = world.scene.time;
 
         for (const entity of entitiesEnter(world)) {
             startTime.set(entity, time.now);

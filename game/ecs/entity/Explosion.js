@@ -3,7 +3,6 @@ import { addComponent, addEntity } from '../../bitecs.js';
 import { Animation, ANIMATION_STATE } from '../animation.js';
 import { Position } from '../common.js';
 import { Duration, Explosion, ExplosionType } from '../component.js';
-import { TEXTURES } from '../constants.js';
 import { Sprite, SpriteDepth } from '../sprite.js';
 
 /**
@@ -12,7 +11,7 @@ import { Sprite, SpriteDepth } from '../sprite.js';
  * @param {Number} x 
  * @param {Number} y
  */
-export const createExplosion = (world, x = 0, y = 0) => {
+export const createExplosion = (world, x = 0, y = 0, scene) => {
     const explosion = addEntity(world);
 
     addComponent(world, Explosion, explosion);
@@ -26,9 +25,9 @@ export const createExplosion = (world, x = 0, y = 0) => {
     Explosion.power[explosion] = 1;
     Position.x[explosion] = x;
     Position.y[explosion] = y;
-    Sprite.key[explosion] = TEXTURES.EXPLOSION;
+    Sprite.texture[explosion] = scene.ecs.getTextureIndex('Explosion');
     SpriteDepth.depth[explosion] = 20;
-    Animation.key[explosion] = 5;
+    Animation.key[explosion] = scene.ecs.getAnimationIndex('Explosion');
     Animation.state[explosion] = ANIMATION_STATE.FORCE_PLAY;
     Duration.timeout[explosion] = 800;
 }

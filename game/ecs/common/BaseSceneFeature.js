@@ -5,12 +5,10 @@ function requiredArgument(name) {
 export default class BaseSceneFeature {
 
     #scene;
-    #world;
     #config;
 
-    constructor(scene = requiredArgument('scene'), world = requiredArgument('world'), config = {}) {
+    constructor(scene = requiredArgument('scene'), config = {}) {
         this.#scene = scene;
-        this.#world = world;
         this.#config = config;
     }
 
@@ -22,10 +20,6 @@ export default class BaseSceneFeature {
         return this.#scene;
     }
 
-    get world() {
-        return this.#world;
-    }
-
     preload() {
     }
 
@@ -35,6 +29,4 @@ export default class BaseSceneFeature {
     update() {
     }
 
-    getTextureIndex() {
-    }
 }
