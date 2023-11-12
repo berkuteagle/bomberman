@@ -6,27 +6,27 @@ import {
     createSapperSystem
 } from '../ecs/system.js';
 
-import { AnimationSceneFeature } from '../ecs/animation.js';
+import { AnimationFeature } from '../ecs/animation.js';
 import { createKeyboardCursorSystem } from '../ecs/input.js';
-import { MovementSceneFeature } from '../ecs/movement.js';
+import { MovementFeature } from '../ecs/movement.js';
 import { createPlayer, createPlayerSystem } from '../ecs/player.js';
-import { SpriteSceneFeature } from '../ecs/sprite.js';
+import { SpriteFeature } from '../ecs/sprite.js';
 
 
 export class GameScene extends Scene {
-
-    #spriteFeature;
-    #animationFeature;
-    #movementFeature;
 
     constructor() {
         super('Game');
     }
 
-    preload() {
-        this.#movementFeature = new MovementSceneFeature(this);
-        this.#spriteFeature = new SpriteSceneFeature(this, { groups: ['Player', 'Objects', 'Bombs'] });
-        this.#animationFeature = new AnimationSceneFeature(this, {
+    init() {
+        this.ecs.addFeature('movement', MovementFeature);
+
+        this.ecs.addFeature('sprite', SpriteFeature, {
+            groups: ['Player', 'Objects', 'Bombs']
+        });
+
+        this.ecs.addFeature('animation', AnimationFeature, {
             animations: [
                 {
                     key: 'GreenNinja_walk_down',
@@ -66,10 +66,6 @@ export class GameScene extends Scene {
     }
 
     create() {
-
-        this.#spriteFeature.create();
-        this.#animationFeature.create();
-        this.#movementFeature.create();
 
         const static_group = this.physics.add.staticGroup();
         const group = this.physics.add.group();

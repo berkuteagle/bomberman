@@ -4,9 +4,10 @@ import { Animations, Plugins, Scenes, Textures } from '../phaser.js';
 export default class SceneWorldPlugin extends Plugins.ScenePlugin {
 
     #world;
+    #features = new Map();
+    #enabledFeatures = new Set();
+
     #updateSystems = new Map();
-    #preUpdateSystems = new Map();
-    #postUpdateSystems = new Map();
 
     #texturesIndex = new Map();
     #textures = new Map();
@@ -49,16 +50,21 @@ export default class SceneWorldPlugin extends Plugins.ScenePlugin {
 
     #updateScene(time, delta) {
 
-        for (const system of this.#preUpdateSystems.values()) {
-            system(this.#world, time, delta);
+        for (const featureKey of this.#enabledFeatures) {
+            this.#features.get(featureKey).preUpdate(time, delta);
         }
 
+        for (const featureKey of this.#enabledFeatures) {
+            this.#features.get(featureKey).update(time, delta);
+        }
+
+        //TODO
         for (const system of this.#updateSystems.values()) {
             system(this.#world, time, delta);
         }
 
-        for (const system of this.#postUpdateSystems.values()) {
-            system(this.#world, time, delta);
+        for (const featureKey of this.#enabledFeatures) {
+            this.#features.get(featureKey).postUpdate(time, delta);
         }
     }
 
@@ -110,29 +116,37 @@ export default class SceneWorldPlugin extends Plugins.ScenePlugin {
 
     }
 
-    addSystem(key, systemFn, stage = 'update') {
+    addFeature(featureKey, FeatureClass, config = {}) {
+        const feature = new FeatureClass(this, {
+            ...FeatureClass.defaultConfig(),
+            ...config
+        });
 
-        switch (stage) {
-            case 'update':
-                this.#updateSystems.set(key, systemFn);
-                break;
-            case 'preUpdate':
-                this.#preUpdateSystems.set(key, systemFn);
-                break;
-            case 'postUpdate':
-                this.#postUpdateSystems.set(key, systemFn);
-                break;
+        feature.init();
+
+        this.#features.set(featureKey, feature);
+        this.#enabledFeatures.add(featureKey);
+    }
+
+    disableFeature(featureKey) {
+        this.#enabledFeatures.delete(featureKey);
+    }
+
+    enableFeature(featureKey) {
+        if (this.#features.has(featureKey)) {
+            this.#enabledFeatures.add(featureKey);
         }
+    }
+
+    addSystem(key, systemFn) {
+
+        this.#updateSystems.set(key, systemFn);
 
     }
 
-    removeSystem(key, stage = 'update') {
+    removeSystem(key) {
 
-        switch (stage) {
-            case 'update': return this.#updateSystems.delete(key);
-            case 'preUpdate': return this.#preUpdateSystems.delete(key);
-            case 'postUpdate': return this.#postUpdateSystems.delete(key);
-        }
+        return this.#updateSystems.delete(key);
 
     }
 
