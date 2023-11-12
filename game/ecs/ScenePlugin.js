@@ -53,10 +53,13 @@ export default class SceneWorldPlugin extends Plugins.ScenePlugin {
             system(this.#world, time, delta);
         }
 
-        for (const system of [...this.#updateSystems.values(), ...this.#postUpdateSystems.values()]) {
+        for (const system of this.#updateSystems.values()) {
             system(this.#world, time, delta);
         }
 
+        for (const system of this.#postUpdateSystems.values()) {
+            system(this.#world, time, delta);
+        }
     }
 
     #addTexture(key, texture) {

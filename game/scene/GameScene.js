@@ -24,33 +24,8 @@ export class GameScene extends Scene {
     }
 
     preload() {
-        this.#spriteFeature = new SpriteSceneFeature(this, {
-            defaultConfig: {
-                frameWidth: 16,
-                frameHeight: 16
-            },
-            groups: ['Player', 'Objects', 'Bombs'],
-            spritesheets: [
-                {
-                    key: 'GreenNinja',
-                    path: 'assets/GreenNinja.png'
-                }, {
-                    key: 'DarkNinja',
-                    path: 'assets/DarkNinja.png'
-                }, {
-                    key: 'Bomb',
-                    path: 'assets/Bomb.png'
-                }, {
-                    key: 'Explosion',
-                    path: 'assets/Explosion.png',
-                    config: {
-                        frameWidth: 48,
-                        frameHeight: 48
-                    }
-                }
-            ]
-        });
-
+        this.#movementFeature = new MovementSceneFeature(this);
+        this.#spriteFeature = new SpriteSceneFeature(this, { groups: ['Player', 'Objects', 'Bombs'] });
         this.#animationFeature = new AnimationSceneFeature(this, {
             animations: [
                 {
@@ -88,22 +63,14 @@ export class GameScene extends Scene {
                 }
             ]
         });
-
-        this.#movementFeature = new MovementSceneFeature(this);
-
-        this.load.setBaseURL('game/');
-
-        this.#spriteFeature.preload();
-        this.#animationFeature.preload();
-
-        this.load.image('TilesetInterior', 'assets/TilesetInterior.png');
-        this.load.image('TilesetInteriorFloor', 'assets/TilesetInteriorFloor.png');
-        this.load.image('TilesetDungeon', 'assets/TilesetDungeon.png');
-
-        this.load.tilemapTiledJSON('map', 'assets/game.json');
     }
 
     create() {
+
+        this.#spriteFeature.create();
+        this.#animationFeature.create();
+        this.#movementFeature.create();
+
         const static_group = this.physics.add.staticGroup();
         const group = this.physics.add.group();
         const bombs_group = this.physics.add.group();
@@ -116,10 +83,6 @@ export class GameScene extends Scene {
         bombs_group.defaults = {
             setImmovable: true
         };
-
-        this.#spriteFeature.create();
-        this.#animationFeature.create();
-        this.#movementFeature.create();
 
         createPlayer(this, 64, 64);
 

@@ -2,10 +2,10 @@ import ScenePlugin from './ecs/ScenePlugin.js';
 import { Game, Scale, WEBGL } from './phaser.js';
 
 import {
-    BootScene,
     GameOver,
     GameScene,
     MenuScene,
+    PreloadScene,
     UIScene
 } from './scene.js';
 
@@ -26,7 +26,7 @@ export default class Booombers extends Game {
                     { key: 'ecsPlugin', plugin: ScenePlugin, mapping: 'ecs' }
                 ]
             },
-            scene: [BootScene, GameScene, MenuScene, UIScene, GameOver],
+            scene: [PreloadScene, GameScene, MenuScene, UIScene, GameOver],
             backgroundColor: '#141b1b',
             physics: {
                 default: 'arcade',

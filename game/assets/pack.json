@@ -1,0 +1,63 @@
+{
+    "pack": {
+        "files": [
+            {
+                "type": "spritesheet",
+                "key": "GreenNinja",
+                "url": "assets/GreenNinja.png",
+                "frameConfig": {
+                    "frameWidth": 16,
+                    "frameHeight": 16
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "DarkNinja",
+                "url": "assets/DarkNinja.png",
+                "frameConfig": {
+                    "frameWidth": 16,
+                    "frameHeight": 16
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "Bomb",
+                "url": "assets/Bomb.png",
+                "frameConfig": {
+                    "frameWidth": 16,
+                    "frameHeight": 16
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "Explosion",
+                "url": "assets/Explosion.png",
+                "frameConfig": {
+                    "frameWidth": 48,
+                    "frameHeight": 48
+                }
+            },
+            {
+                "type": "image",
+                "key": "TilesetInterior",
+                "url": "assets/TilesetInterior.png"
+            },
+            {
+                "type": "image",
+                "key": "TilesetInteriorFloor",
+                "url": "assets/TilesetInteriorFloor.png"
+            },
+            {
+                "type": "image",
+                "key": "TilesetDungeon",
+                "url": "assets/TilesetDungeon.png"
+            },
+            {
+                "type": "tilemapTiledJSON",
+                "key": "map",
+                "url": "assets/game.json"
+            }
+        ]
+    },
+    "meta": {}
+}

@@ -5,24 +5,6 @@ import { createEnterSpriteSystem, createExitSpriteSystem, createSpriteDepthSyste
 
 export default class SpriteSceneFeature extends BaseSceneFeature {
 
-    preload() {
-
-        const { spritesheets = [], defaultConfig = {} } = this.config;
-
-        spritesheets.forEach(({ key, path, config = {} }) => {
-            this.scene.load.spritesheet(
-                key,
-                path,
-                {
-                    ...defaultConfig,
-                    ...config
-                }
-            );
-        });
-
-        super.preload();
-    }
-
     create() {
 
         const { groups = [] } = this.config;
