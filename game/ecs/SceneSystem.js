@@ -1,5 +1,4 @@
-export default class SceneFeature {
-
+export default class SceneSystem {
     #ecs;
     #config;
 
@@ -23,11 +22,6 @@ export default class SceneFeature {
 
     /**
      * 
-     */
-    init() { }
-
-    /**
-     * 
      * @param {*} time 
      * @param {*} delta 
      */
@@ -47,7 +41,4 @@ export default class SceneFeature {
      */
     postUpdate(time, delta) { }
 
-    static defaultConfig() {
-        return {};
-    }
 }

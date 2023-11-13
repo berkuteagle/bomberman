@@ -1,7 +1,7 @@
 import { addComponent, addEntity } from '../../bitecs.js';
 
 import { Animation, ANIMATION_STATE } from '../animation.js';
-import { Position } from '../common.js';
+import { Position } from '../position.js';
 import { Belong, Duration, Explosive } from '../component.js';
 import { Sprite, SpriteGroup } from '../sprite.js';
 

@@ -1,6 +1,6 @@
 import { Not, defineQuery, defineSystem, enterQuery, exitQuery, hasComponent } from '../../bitecs.js';
 
-import { Position } from '../common.js';
+import { Position } from '../position.js';
 
 import { Sprite } from './Sprite.js';
 import { SpriteDepth } from './SpriteDepth.js';
@@ -56,8 +56,8 @@ export const createSpritePositionSystem = () => {
 
         for (const entity of allEntities(world)) {
             const sprite = world.scene.ecs.getSprite(entity);
-            Position.x[entity] = sprite.x;
-            Position.y[entity] = sprite.y;
+            sprite.x = Position.x[entity];
+            sprite.y = Position.y[entity];
         }
 
     });

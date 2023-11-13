@@ -1,6 +1,6 @@
 import { defineQuery, defineSystem, enterQuery, exitQuery, removeEntity } from '../../bitecs.js';
 
-import { Position } from '../common.js';
+import { Position } from '../position.js';
 import { Belong, Duration, Explosive, Sapper } from '../component.js';
 import { createExplosion } from '../entity.js';
 

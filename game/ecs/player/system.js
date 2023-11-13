@@ -2,7 +2,8 @@ import { defineQuery, defineSystem } from '../../bitecs.js';
 
 import { Direction, DIRECTION } from '../common.js';
 import { Cursor, CURSOR_MASK } from '../input.js';
-import { Movement, MOVEMENT_STATE, Velocity } from '../movement.js';
+import { Movement, MOVEMENT_STATE } from '../movement.js';
+import { Velocity } from '../phy.js';
 
 import { Player } from './Player.js';
 

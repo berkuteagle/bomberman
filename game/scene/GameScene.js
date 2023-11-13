@@ -9,7 +9,9 @@ import {
 import { AnimationFeature } from '../ecs/animation.js';
 import { createKeyboardCursorSystem } from '../ecs/input.js';
 import { MovementFeature } from '../ecs/movement.js';
+import { PhyFeature } from '../ecs/phy.js';
 import { createPlayer, createPlayerSystem } from '../ecs/player.js';
+import { PositionFeature } from '../ecs/position.js';
 import { SpriteFeature } from '../ecs/sprite.js';
 
 
@@ -20,6 +22,8 @@ export class GameScene extends Scene {
     }
 
     init() {
+        this.ecs.addFeature('phy', PhyFeature);
+        this.ecs.addFeature('position', PositionFeature);
         this.ecs.addFeature('movement', MovementFeature);
 
         this.ecs.addFeature('sprite', SpriteFeature, {

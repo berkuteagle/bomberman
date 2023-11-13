@@ -1,9 +1,11 @@
 import { addComponent, addEntity } from '../../bitecs.js';
 
 import { ANIMATION_STATE, Animation } from '../animation.js';
-import { DIRECTION, Direction, Position } from '../common.js';
+import { DIRECTION, Direction } from '../common.js';
 import { Destructible, ExplosionType, Sapper, Shooter } from '../component.js';
-import { MOVEMENT_STATE, Movement, MovementAnimation, Velocity } from '../movement.js';
+import { MOVEMENT_STATE, Movement, MovementAnimation } from '../movement.js';
+import { Velocity } from '../phy.js';
+import { Position, PositionBoundaries } from '../position.js';
 import { Sprite, SpriteDepth, SpriteGroup } from '../sprite.js';
 
 import { Player } from './Player.js';
@@ -20,6 +22,7 @@ export function createPlayer(scene, x = 0, y = 0) {
 
     addComponent(world, Player, player);
     addComponent(world, Position, player);
+    addComponent(world, PositionBoundaries, player);
     addComponent(world, Velocity, player);
     addComponent(world, Direction, player);
     addComponent(world, Shooter, player);
@@ -41,6 +44,8 @@ export function createPlayer(scene, x = 0, y = 0) {
     Player.velocity[player] = 50;
     Position.x[player] = x;
     Position.y[player] = y;
+    PositionBoundaries.x[player] = [64, 640];
+    PositionBoundaries.y[player] = [64, 480];
     Velocity.x[player] = 0;
     Velocity.y[player] = 0;
     Direction.current[player] = DIRECTION.DOWN;

@@ -1,14 +1,11 @@
 import SceneFeature from '../SceneFeature.js';
-import { createMovementAnimationSystem, createMovementSystem } from './system.js';
+import { createMovementAnimationSystem } from './system.js';
 
 export default class MovementFeature extends SceneFeature {
 
-    #movementSystem = null;
     #movementAnimationSystem = null;
 
     init() {
-        this.#movementSystem = createMovementSystem();
-
         if (this.config.animation) {
             this.#movementAnimationSystem = createMovementAnimationSystem();
         }
@@ -17,10 +14,8 @@ export default class MovementFeature extends SceneFeature {
     /**
      * @override
      */
-    update(time, delta) {
-        this.#movementSystem?.(this.ecs.world);
+    update() {
         this.#movementAnimationSystem?.(this.ecs.world);
-        super.update(time, delta);
     }
 
     static defaultConfig() {
