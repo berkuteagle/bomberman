@@ -22,11 +22,11 @@ export const createPlayerSystem = () => {
         for (const entity of playerAll(world)) {
 
             if (state & CURSOR_MASK.LEFT && !(state & CURSOR_MASK.RIGHT)) {
-                Velocity.x[entity] = -Player.velocity[entity];
+                Velocity.x[entity] = -Velocity.max[entity];
                 Direction.current[entity] = DIRECTION.LEFT;
                 Movement.state[entity] = MOVEMENT_STATE.WALK;
             } else if (state & CURSOR_MASK.RIGHT && !(state & CURSOR_MASK.LEFT)) {
-                Velocity.x[entity] = Player.velocity[entity];
+                Velocity.x[entity] = Velocity.max[entity];
                 Direction.current[entity] = DIRECTION.RIGHT;
                 Movement.state[entity] = MOVEMENT_STATE.WALK;
             } else {
@@ -34,11 +34,11 @@ export const createPlayerSystem = () => {
             }
 
             if (state & CURSOR_MASK.UP && !(state & CURSOR_MASK.DOWN)) {
-                Velocity.y[entity] = -Player.velocity[entity];
+                Velocity.y[entity] = -Velocity.max[entity];
                 Direction.current[entity] = DIRECTION.UP;
                 Movement.state[entity] = MOVEMENT_STATE.WALK;
             } else if (state & CURSOR_MASK.DOWN && !(state & CURSOR_MASK.UP)) {
-                Velocity.y[entity] = Player.velocity[entity];
+                Velocity.y[entity] = Velocity.max[entity];
                 Direction.current[entity] = DIRECTION.DOWN;
                 Movement.state[entity] = MOVEMENT_STATE.WALK;
             } else {

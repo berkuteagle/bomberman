@@ -40,13 +40,13 @@ export function createPlayer(scene, x = 0, y = 0) {
     Sapper.count[player] = 3;
     Sapper.power[player] = 1;
     Sapper.type[player] = ExplosionType.DEFAULT;
-    Player.velocity[player] = 50;
     Position.x[player] = x;
     Position.y[player] = y;
     PositionBoundaries.x[player] = [64, 416];
     PositionBoundaries.y[player] = [64, 416];
     Velocity.x[player] = 0;
     Velocity.y[player] = 0;
+    Velocity.max[player] = 50;
     Direction.current[player] = DIRECTION.DOWN;
     Destructible.health[player] = 10;
     Movement.state[player] = MOVEMENT_STATE.STOP;

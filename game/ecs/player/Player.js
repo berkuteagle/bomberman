@@ -1,5 +1,3 @@
-import { defineComponent, Types } from '../../bitecs.js';
+import { defineComponent } from '../../bitecs.js';
 
-export const Player = defineComponent({
-    velocity: Types.ui32
-});
+export const Player = defineComponent();
