@@ -1,4 +1,3 @@
-export { DIRECTION, Direction } from './common/Direction.js';
 export { Request } from './common/Request.js';
 import { Types } from '../bitecs.js';
 

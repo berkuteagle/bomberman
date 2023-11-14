@@ -1,14 +1,13 @@
 import { Changed, defineQuery, defineSystem } from '../../bitecs.js';
 
 import { ANIMATION_STATE, sendAnimationRequest } from '../animation.js';
-import { Direction } from '../common.js';
 
 import { Movement } from './Movement.js';
 import { MovementAnimation } from './MovementAnimation.js';
 
 export const createMovementAnimationSystem = () => {
 
-    const allEntities = defineQuery([Changed(Direction), Movement, MovementAnimation]);
+    const allEntities = defineQuery([Changed(Movement), MovementAnimation]);
 
     return defineSystem(world => {
 
@@ -16,7 +15,7 @@ export const createMovementAnimationSystem = () => {
 
             sendAnimationRequest(
                 world,
-                MovementAnimation.keys[entity][Direction.current[entity]],
+                MovementAnimation.keys[entity][Movement.direction[entity]],
                 Movement.state[entity] ? ANIMATION_STATE.PLAY : ANIMATION_STATE.STOP,
                 entity
             );

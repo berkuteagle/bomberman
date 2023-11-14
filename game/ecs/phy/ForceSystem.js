@@ -16,10 +16,9 @@ export default class ForceSystem extends SceneSystem {
         super(ecs, config);
 
         this.#allEntities = defineQuery([Acceleration, Force]);
-
-        const accelerationVector = new Math.Vector2();
-
         this.#update = defineSystem(world => {
+
+            const accelerationVector = new Math.Vector2();
 
             for (const entity of this.#allEntities(world)) {
 

@@ -15,10 +15,9 @@ export default class AccelerationSystem extends SceneSystem {
         super(ecs, config);
 
         this.#allEntities = defineQuery([Acceleration, Velocity]);
-
-        const velocityVector = new Math.Vector2();
-
         this.#update = defineSystem((world, _time, delta) => {
+
+            const velocityVector = new Math.Vector2();
 
             for (const entity of this.#allEntities(world)) {
 
