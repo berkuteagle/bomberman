@@ -13,12 +13,12 @@ export const createMovementAnimationSystem = () => {
 
         for (const entity of allEntities(world)) {
 
-            sendAnimationRequest(
-                world,
+            world.scene.ecs.sendRequest(w => sendAnimationRequest(
+                w,
                 MovementAnimation.keys[entity][Movement.direction[entity]],
                 Movement.state[entity] ? ANIMATION_STATE.PLAY : ANIMATION_STATE.STOP,
                 entity
-            );
+            ));
 
         }
 

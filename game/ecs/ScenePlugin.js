@@ -1,5 +1,7 @@
-import { createWorld } from '../bitecs.js';
+import { createWorld, defineQuery, removeEntity } from '../bitecs.js';
 import { Animations, GameObjects, Plugins, Scenes, Textures } from '../phaser.js';
+
+import { Event, Request } from './common.js';
 
 class EntityObjectStore {
 
@@ -115,6 +117,12 @@ export default class SceneWorldPlugin extends Plugins.ScenePlugin {
     #groups;
     #sprites;
 
+    #eventsQuery;
+    #requestsQuery;
+
+    #sendEventsQueue = [];
+    #sendRequestSQueue = [];
+
     constructor(scene, pluginManager) {
 
         super(scene, pluginManager);
@@ -123,7 +131,8 @@ export default class SceneWorldPlugin extends Plugins.ScenePlugin {
         this.#sprites = new EntitySpriteStore(scene);
 
         this.#world = createWorld({ scene });
-
+        this.#eventsQuery = defineQuery([Event]);
+        this.#requestsQuery = defineQuery([Request]);
     }
 
     boot() {
@@ -148,6 +157,16 @@ export default class SceneWorldPlugin extends Plugins.ScenePlugin {
 
     #updateScene(time, delta) {
 
+        for (const eventFn of this.#sendEventsQueue) {
+            eventFn(this.#world);
+        }
+        this.#sendEventsQueue = [];
+
+        for (const requestFn of this.#sendRequestSQueue) {
+            requestFn(this.#world);
+        }
+        this.#sendRequestSQueue = [];
+
         for (const featureKey of this.#enabledFeatures) {
             this.#features.get(featureKey).preUpdate(time, delta);
         }
@@ -162,6 +181,18 @@ export default class SceneWorldPlugin extends Plugins.ScenePlugin {
 
         for (const featureKey of this.#enabledFeatures) {
             this.#features.get(featureKey).postUpdate(time, delta);
+        }
+
+        for (const entity of this.#eventsQuery(this.#world)) {
+            removeEntity(this.#world, entity);
+        }
+
+        for (const entity of this.#requestsQuery(this.#world)) {
+            if (Request.ttl[entity] > 0) {
+                --Request.ttl[entity];
+            } else {
+                removeEntity(this.#world, entity);
+            }
         }
     }
 
@@ -250,6 +281,14 @@ export default class SceneWorldPlugin extends Plugins.ScenePlugin {
     removeSystem(systemKey) {
         this.#enabledSystems.delete(systemKey);
         this.#systems.delete(systemKey);
+    }
+
+    sendRequest(requestFn) {
+        this.#sendRequestSQueue.push(requestFn);
+    }
+
+    sendEvent(eventFn) {
+        this.#sendEventsQueue.push(eventFn);
     }
 
     get world() { return this.#world; }

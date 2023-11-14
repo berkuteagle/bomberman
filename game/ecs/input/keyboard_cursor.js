@@ -1,24 +1,24 @@
 import { addComponent, addEntity, defineQuery, defineSystem, removeEntity, } from '../../bitecs.js';
 
-import { CURSOR_MASK, Cursor } from './cursor.js';
+import { CURSOR_STATE, Cursor } from './cursor.js';
 
 function getCursorState(cursors) {
     let result = 0;
 
     if (cursors.up.isDown) {
-        result |= CURSOR_MASK.UP;
+        result |= CURSOR_STATE.UP;
     }
 
     if (cursors.down.isDown) {
-        result |= CURSOR_MASK.DOWN;
+        result |= CURSOR_STATE.DOWN;
     }
 
     if (cursors.left.isDown) {
-        result |= CURSOR_MASK.LEFT;
+        result |= CURSOR_STATE.LEFT;
     }
 
     if (cursors.right.isDown) {
-        result |= CURSOR_MASK.RIGHT;
+        result |= CURSOR_STATE.RIGHT;
     }
 
     return result;

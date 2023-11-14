@@ -1,7 +1,7 @@
 import { defineQuery, defineSystem } from '../../bitecs.js';
 import { Math } from '../../phaser.js';
 
-import { Cursor, CURSOR_MASK } from '../input.js';
+import { Cursor, CURSOR_STATE } from '../input.js';
 import { Movement, MOVEMENT_DIRECTION, MOVEMENT_STATE } from '../movement.js';
 import { Velocity } from '../phy.js';
 
@@ -27,11 +27,11 @@ export const createPlayerSystem = () => {
                 Movement.state[entity] = MOVEMENT_STATE.STOP;
             } else {
 
-                if (state & CURSOR_MASK.LEFT && !(state & CURSOR_MASK.RIGHT)) {
+                if (state & CURSOR_STATE.LEFT && !(state & CURSOR_STATE.RIGHT)) {
                     Velocity.x[entity] = -Velocity.max[entity];
                     Movement.direction[entity] = MOVEMENT_DIRECTION.LEFT;
                     Movement.state[entity] = MOVEMENT_STATE.WALK;
-                } else if (state & CURSOR_MASK.RIGHT && !(state & CURSOR_MASK.LEFT)) {
+                } else if (state & CURSOR_STATE.RIGHT && !(state & CURSOR_STATE.LEFT)) {
                     Velocity.x[entity] = Velocity.max[entity];
                     Movement.direction[entity] = MOVEMENT_DIRECTION.RIGHT;
                     Movement.state[entity] = MOVEMENT_STATE.WALK;
@@ -39,11 +39,11 @@ export const createPlayerSystem = () => {
                     Velocity.x[entity] = 0;
                 }
 
-                if (state & CURSOR_MASK.UP && !(state & CURSOR_MASK.DOWN)) {
+                if (state & CURSOR_STATE.UP && !(state & CURSOR_STATE.DOWN)) {
                     Velocity.y[entity] = -Velocity.max[entity];
                     Movement.direction[entity] = MOVEMENT_DIRECTION.UP;
                     Movement.state[entity] = MOVEMENT_STATE.WALK;
-                } else if (state & CURSOR_MASK.DOWN && !(state & CURSOR_MASK.UP)) {
+                } else if (state & CURSOR_STATE.DOWN && !(state & CURSOR_STATE.UP)) {
                     Velocity.y[entity] = Velocity.max[entity];
                     Movement.direction[entity] = MOVEMENT_DIRECTION.DOWN;
                     Movement.state[entity] = MOVEMENT_STATE.WALK;

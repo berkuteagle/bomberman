@@ -35,17 +35,3 @@ export const createAnimationPreSystem = () => {
         }
     });
 }
-
-export const createAnimationPostSystem = () => {
-    const allEntities = defineQuery([Request]);
-
-    return defineSystem(world => {
-        for (const entity of allEntities(world)) {
-            if (Request.ttl[entity]) {
-                --Request.ttl[entity];
-            } else {
-                removeEntity(world, entity);
-            }
-        }
-    });
-}

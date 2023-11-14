@@ -1,3 +1,4 @@
+export { Event } from './common/Event.js';
 export { Request } from './common/Request.js';
 import { Types } from '../bitecs.js';
 
