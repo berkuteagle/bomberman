@@ -1,28 +1,126 @@
 import { createWorld } from '../bitecs.js';
-import { Animations, Plugins, Scenes, Textures } from '../phaser.js';
+import { Animations, GameObjects, Plugins, Scenes, Textures } from '../phaser.js';
+
+class EntityObjectStore {
+
+    #store = new Map();
+    #storeIndex = new Map();
+
+    getKey(index) {
+        return this.#store.get(index)[0];
+    }
+
+    get(index) {
+        return this.#store.get(index)[1];
+    }
+
+    getIndex(key) {
+        return this.#storeIndex.get(key);
+    }
+
+    add(key, object) {
+        const index = this.#storeIndex.size;
+
+        this.#store.set(index, [key, object]);
+        this.#storeIndex.set(key, index);
+
+        return index;
+    }
+
+}
+
+class EntityGroupStore {
+
+    #groups = new Map();
+    #groupsIndex = new Map();
+    #scene;
+
+    constructor(scene) {
+        this.#scene = scene;
+    }
+
+    getName(index) {
+        return this.#groups.get(index)[0];
+    }
+
+    get(index) {
+        return this.#groups.get(index)[1];
+    }
+
+    getIndex(name) {
+        return this.#groupsIndex.has(name)
+            ? this.#groupsIndex.get(name)
+            : this.create(name);
+    }
+
+    create(name) {
+        const index = this.#groups.size;
+        const group = this.#scene.add.group({ name, runChildUpdate: true });
+
+        this.#groups.set(index, [name, group]);
+        this.#groupsIndex.set(name, index);
+
+        return index;
+    }
+}
+
+class EntitySpriteStore {
+
+    #sprites = new Map();
+    #spritesIndex = new Map();
+    #scene;
+
+    constructor(scene) {
+        this.#scene = scene;
+    }
+
+    get(entity) {
+        return this.#sprites.get(entity);
+    }
+
+    getEntity(sprite) {
+        return this.#spritesIndex.get(sprite);
+    }
+
+    create(entity, x, y, texture) {
+        const sprite = new GameObjects.Sprite(this.#scene, x, y, texture);
+
+        this.#sprites.set(entity, sprite);
+        this.#spritesIndex.set(sprite, entity);
+    }
+
+    destroy(entity) {
+        const sprite = this.#sprites.get(entity);
+
+        if (sprite) {
+            this.#spritesIndex.delete(sprite);
+            this.#sprites.delete(entity);
+
+            sprite.destroy();
+        }
+
+    }
+}
 
 export default class SceneWorldPlugin extends Plugins.ScenePlugin {
 
     #world;
     #features = new Map();
     #enabledFeatures = new Set();
+    #systems = new Map();
+    #enabledSystems = new Set();
 
-    #updateSystems = new Map();
-
-    #texturesIndex = new Map();
-    #textures = new Map();
-
-    #animationsIndex = new Map();
-    #animations = new Map();
-
-    #groupsIndex = new Map();
-    #groups = new Map();
-
-    #spritesMap = new Map();
+    #anims = new EntityObjectStore();
+    #textures = new EntityObjectStore();
+    #groups;
+    #sprites;
 
     constructor(scene, pluginManager) {
 
         super(scene, pluginManager);
+
+        this.#groups = new EntityGroupStore(scene);
+        this.#sprites = new EntitySpriteStore(scene);
 
         this.#world = createWorld({ scene });
 
@@ -58,9 +156,8 @@ export default class SceneWorldPlugin extends Plugins.ScenePlugin {
             this.#features.get(featureKey).update(time, delta);
         }
 
-        //TODO
-        for (const system of this.#updateSystems.values()) {
-            system(this.#world, time, delta);
+        for (const systemKey of this.#enabledSystems) {
+            this.#systems.get(systemKey)(this.#world, time, delta);
         }
 
         for (const featureKey of this.#enabledFeatures) {
@@ -69,21 +166,11 @@ export default class SceneWorldPlugin extends Plugins.ScenePlugin {
     }
 
     #addTexture(key, texture) {
-
-        const index = this.#texturesIndex.size;
-
-        this.#texturesIndex.set(key, index);
-        this.#textures.set(index, [key, texture]);
-
+        this.#textures.add(key, texture);
     }
 
     #addAnimation(key, animation) {
-
-        const index = this.#animationsIndex.size;
-
-        this.#animationsIndex.set(key, index);
-        this.#animations.set(index, [key, animation]);
-
+        this.#anims.add(key, animation);
     }
 
     #addGameObject(gameObject) {
@@ -138,73 +225,49 @@ export default class SceneWorldPlugin extends Plugins.ScenePlugin {
         }
     }
 
-    addSystem(key, systemFn) {
-
-        this.#updateSystems.set(key, systemFn);
-
+    removeFeature(featureKey) {
+        if (this.#features.has(featureKey)) {
+            this.#enabledFeatures.delete(featureKey);
+            this.#features.delete(featureKey);
+        }
     }
 
-    removeSystem(key) {
+    addSystem(systemKey, systemFn) {
+        this.#systems.set(systemKey, systemFn);
+        this.#enabledSystems.add(systemKey);
+    }
 
-        return this.#updateSystems.delete(key);
+    disableSystem(systemKey) {
+        this.#enabledSystems.delete(systemKey);
+    }
 
+    enableSystem(systemKey) {
+        if (this.#systems.has(systemKey)) {
+            this.#enabledSystems.add(systemKey);
+        }
+    }
+
+    removeSystem(systemKey) {
+        this.#enabledSystems.delete(systemKey);
+        this.#systems.delete(systemKey);
     }
 
     get world() { return this.#world; }
 
-    addSprite(index, sprite) {
-        this.#spritesMap.set(index, sprite);
+    get sprites() {
+        return this.#sprites;
     }
 
-    removeSprite(index) {
-        this.#spritesMap.get(index).destroy();
-        this.#spritesMap.delete(index);
+    get groups() {
+        return this.#groups;
     }
 
-    getSprite(index) {
-        return this.#spritesMap.get(index);
+    get textures() {
+        return this.#textures;
     }
 
-    addGroup(key, group) {
-        const index = this.#groupsIndex.size;
-
-        this.#groupsIndex.set(key, index);
-        this.#groups.set(index, [key, group]);
+    get anims() {
+        return this.#anims;
     }
 
-    getGroupKey(index) {
-        return this.#groups.get(index)[0];
-    }
-
-    getGroup(index) {
-        return this.#groups.get(index)[1];
-    }
-
-    getGroupIndex(key) {
-        return this.#groupsIndex.get(key);
-    }
-
-    getTextureKey(index) {
-        return this.#textures.get(index)[0];
-    }
-
-    getTexture(index) {
-        return this.#textures.get(index)[1];
-    }
-
-    getTextureIndex(key) {
-        return this.#texturesIndex.get(key);
-    }
-
-    getAnimationKey(index) {
-        return this.#animations.get(index)[0];
-    }
-
-    getAnimation(index) {
-        return this.#animations.get(index)[1];
-    }
-
-    getAnimationIndex(key) {
-        return this.#animationsIndex.get(key);
-    }
 }

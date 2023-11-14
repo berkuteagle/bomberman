@@ -56,6 +56,11 @@
                 "type": "tilemapTiledJSON",
                 "key": "map",
                 "url": "assets/game.json"
+            },
+            {
+                "type": "animation",
+                "key": "animations",
+                "url": "assets/animations.json"
             }
         ]
     },

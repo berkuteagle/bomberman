@@ -1,4 +1,5 @@
 export default class SceneSystem {
+
     #ecs;
     #config;
 
@@ -40,5 +41,9 @@ export default class SceneSystem {
      * @param {*} delta 
      */
     postUpdate(time, delta) { }
+
+    static defaultConfig() {
+        return {};
+    }
 
 }

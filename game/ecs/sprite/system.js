@@ -1,48 +1,20 @@
-import { Not, defineQuery, defineSystem, enterQuery, exitQuery, hasComponent } from '../../bitecs.js';
+import { Not, defineQuery, defineSystem, enterQuery, exitQuery } from '../../bitecs.js';
 
 import { Position } from '../position.js';
 
-import { Sprite } from './Sprite.js';
 import { SpriteDepth } from './SpriteDepth.js';
 import { SpriteGroup } from './SpriteGroup.js';
-
-export const createEnterSpriteSystem = () => {
-
-    const allEntities = defineQuery([Sprite, Position]);
-    const enterEntities = enterQuery(allEntities);
-
-    return defineSystem(world => {
-
-        for (const entity of enterEntities(world)) {
-
-            const sprite = hasComponent(world, SpriteGroup, entity)
-                ? world.scene.ecs.getGroup(SpriteGroup.key[entity]).create(
-                    Position.x[entity],
-                    Position.y[entity],
-                    world.scene.ecs.getTextureKey(Sprite.texture[entity])
-                )
-                : world.scene.physics.add.sprite(
-                    Position.x[entity],
-                    Position.y[entity],
-                    world.scene.ecs.getTextureKey(Sprite.texture[entity])
-                );
-
-            world.scene.ecs.addSprite(entity, sprite);
-
-        }
-
-    });
-}
+import { SpriteTag } from './SpriteTag.js';
 
 export const createExitSpriteSystem = () => {
 
-    const allEntities = defineQuery([Sprite]);
+    const allEntities = defineQuery([SpriteTag]);
     const exitEntities = exitQuery(allEntities);
 
     return defineSystem(world => {
 
         for (const entity of exitEntities(world)) {
-            world.scene.ecs.removeSprite(entity);
+            world.scene.ecs.sprites.destroy(entity);
         }
 
     });
@@ -50,14 +22,16 @@ export const createExitSpriteSystem = () => {
 
 export const createSpritePositionSystem = () => {
 
-    const allEntities = defineQuery([Sprite, Position]);
+    const allEntities = defineQuery([SpriteTag, Position]);
 
     return defineSystem(world => {
 
         for (const entity of allEntities(world)) {
-            const sprite = world.scene.ecs.getSprite(entity);
-            sprite.x = Position.x[entity];
-            sprite.y = Position.y[entity];
+            const sprite = world.scene.ecs.sprites.get(entity);
+            if (sprite) {
+                sprite.x = Position.x[entity];
+                sprite.y = Position.y[entity];
+            }
         }
 
     });
@@ -65,13 +39,13 @@ export const createSpritePositionSystem = () => {
 
 export const createSpriteDepthSystem = () => {
 
-    const allEntities = defineQuery([Sprite, SpriteDepth]);
+    const allEntities = defineQuery([SpriteTag, SpriteDepth]);
     const enterEntities = enterQuery(allEntities);
 
     return defineSystem(world => {
 
         for (const entity of enterEntities(world)) {
-            world.scene.ecs.getSprite(entity)?.setDepth(SpriteDepth.depth[entity]);
+            world.scene.ecs.sprites.get(entity)?.setDepth(SpriteDepth.depth[entity]);
         }
 
     });
@@ -79,13 +53,17 @@ export const createSpriteDepthSystem = () => {
 
 export const createSpriteSceneSystem = () => {
 
-    const allEntities = defineQuery([Sprite, Not(SpriteGroup)]);
+    const allEntities = defineQuery([SpriteTag, Not(SpriteGroup)]);
     const enterEntities = enterQuery(allEntities);
 
     return defineSystem(world => {
 
         for (const entity of enterEntities(world)) {
-            world.scene.add.existing(world.scene.ecs.getSprite(entity));
+            const sprite = world.scene.ecs.sprites.get(entity);
+
+            if (sprite) {
+                world.scene.add.existing(sprite);
+            }
         }
 
     });
@@ -93,13 +71,18 @@ export const createSpriteSceneSystem = () => {
 
 export const createSpriteGroupSystem = () => {
 
-    const allEntities = defineQuery([Sprite, SpriteGroup]);
+    const allEntities = defineQuery([SpriteTag, SpriteGroup]);
     const enterEntities = enterQuery(allEntities);
 
     return defineSystem(world => {
 
         for (const entity of enterEntities(world)) {
-            world.scene.ecs.getGroup(SpriteGroup.key[entity]).add(world.scene.ecs.getSprite(entity));
+            const sprite = world.scene.ecs.sprites.get(entity);
+            const group = world.scene.ecs.groups.get(SpriteGroup.key[entity]);
+
+            if (sprite && group) {
+                group.add(sprite, true);
+            }
         }
 
     });

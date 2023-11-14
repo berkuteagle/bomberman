@@ -25,48 +25,8 @@ export class GameScene extends Scene {
         this.ecs.addFeature('phy', PhyFeature);
         this.ecs.addFeature('position', PositionFeature);
         this.ecs.addFeature('movement', MovementFeature);
-
-        this.ecs.addFeature('sprite', SpriteFeature, {
-            groups: ['Player', 'Objects', 'Bombs']
-        });
-
-        this.ecs.addFeature('animation', AnimationFeature, {
-            animations: [
-                {
-                    key: 'GreenNinja_walk_down',
-                    texture: 'GreenNinja',
-                    frames: [0, 4, 8, 12],
-                    frameRate: 8,
-                    repeat: -1
-                }, {
-                    key: 'GreenNinja_walk_up',
-                    texture: 'GreenNinja',
-                    frames: [1, 5, 9, 13],
-                    frameRate: 8,
-                    repeat: -1
-                }, {
-                    key: 'GreenNinja_walk_left',
-                    texture: 'GreenNinja',
-                    frames: [2, 6, 10, 14],
-                    frameRate: 8,
-                    repeat: -1
-                }, {
-                    key: 'GreenNinja_walk_right',
-                    texture: 'GreenNinja',
-                    frames: [3, 7, 11, 15],
-                    frameRate: 8,
-                    repeat: -1
-                }, {
-                    key: 'Bomb',
-                    frameRate: 8,
-                    repeat: -1
-                }, {
-                    key: 'Explosion',
-                    frameRate: 12,
-                    repeat: 1
-                }
-            ]
-        });
+        this.ecs.addFeature('sprite', SpriteFeature);
+        this.ecs.addFeature('animation', AnimationFeature);
     }
 
     create() {

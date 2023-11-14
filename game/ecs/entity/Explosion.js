@@ -1,9 +1,9 @@
 import { addComponent, addEntity } from '../../bitecs.js';
 
-import { Animation, ANIMATION_STATE } from '../animation.js';
-import { Position } from '../position.js';
+import { ANIMATION_STATE, AnimationTag, sendAnimationRequest } from '../animation.js';
 import { Duration, Explosion, ExplosionType } from '../component.js';
-import { Sprite, SpriteDepth } from '../sprite.js';
+import { Position } from '../position.js';
+import { SpriteDepth, SpriteTag } from '../sprite.js';
 
 /**
  * 
@@ -16,18 +16,20 @@ export const createExplosion = (world, x = 0, y = 0, scene) => {
 
     addComponent(world, Explosion, explosion);
     addComponent(world, Position, explosion);
-    addComponent(world, Sprite, explosion);
+    addComponent(world, SpriteTag, explosion);
     addComponent(world, SpriteDepth, explosion);
-    addComponent(world, Animation, explosion);
     addComponent(world, Duration, explosion);
+    addComponent(world, AnimationTag, explosion);
 
     Explosion.type[explosion] = ExplosionType.DEFAULT;
     Explosion.power[explosion] = 1;
     Position.x[explosion] = x;
     Position.y[explosion] = y;
-    Sprite.texture[explosion] = scene.ecs.getTextureIndex('Explosion');
     SpriteDepth.depth[explosion] = 20;
-    Animation.key[explosion] = scene.ecs.getAnimationIndex('Explosion');
-    Animation.state[explosion] = ANIMATION_STATE.FORCE_PLAY;
     Duration.timeout[explosion] = 800;
+
+    scene.ecs.sprites.create(explosion, x, y, 'Explosion');
+
+    sendAnimationRequest(world, world.scene.ecs.anims.getIndex('Explosion'), ANIMATION_STATE.PLAY, explosion);
+
 }

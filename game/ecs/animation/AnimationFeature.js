@@ -1,33 +1,31 @@
 import SceneFeature from '../SceneFeature.js';
 
-import { createAnimationSystem } from './system.js';
+import { createAnimationPostSystem, createAnimationPreSystem } from './system.js';
 
 export default class AnimationFeature extends SceneFeature {
 
-    #animationSystem = null;
+    #animationPreSystem = null;
+    #animationPostSystem = null;
 
     /**
      * @override
      */
     init() {
-        const { animations = [] } = this.config;
-
-        animations.forEach(({ key, texture, frames, frameRate, repeat = -1 }) => {
-            this.ecs.scene.anims.create({
-                key,
-                frames: this.ecs.scene.anims.generateFrameNumbers(texture || key, { frames }),
-                frameRate,
-                repeat
-            });
-        });
-
-        this.#animationSystem = createAnimationSystem();
+        this.#animationPreSystem = createAnimationPreSystem();
+        this.#animationPostSystem = createAnimationPostSystem();
     }
 
     /**
      * @override
      */
-    update(time, delta) {
-        this.#animationSystem?.(this.ecs.world, time, delta);
+    preUpdate(time, delta) {
+        this.#animationPreSystem?.(this.ecs.world, time, delta);
+    }
+
+    /**
+     * @override
+     */
+    postUpdate(time, delta) {
+        this.#animationPostSystem?.(this.ecs.world, time, delta);
     }
 }
