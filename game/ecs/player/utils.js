@@ -3,7 +3,7 @@ import { addComponent, addEntity } from '../../bitecs.js';
 import { AnimationTag } from '../animation.js';
 import { Destructible, ExplosionType, Sapper, Shooter } from '../component.js';
 import { MOVEMENT_DIRECTION, MOVEMENT_STATE, Movement, MovementAnimation } from '../movement.js';
-import { SHAPE_TYPE, Shape, Velocity } from '../phy.js';
+import { CollisionTag, SHAPE_TYPE, Shape, Velocity } from '../phy.js';
 import { Position, PositionBoundaries } from '../position.js';
 import { SpriteDepth, SpriteGroup, SpriteTag } from '../sprite.js';
 
@@ -33,6 +33,7 @@ export function createPlayer(scene, x = 0, y = 0) {
     addComponent(world, SpriteGroup, player);
     addComponent(world, AnimationTag, player);
     addComponent(world, Shape, player);
+    addComponent(world, CollisionTag, player);
 
     Shape.type[player] = SHAPE_TYPE.CIRCLE;
     Shape.size[player] = 8;

@@ -13,6 +13,27 @@ export class PreloadScene extends Scene {
     }
 
     create() {
-        this.scene.start('Game');
+
+        if (this.peerjs.rival) {
+            console.log(this.peerjs.rival);
+            this.scene.start('Game');
+        } else if (this.peerjs.ready) {
+            this.peerjs.ready.then(() => {
+                const url = `${location.origin}${location.pathname}?r=${this.peerjs.id}`;
+
+                this.qrcode.makeImage(url).then(code => {
+
+                    this.textures.once('onload', () => {
+                        this.scene.start('InviteLink');
+                    });
+
+                    this.textures.addBase64('invite', code);
+                });
+            });
+        } else {
+
+            console.log('no peerjs');
+            this.scene.start('Game');
+        }
     }
 }

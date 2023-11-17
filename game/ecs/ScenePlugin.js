@@ -104,7 +104,7 @@ class EntitySpriteStore {
     }
 }
 
-export default class SceneWorldPlugin extends Plugins.ScenePlugin {
+export default class ECSScenePlugin extends Plugins.ScenePlugin {
 
     #world;
     #features = new Map();

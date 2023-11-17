@@ -2,6 +2,7 @@ import { addComponent, addEntity } from '../../bitecs.js';
 
 import { ANIMATION_STATE, AnimationTag, sendAnimationRequest } from '../animation.js';
 import { Belong, Duration, Explosive } from '../component.js';
+import { CollisionTag } from '../phy.js';
 import { Position } from '../position.js';
 import { SpriteGroup, SpriteTag } from '../sprite.js';
 
@@ -24,6 +25,7 @@ export const createBomb = (world, x = 0, y = 0, sapper) => {
     addComponent(world, Duration, bomb);
     addComponent(world, Belong, bomb);
     addComponent(world, AnimationTag, bomb);
+    addComponent(world, CollisionTag, bomb);
 
     Belong.owner[bomb] = sapper;
     Duration.timeout[bomb] = 3000;
@@ -35,4 +37,5 @@ export const createBomb = (world, x = 0, y = 0, sapper) => {
 
     sendAnimationRequest(world, ecs.anims.getIndex('Bomb'), ANIMATION_STATE.PLAY, bomb);
 
+    return bomb;
 }
