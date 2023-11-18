@@ -1,5 +1,4 @@
 import PeerjsGamePlugin from './PeerjsGamePlugin.js';
-import QRCodeGamePlugin from './QRCodeGamePlugin.js';
 import { Game, Scale, WEBGL } from './phaser.js';
 
 import ECSScenePlugin from './ecs/ScenePlugin.js';
@@ -34,7 +33,6 @@ export default class Booombers extends Game {
             plugins: {
                 global: [
                     { key: 'peerjsPlugin', plugin: PeerjsGamePlugin, start: true, mapping: 'peerjs', data: { rival, enabled } },
-                    { key: 'qrcodePlugin', plugin: QRCodeGamePlugin, start: true, mapping: 'qrcode' }
                 ],
                 scene: [
                     { key: 'ecsPlugin', plugin: ECSScenePlugin, mapping: 'ecs' }
