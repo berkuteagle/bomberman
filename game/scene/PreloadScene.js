@@ -10,6 +10,7 @@ export class PreloadScene extends Scene {
     preload() {
         this.load.setBaseURL('game/');
         this.load.pack('pack', 'assets/pack.json');
+        this.load.atlasXML('ui', 'assets/ui/atlas.png', 'assets/ui/atlas.xml');
     }
 
     create() {

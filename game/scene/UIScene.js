@@ -15,8 +15,23 @@ export class UIScene extends Scene {
             lives: 3
         });
 
-        this.scoreText = this.add.text(0, 0, 'Score: ' + this.data.get('score'));
-        this.livesText = this.add.text(240, 0, 'Lives: ' + this.data.get('lives'));
+        this.scoreText = this.add.text(
+            44, 0,
+            'Score: ' + this.data.get('score'),
+            {
+                fontFamily: 'Pixel',
+                fontSize: '24px'
+            }
+        );
+
+        this.livesText = this.add.text(
+            384, 0,
+            'Lives: ' + this.data.get('lives'),
+            {
+                fontFamily: 'Pixel',
+                fontSize: '24px'
+            }
+        );
     }
 
     setScore(score) {

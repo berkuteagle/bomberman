@@ -1,3 +1,13 @@
-html, body {
+html,
+body {
     margin: 0;
+}
+
+@font-face {
+    font-family: Pixel;
+    src: url('game/assets/fonts/Pixel.ttf');
+}
+
+div#game {
+    font-family: Pixel;
 }

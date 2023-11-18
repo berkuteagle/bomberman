@@ -11,19 +11,9 @@
 </head>
 
 <body>
-  <div id="booombers"></div>
+  <div id="game"></div>
 
   <script src="index.js" type="module"></script>
-
-  <script>
-    if ('serviceWorker' in navigator) {
-      if (location.hostname === 'berkuteagle.github.io') {
-        navigator.serviceWorker.register('/bomberman/sw.js', { scope: '/bomberman/' });
-      } else {
-        navigator.serviceWorker.register('/sw.js');
-      }
-    }
-  </script>
 </body>
 
 </html>
