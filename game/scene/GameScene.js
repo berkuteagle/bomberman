@@ -32,9 +32,9 @@ export class GameScene extends Scene {
     create() {
 
         const static_group = this.physics.add.staticGroup();
-        const group = this.physics.add.group();
-        const bombs_group = this.physics.add.group();
-        const damage_group = this.physics.add.group();
+        const group = this.ecs.groups.get(this.ecs.groups.getIndex('Player'));
+        const bombs_group = this.ecs.groups.get(this.ecs.groups.getIndex('Bombs'));
+        const damage_group = this.ecs.groups.get(this.ecs.groups.getIndex('Explosion'));
 
         group.defaults = {
             setCollideWorldBounds: true
@@ -44,7 +44,7 @@ export class GameScene extends Scene {
             setImmovable: true
         };
 
-        createPlayer(this, 64, 64);
+        createPlayer(64, 64)(this.ecs.world);
 
         this.scene.launch('UI');
 

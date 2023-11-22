@@ -1,7 +1,7 @@
 export { Acceleration } from './phy/Acceleration.js';
-export { Collision } from './phy/Collision.js';
 export { CollisionEntities } from './phy/CollisionEntities.js';
-export { CollisionTag } from './phy/CollisionTag.js';
+export { CollisionState, addCollisionState } from './phy/CollisionState.js';
+export { CollisionTag, addCollisionTag } from './phy/CollisionTag.js';
 export { Force } from './phy/Force.js';
 export { Mass } from './phy/Mass.js';
 export { default as PhyFeature } from './phy/PhyFeature.js';

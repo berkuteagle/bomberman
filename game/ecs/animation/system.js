@@ -1,6 +1,5 @@
-import { defineQuery, defineSystem, hasComponent, removeEntity } from '../../bitecs.js';
+import { defineQuery, defineSystem, hasComponent } from '../../bitecs.js';
 
-import { Request } from '../common.js';
 import { SpriteTag } from '../sprite.js';
 
 import { AnimationTag } from './AnimationTag.js';
@@ -22,7 +21,7 @@ export const createAnimationPreSystem = () => {
 
             if (hasComponent(world, AnimationTag, toEntity) && hasComponent(world, SpriteTag, toEntity)) {
                 const sprite = world.scene.ecs.sprites.get(AnimationRequest.sprite[entity]);
-                const animation = world.scene.ecs.anims.getKey(AnimationRequest.key[entity]);
+                const animation = world.scene.ecs.anims.getKey(AnimationRequest.animation[entity]);
                 const state = AnimationRequest.state[entity];
 
                 if (sprite && state) {

@@ -80,6 +80,11 @@ class EntitySpriteStore {
         return this.#sprites.get(entity);
     }
 
+    add(entity, sprite) {
+        this.#sprites.set(entity, sprite);
+        this.#spritesIndex.set(sprite, entity);
+    }
+
     getEntity(sprite) {
         return this.#spritesIndex.get(sprite);
     }

@@ -1,9 +1,10 @@
-import { addComponent, addEntity } from '../../bitecs.js';
+import { addComponent } from '../../bitecs.js';
 
-import { ANIMATION_STATE, AnimationTag, sendAnimationRequest } from '../animation.js';
+import { ANIMATION_STATE, addAnimationTag, sendAnimationRequest } from '../animation.js';
 import { Duration, Explosion, ExplosionType } from '../component.js';
-import { Position } from '../position.js';
-import { SpriteDepth, SpriteTag } from '../sprite.js';
+import { addCollisionTag } from '../phy.js';
+import { addPosition } from '../position.js';
+import { addSpriteDepth, addSpriteGroup, createSprite } from '../sprite.js';
 
 /**
  * 
@@ -11,25 +12,26 @@ import { SpriteDepth, SpriteTag } from '../sprite.js';
  * @param {Number} x 
  * @param {Number} y
  */
-export const createExplosion = (world, x = 0, y = 0, scene) => {
-    const explosion = addEntity(world);
+export const createExplosion = (world, x = 0, y = 0) => {
+    const { scene } = world;
+
+    const explosion = createSprite(
+        { texture: 'Explosion', x, y },
+        addSpriteDepth(20),
+        addSpriteGroup('Explosion'),
+        addPosition(x, y),
+        addAnimationTag(),
+        addCollisionTag()
+    )(world);
 
     addComponent(world, Explosion, explosion);
-    addComponent(world, Position, explosion);
-    addComponent(world, SpriteTag, explosion);
-    addComponent(world, SpriteDepth, explosion);
     addComponent(world, Duration, explosion);
-    addComponent(world, AnimationTag, explosion);
 
     Explosion.type[explosion] = ExplosionType.DEFAULT;
     Explosion.power[explosion] = 1;
-    Position.x[explosion] = x;
-    Position.y[explosion] = y;
-    SpriteDepth.depth[explosion] = 20;
     Duration.timeout[explosion] = 800;
 
-    scene.ecs.sprites.create(explosion, x, y, 'Explosion');
+    sendAnimationRequest(world, scene.ecs.anims.getIndex('Explosion'), ANIMATION_STATE.PLAY, explosion);
 
-    sendAnimationRequest(world, world.scene.ecs.anims.getIndex('Explosion'), ANIMATION_STATE.PLAY, explosion);
-
+    return explosion;
 }

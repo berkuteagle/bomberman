@@ -1,8 +1,9 @@
 import { defineQuery, defineSystem, enterQuery, exitQuery, removeEntity } from '../../bitecs.js';
 
-import { Position } from '../position.js';
 import { Belong, Duration, Explosive, Sapper } from '../component.js';
 import { createExplosion } from '../entity.js';
+import { createCollision } from '../phy.js';
+import { Position } from '../position.js';
 
 export const createBombSystem = () => {
     const entitiesAll = defineQuery([Explosive, Duration, Position, Belong]);
@@ -28,7 +29,10 @@ export const createBombSystem = () => {
         for (const entity of entitiesAll(world)) {
             if (Duration.timeout[entity] < (time.now - startTime.get(entity))) {
                 removeEntity(world, entity);
-                createExplosion(world, Position.x[entity], Position.y[entity], world.scene);
+                createCollision(
+                    Belong.owner[entity],
+                    createExplosion(world, Position.x[entity], Position.y[entity])
+                )(world);
             }
         }
 
