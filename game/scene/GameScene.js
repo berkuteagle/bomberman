@@ -2,8 +2,7 @@ import { Input, Scene } from '../phaser.js';
 
 import {
     createBombSystem,
-    createExplosionSystem,
-    createSapperSystem
+    createExplosionSystem
 } from '../ecs/system.js';
 
 import { AnimationFeature } from '../ecs/animation.js';
@@ -13,6 +12,7 @@ import { PhyFeature } from '../ecs/phy.js';
 import { createPlayer, createPlayerSystem } from '../ecs/player.js';
 import { PositionFeature } from '../ecs/position.js';
 import { SpriteFeature } from '../ecs/sprite.js';
+import { SapperFeature } from '../ecs/sapper.js';
 
 
 export class GameScene extends Scene {
@@ -27,22 +27,10 @@ export class GameScene extends Scene {
         this.ecs.addFeature('movement', MovementFeature);
         this.ecs.addFeature('sprite', SpriteFeature);
         this.ecs.addFeature('animation', AnimationFeature);
+        this.ecs.addFeature('sapper', SapperFeature, { bombKey: this.input.keyboard.addKey(Input.Keyboard.KeyCodes.SPACE) });
     }
 
     create() {
-
-        const static_group = this.physics.add.staticGroup();
-        const group = this.ecs.groups.get(this.ecs.groups.getIndex('Player'));
-        const bombs_group = this.ecs.groups.get(this.ecs.groups.getIndex('Bombs'));
-        const damage_group = this.ecs.groups.get(this.ecs.groups.getIndex('Explosion'));
-
-        group.defaults = {
-            setCollideWorldBounds: true
-        };
-
-        bombs_group.defaults = {
-            setImmovable: true
-        };
 
         createPlayer(64, 64)(this.ecs.world);
 
@@ -66,18 +54,7 @@ export class GameScene extends Scene {
         wallsLayer.setCollision([162, 166, 163, 184, 210, 244, 215, 179, 291, 262, 279, 195, 245, 276, 273, 274, 246, 278, 198, 280, 275, 261, 193, 310, 307, 311]);
         stoneLayer.setCollision(739);
 
-        this.physics.add.collider(group, bombs_group);
-        this.physics.add.collider(group, static_group);
-        this.physics.add.collider(group, wallsLayer);
-        this.physics.add.collider(group, stoneLayer);
-
-        this.physics.add.overlap(group, damage_group, () => {
-            this.scene.sleep('UI');
-            this.scene.switch('GameOver');
-        }, null, null);
-
         this.ecs.addSystem('player', createPlayerSystem());
-        this.ecs.addSystem('sapper', createSapperSystem(this.input.keyboard.addKey(Input.Keyboard.KeyCodes.SPACE)));
         this.ecs.addSystem('bomb', createBombSystem());
         this.ecs.addSystem('explosion', createExplosionSystem());
         this.ecs.addSystem('cursor', createKeyboardCursorSystem(this));

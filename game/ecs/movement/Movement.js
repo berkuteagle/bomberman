@@ -1,12 +1,12 @@
-import { Types, defineComponent } from '../../bitecs.js';
+import { Types, defineComponent, addComponent } from '../../bitecs.js';
 
-export const MOVEMENT_STATE = Object.freeze({
+export const MovementState = Object.freeze({
     STOP: 0,
     WALK: 1,
     SNEAK: 2
 });
 
-export const MOVEMENT_DIRECTION = Object.freeze({
+export const MovementDirection = Object.freeze({
     UP: 0,
     DOWN: 1,
     LEFT: 2,
@@ -17,3 +17,9 @@ export const Movement = defineComponent({
     state: Types.ui8,
     direction: Types.ui8
 });
+
+export const addMovement = ({ state = MovementState.STOP, direction = MovementDirection.DOWN } = {}) => (world, eid) => {
+    addComponent(world, Movement, eid);
+    Movement.state[eid] = state;
+    Movement.direction[eid] = direction;
+}

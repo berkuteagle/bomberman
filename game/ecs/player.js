@@ -1,3 +1,3 @@
-export { Player } from './player/Player.js';
+export { PlayerTag, addPlayerTag } from './player/PlayerTag.js';
 export { createPlayerSystem } from './player/system.js';
 export { createPlayer } from './player/utils.js';

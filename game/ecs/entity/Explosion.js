@@ -1,6 +1,6 @@
 import { addComponent } from '../../bitecs.js';
 
-import { ANIMATION_STATE, addAnimationTag, sendAnimationRequest } from '../animation.js';
+import { AnimationState, addAnimationTag, createAnimationRequest } from '../animation.js';
 import { Duration, Explosion, ExplosionType } from '../component.js';
 import { addCollisionTag } from '../phy.js';
 import { addPosition } from '../position.js';
@@ -31,7 +31,7 @@ export const createExplosion = (world, x = 0, y = 0) => {
     Explosion.power[explosion] = 1;
     Duration.timeout[explosion] = 800;
 
-    sendAnimationRequest(world, scene.ecs.anims.getIndex('Explosion'), ANIMATION_STATE.PLAY, explosion);
+    createAnimationRequest(scene.ecs.anims.getIndex('Explosion'), AnimationState.PLAY, explosion)(world);
 
     return explosion;
 }

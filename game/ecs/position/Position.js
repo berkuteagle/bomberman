@@ -5,9 +5,12 @@ export const Position = defineComponent({
     y: Types.f32
 });
 
-export const addPosition = (x, y) => (world, eid) => {
-    addComponent(world, Position, eid);
-
+export const setPosition = (x = 0, y = 0, eid) => {
     Position.x[eid] = x;
     Position.y[eid] = y;
+}
+
+export const addPosition = (x = 0, y = 0) => (world, eid) => {
+    addComponent(world, Position, eid);
+    setPosition(x, y, eid);
 }

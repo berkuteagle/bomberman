@@ -1,3 +1,3 @@
-export { MOVEMENT_DIRECTION, MOVEMENT_STATE, Movement } from './movement/Movement.js';
-export { MovementAnimation } from './movement/MovementAnimation.js';
+export { MovementDirection, MovementState, Movement, addMovement } from './movement/Movement.js';
+export { MovementAnimation, addMovementAnimation } from './movement/MovementAnimation.js';
 export { default as MovementFeature } from './movement/MovementFeature.js';

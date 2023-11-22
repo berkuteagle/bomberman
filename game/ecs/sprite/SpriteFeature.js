@@ -1,51 +1,46 @@
 import SceneFeature from '../SceneFeature.js';
 
-import {
-    createExitSpriteSystem,
-    createSpriteDepthSystem,
-    createSpriteGroupSystem,
-    createSpritePositionSystem,
-    createSpriteSceneSystem
-} from './system.js';
+import SpriteSystem from './SpriteSystem.js';
+import SpriteDepthSystem from './SpriteDepthSystem.js';
+import SpriteGroupSystem from './SpriteGroupSystem.js';
 
 export default class SpriteFeature extends SceneFeature {
 
-    #preUpdateSystems = new Set();
-    #updateSystems = new Set();
-    #postUpdateSystems = new Set();
+    #spriteSystem = null;
+    #spriteDepthSystem = null;
+    #spriteGroupSystem = null;
 
     init() {
-        this.#updateSystems.add(createSpriteDepthSystem());
-        this.#updateSystems.add(createSpriteSceneSystem());
-        this.#updateSystems.add(createSpriteGroupSystem());
-        this.#updateSystems.add(createSpritePositionSystem());
-        this.#postUpdateSystems.add(createExitSpriteSystem());
+        this.#spriteSystem = new SpriteSystem(this.ecs);
+        this.#spriteDepthSystem = new SpriteDepthSystem(this.ecs);
+        this.#spriteGroupSystem = new SpriteGroupSystem(this.ecs);
     }
 
     /**
      * @override
      */
     preUpdate(time, delta) {
-        for (const system of this.#preUpdateSystems) {
-            system(this.ecs.world, time, delta);
-        }
+        this.#spriteSystem?.preUpdate(time, delta);
+        this.#spriteDepthSystem?.preUpdate(time, delta);
+        this.#spriteGroupSystem?.preUpdate(time, delta);
     }
 
     /**
      * @override
      */
     update(time, delta) {
-        for (const system of this.#updateSystems) {
-            system(this.ecs.world, time, delta);
-        }
+        this.#spriteSystem?.update(time, delta);
+        this.#spriteDepthSystem?.update(time, delta);
+        this.#spriteGroupSystem?.update(time, delta);
+
     }
 
     /**
      * @override
      */
     postUpdate(time, delta) {
-        for (const system of this.#postUpdateSystems) {
-            system(this.ecs.world, time, delta);
-        }
+        this.#spriteSystem?.postUpdate(time, delta);
+        this.#spriteDepthSystem?.postUpdate(time, delta);
+        this.#spriteGroupSystem?.postUpdate(time, delta);
     }
 }

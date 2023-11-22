@@ -1,25 +1,21 @@
+import { addEntity } from '../bitecs.js';
+
+import { addRequest } from './common/Request.js';
+import { addEvent } from './common/Event.js';
+
 export { Event } from './common/Event.js';
 export { Request } from './common/Request.js';
-import { Types, addEntity } from '../bitecs.js';
 
-export const Vector = {
-    x: Types.f32,
-    y: Types.f32
-};
-
-export function pickVectorXY(Component, entity) {
-    return {
-        x: Component.x[entity],
-        y: Component.y[entity]
-    };
-}
-
-export const createEntity = (...subs) => world => {
+export const createEntity = (...ext) => world => {
     const eid = addEntity(world);
 
-    for (const sub of subs) {
-        sub(world, eid);
+    for (const fn of ext) {
+        fn(world, eid);
     }
 
     return eid;
 }
+
+export const createRequest = (ttl, ...ext) => createEntity(addRequest(ttl), ...ext);
+
+export const createEvent = (...ext) => createEntity(addEvent(), ...ext);

@@ -1,9 +1,10 @@
 import { defineQuery, defineSystem, enterQuery, exitQuery, removeEntity } from '../../bitecs.js';
 
-import { Belong, Duration, Explosive, Sapper } from '../component.js';
+import { Belong, Duration, Explosive } from '../component.js';
 import { createExplosion } from '../entity.js';
 import { createCollision } from '../phy.js';
 import { Position } from '../position.js';
+import { Sapper } from '../sapper.js';
 
 export const createBombSystem = () => {
     const entitiesAll = defineQuery([Explosive, Duration, Position, Belong]);

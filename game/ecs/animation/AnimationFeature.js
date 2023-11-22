@@ -1,23 +1,45 @@
-import SceneFeature from '../SceneFeature.js';
+import { defineQuery } from '../../bitecs.js';
 
-import { createAnimationPreSystem } from './system.js';
+import SceneFeature from '../SceneFeature.js';
+import { hasSpriteTag } from '../sprite.js';
+
+import { AnimationRequest, AnimationState } from './AnimationRequest.js';
+import { hasAnimationTag } from './AnimationTag.js';
 
 export default class AnimationFeature extends SceneFeature {
 
-    #animationPreSystem = null;
+    #allEntities = null;
 
     /**
      * @override
      */
     init() {
-        this.#animationPreSystem = createAnimationPreSystem();
+        this.#allEntities = defineQuery([AnimationRequest]);
     }
 
     /**
      * @override
      */
-    preUpdate(time, delta) {
-        this.#animationPreSystem?.(this.ecs.world, time, delta);
+    preUpdate() {
+        const { world, sprites, anims } = this.ecs;
+
+        for (const entity of this.#allEntities?.(world)) {
+
+            const toEntity = AnimationRequest.sprite[entity];
+
+            if (hasAnimationTag(world, toEntity) && hasSpriteTag(world, toEntity)) {
+                const sprite = sprites.get(AnimationRequest.sprite[entity]);
+                const animation = anims.getKey(AnimationRequest.animation[entity]);
+                const state = AnimationRequest.state[entity];
+
+                if (sprite && state) {
+                    sprite.play(animation, !!(state & AnimationState.FORCE_PLAY));
+                } else if (sprite) {
+                    sprite.stop();
+                }
+            }
+
+        }
     }
 
 }

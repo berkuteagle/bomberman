@@ -1,25 +1,16 @@
-import { addComponent, defineComponent } from '../../bitecs.js';
+import { addComponent, defineComponent, hasComponent } from '../../bitecs.js';
 import { GameObjects } from '../../phaser.js';
 
 import { createEntity } from '../common.js';
-import { addSpriteDepth } from './SpriteDepth.js';
-import { addSpriteGroup } from './SpriteGroup.js';
 
 export const SpriteTag = defineComponent();
 
-export const addSpriteTag = () => (world, eid) => {
+export const addSpriteTag = (x, y, texture) => (world, eid) => {
+    world.scene.ecs.sprites.add(eid, new GameObjects.Sprite(world.scene, x, y, texture));
+
     addComponent(world, SpriteTag, eid);
 }
 
-export const createSprite = ({ x, y, texture }, ...subs) => world => {
-    const { scene } = world;
+export const createSprite = ({ x, y, texture }, ...ext) => createEntity(addSpriteTag(x, y, texture), ...ext);
 
-    const eid = createEntity(
-        addSpriteTag(),
-        ...subs
-    )(world);
-
-    scene.ecs.sprites.add(eid, new GameObjects.Sprite(scene, x, y, texture));
-
-    return eid;
-}
+export const hasSpriteTag = (world, ...eids) => eids.every(eid => hasComponent(world, SpriteTag, eid));
