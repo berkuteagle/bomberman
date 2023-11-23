@@ -1,7 +1,7 @@
-import SceneFeature from '../SceneFeature.js';
+import Feature from '../feature.js';
 import PositionSystem from './PositionSystem.js';
 
-export default class PositionFeature extends SceneFeature {
+export default class PositionFeature extends Feature {
 
     /**
      * @override

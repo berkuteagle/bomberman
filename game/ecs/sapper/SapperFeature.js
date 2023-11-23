@@ -1,13 +1,13 @@
-import { Math, Input } from '../../phaser.js';
 import { defineQuery } from '../../bitecs.js';
+import { Input, Math } from '../../phaser.js';
 
-import SceneFeature from '../SceneFeature.js';
-import { Position } from '../position.js';
 import { createBomb } from '../entity.js';
+import Feature from '../feature.js';
+import { Position } from '../position.js';
 
 import { Sapper } from './Sapper.js';
 
-export default class SapperFeature extends SceneFeature {
+export default class SapperFeature extends Feature {
 
     #allEntities;
 

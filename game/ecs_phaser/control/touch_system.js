@@ -1,7 +1,7 @@
-import SceneSystem from '../SceneSystem.js';
+import { SceneSystem } from '../../ecs.js';
 
 export default class TouchSystem extends SceneSystem {
     constructor(ecs, config) {
-        super(ecs, config);
+        super(ecs);
     }
 }

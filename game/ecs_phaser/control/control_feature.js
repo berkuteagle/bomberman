@@ -1,10 +1,20 @@
-import SceneFeature from '../SceneFeature.js';
-import GamepadSystem from './GamepadSystem.js';
-import KeyboardSystem from './KeyboardSystem.js';
-import TouchSystem from './TouchSystem.js';
+import { Feature } from '../../ecs.js';
 
-export default class ControlFeature extends SceneFeature {
+import GamepadSystem from './gamepad_system.js';
+import KeyboardSystem from './keyboard_system.js';
+import TouchSystem from './touch_system.js';
 
+/**
+ * @typedef {Object} ControlFeatureConfig
+ * @property {import('./keyboard_system.js').KeyboardSystemConfig} keyboardConfig
+ */
+
+/**
+ * @extends Feature<ControlFeatureConfig>
+ */
+export default class ControlFeature extends Feature {
+
+    /** @override */
     init() {
 
         let system;
@@ -24,6 +34,7 @@ export default class ControlFeature extends SceneFeature {
         this.addSystem('control', system);
     }
 
+    /** @override */
     static defaultConfig() {
         return { controlType: 'keyboard' };
     }

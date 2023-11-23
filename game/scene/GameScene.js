@@ -6,7 +6,6 @@ import {
 } from '../ecs/system.js';
 
 import { AnimationFeature } from '../ecs/animation.js';
-import { ControlFeature } from '../ecs/control.js';
 import { createKeyboardCursorSystem } from '../ecs/input.js';
 import { MovementFeature } from '../ecs/movement.js';
 import { PhyFeature } from '../ecs/phy.js';
@@ -14,6 +13,8 @@ import { createPlayerSystem } from '../ecs/player.js';
 import { PositionFeature } from '../ecs/position.js';
 import { SapperFeature } from '../ecs/sapper.js';
 import { SpriteFeature } from '../ecs/sprite.js';
+
+import { ControlFeature } from '../ecs_phaser/control.js';
 
 import { createPlayer } from '../bomberman/utils.js';
 

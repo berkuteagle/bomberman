@@ -1,11 +1,11 @@
-import SceneFeature from '../SceneFeature.js';
+import Feature from '../feature.js';
 
 import AccelerationSystem from './AccelerationSystem.js';
 import CollisionSystem from './CollisionSystem.js';
 import ForceSystem from './ForceSystem.js';
 import VelocitySystem from './VelocitySystem.js';
 
-export default class PhyFeature extends SceneFeature {
+export default class PhyFeature extends Feature {
 
     /**
      * @override

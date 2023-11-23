@@ -1,10 +1,10 @@
-import SceneFeature from '../SceneFeature.js';
+import Feature from '../feature.js';
 
 import SpriteDepthSystem from './SpriteDepthSystem.js';
 import SpriteGroupSystem from './SpriteGroupSystem.js';
 import SpriteSystem from './SpriteSystem.js';
 
-export default class SpriteFeature extends SceneFeature {
+export default class SpriteFeature extends Feature {
 
     /**
      * @override

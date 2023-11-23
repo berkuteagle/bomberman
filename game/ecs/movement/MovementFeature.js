@@ -1,8 +1,8 @@
-import SceneFeature from '../SceneFeature.js';
+import Feature from '../feature.js';
 
 import MovementAnimationSystem from './MovementAnimationSystem.js';
 
-export default class MovementFeature extends SceneFeature {
+export default class MovementFeature extends Feature {
 
     /**
      * @override

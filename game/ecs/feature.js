@@ -1,22 +1,30 @@
-export default class SceneFeature {
+/**
+ * Base Feature class
+ * @template TConfig
+ */
+export default class Feature {
 
+    /** @type {import('../ecs.js').ECS} */
     #ecs;
+    /** @type {TConfig} */
     #config;
-    #systems;
-    #enabledSystems;
+    /** @type {Map<String, String>} */
+    #systems = new Map();
+    /** @type {Set<String>} */
+    #enabledSystems = new Set();
 
     /**
-     * 
-     * @param {*} ecs 
-     * @param {*} config 
+     * @param {import('../ecs.js').ECS} ecs - ECS instance
+     * @param {TConfig} config - Feature configuration
      */
     constructor(ecs, config = {}) {
         this.#ecs = ecs;
         this.#config = config;
-        this.#systems = new Map();
-        this.#enabledSystems = new Set();
     }
 
+    /**
+     * @returns {import('../ecs.js').ECS}
+     */
     get ecs() {
         return this.#ecs;
     }
@@ -29,11 +37,20 @@ export default class SceneFeature {
         return this.#systems;
     }
 
+    /**
+     * Add system to feature
+     * @param {String} key
+     * @param {*} system
+     */
     addSystem(key, system) {
         this.#systems.set(key, system);
         this.#enabledSystems.add(key);
     }
 
+    /**
+     * Remove system from feature
+     * @param {String} key
+     */
     removeSystem(key) {
         this.#systems.delete(key);
         this.#enabledSystems.delete(key);

@@ -1,49 +1,40 @@
+/**
+ * 
+ */
 export default class SceneSystem {
 
     #ecs;
-    #config;
 
     /**
-     * 
-     * @param {*} ecs 
-     * @param {*} config 
+     * @param {*} ecs
      */
-    constructor(ecs, config = {}) {
+    constructor(ecs) {
         this.#ecs = ecs;
-        this.#config = config;
     }
 
     get ecs() {
         return this.#ecs;
     }
 
-    get config() {
-        return this.#config;
-    }
-
     /**
      * 
-     * @param {*} time 
-     * @param {*} delta 
+     * @param {Number} time - Time from game start
+     * @param {Number} delta - Time from previous frame
      */
     preUpdate(time, delta) { }
 
     /**
      * 
-     * @param {*} time 
-     * @param {*} delta 
+     * @param {Number} time - Time from game start
+     * @param {Number} delta - Time from previous frame
      */
     update(time, delta) { }
 
     /**
      * 
-     * @param {*} time 
-     * @param {*} delta 
+     * @param {Number} time - Time from game start
+     * @param {Number} delta - Time from previous frame
      */
     postUpdate(time, delta) { }
-
-    static defaultConfig() {
-        return {};
-    }
 
 }

@@ -1,12 +1,12 @@
 import { defineQuery } from '../../bitecs.js';
 
-import SceneFeature from '../SceneFeature.js';
+import Feature from '../feature.js';
 import { hasSpriteTag } from '../sprite.js';
 
 import { AnimationRequest, AnimationState } from './AnimationRequest.js';
 import { hasAnimationTag } from './AnimationTag.js';
 
-export default class AnimationFeature extends SceneFeature {
+export default class AnimationFeature extends Feature {
 
     #allEntities = null;
 
