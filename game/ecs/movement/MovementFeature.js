@@ -4,19 +4,13 @@ import MovementAnimationSystem from './MovementAnimationSystem.js';
 
 export default class MovementFeature extends SceneFeature {
 
-    #movementAnimationSystem = null;
-
-    init() {
-        if (this.config.animation) {
-            this.#movementAnimationSystem = new MovementAnimationSystem(this.ecs);
-        }
-    }
-
     /**
      * @override
      */
-    update() {
-        this.#movementAnimationSystem?.update();
+    init() {
+        if (this.config.animation) {
+            this.addSystem('movement_animation', new MovementAnimationSystem(this.ecs));
+        }
     }
 
     static defaultConfig() {

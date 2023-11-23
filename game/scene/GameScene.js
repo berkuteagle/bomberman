@@ -6,14 +6,16 @@ import {
 } from '../ecs/system.js';
 
 import { AnimationFeature } from '../ecs/animation.js';
+import { ControlFeature } from '../ecs/control.js';
 import { createKeyboardCursorSystem } from '../ecs/input.js';
 import { MovementFeature } from '../ecs/movement.js';
 import { PhyFeature } from '../ecs/phy.js';
-import { createPlayer, createPlayerSystem } from '../ecs/player.js';
+import { createPlayerSystem } from '../ecs/player.js';
 import { PositionFeature } from '../ecs/position.js';
-import { SpriteFeature } from '../ecs/sprite.js';
 import { SapperFeature } from '../ecs/sapper.js';
+import { SpriteFeature } from '../ecs/sprite.js';
 
+import { createPlayer } from '../bomberman/utils.js';
 
 export class GameScene extends Scene {
 
@@ -28,11 +30,12 @@ export class GameScene extends Scene {
         this.ecs.addFeature('sprite', SpriteFeature);
         this.ecs.addFeature('animation', AnimationFeature);
         this.ecs.addFeature('sapper', SapperFeature, { bombKey: this.input.keyboard.addKey(Input.Keyboard.KeyCodes.SPACE) });
+        this.ecs.addFeature('control', ControlFeature);
     }
 
     create() {
 
-        createPlayer(64, 64)(this.ecs.world);
+        this.ecs.addEntity(createPlayer(64, 64));
 
         this.scene.launch('UI');
 

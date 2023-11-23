@@ -296,6 +296,10 @@ export default class ECSScenePlugin extends Plugins.ScenePlugin {
         this.#sendEventsQueue.push(eventFn);
     }
 
+    addEntity(entityFn) {
+        entityFn(this.#world);
+    }
+
     get world() { return this.#world; }
 
     get sprites() {

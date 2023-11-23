@@ -55,11 +55,7 @@ export default class Bomberman extends Game {
                 GameOver,
                 InviteLinkScene
             ],
-            backgroundColor: '#141b1b',
-            physics: {
-                default: 'arcade',
-                arcade: { debug }
-            }
+            backgroundColor: '#141b1b'
         };
 
         super(config);

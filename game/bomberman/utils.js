@@ -1,14 +1,13 @@
-import { addComponent } from '../../bitecs.js';
+import { addComponent } from '../bitecs.js';
 
-import { addAnimationTag } from '../animation.js';
-import { Destructible } from '../component.js';
-import { addMovement, addMovementAnimation } from '../movement.js';
-import { Velocity, addCollisionTag } from '../phy.js';
-import { addPosition, addPositionBoundaries } from '../position.js';
-import { addSpriteDepth, addSpriteGroup, createSprite } from '../sprite.js';
-import { addSapper } from '../sapper.js';
-
-import { addPlayerTag } from './PlayerTag.js';
+import { addAnimationTag } from '../ecs/animation.js';
+import { Destructible } from '../ecs/component.js';
+import { addMovement, addMovementAnimation } from '../ecs/movement.js';
+import { Velocity, addCollisionTag } from '../ecs/phy.js';
+import { addPlayerTag } from '../ecs/player.js';
+import { addPosition, addPositionBoundaries } from '../ecs/position.js';
+import { addSapper } from '../ecs/sapper.js';
+import { addSpriteDepth, addSpriteGroup, createSprite } from '../ecs/sprite.js';
 
 /**
  * 
