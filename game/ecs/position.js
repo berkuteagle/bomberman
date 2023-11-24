@@ -1,3 +1,19 @@
-export { Position, addPosition } from './position/Position.js';
-export { PositionBoundaries, addPositionBoundaries } from './position/PositionBoundaries.js';
+export {
+    Position,
+    SetPositionRequest,
+    ChangePositionRequest,
+    PositionLimits
+} from './position/components.js';
+
+export {
+    addPosition,
+    addPositionLimits,
+    hasPosition,
+    hasPositionLimits,
+    addSetPositionRequest,
+    createSetPositionRequest,
+    addChangePositionRequest,
+    createChangePositionRequest
+} from './position/utils.js';
+
 export { default as PositionFeature } from './position/PositionFeature.js';

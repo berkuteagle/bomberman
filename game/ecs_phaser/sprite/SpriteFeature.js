@@ -3,6 +3,7 @@ import { GameObjects } from '../../phaser.js';
 
 import SpriteDepthSystem from './SpriteDepthSystem.js';
 import SpriteSystem from './SpriteSystem.js';
+import { addSpriteTag } from './SpriteTag.js';
 
 export default class SpriteFeature extends Feature {
 
@@ -16,7 +17,23 @@ export default class SpriteFeature extends Feature {
         this.addSystem('sprite_depth', new SpriteDepthSystem(this.ecs));
     }
 
-    create(x, y, texture, eid) {
-        this.ecs.store.setValue(eid, 'sprite', new GameObjects.Sprite(this.ecs.world.scene, x, y, texture));
+    addSpriteTag() {
+        return addSpriteTag();
+    }
+
+    create(x, y, texture, ...ext) {
+        const eid = this.ecs.getFeature('position').create(
+            x, y,
+            addSpriteTag(),
+            ...ext
+        );
+
+        this.ecs.store.setValue(
+            eid,
+            'sprite',
+            new GameObjects.Sprite(this.ecs.world.scene, x, y, texture)
+        );
+
+        return eid;
     }
 }

@@ -1,10 +1,10 @@
-import { ECS } from '../ecs.js';
-import { ScenePlugin as PhaserScenePlugin } from '../phaser.js';
+import { ECS, PositionFeature } from '../ecs.js';
+import { Plugins, Scenes } from '../phaser.js';
 
 import { AnimationFeature } from './animation.js';
 import { SpriteFeature } from './sprite.js';
 
-export default class ScenePlugin extends PhaserScenePlugin {
+export default class ScenePlugin extends Plugins.ScenePlugin {
 
     /** @type {import('../ecs.js').ECS<{scene: (import '../phaser.js').Scene}>} */
     #ecs;
@@ -31,10 +31,15 @@ export default class ScenePlugin extends PhaserScenePlugin {
 
     boot() {
         this.#ecs = new ECS({ scene: this.scene });
+        this.#ecs.addFeature('position', PositionFeature);
         this.#ecs.addFeature('sprite', SpriteFeature);
         this.#ecs.addFeature('animation', AnimationFeature);
+
+        this.scene.events.on(Scenes.Events.UPDATE, this.#ecs.process, this.#ecs);
     }
 
-    destroy() { }
+    destroy() {
+        this.scene.events.off(Scenes.Events.UPDATE, this.#ecs.process);
+    }
 
 }

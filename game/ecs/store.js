@@ -41,6 +41,8 @@ export default class Store {
     }
 
     setValue(eid, field, value) {
+        this.addField(eid, field);
+
         if (this.#fieldEntityData.has(field) && this.#entityFields.has(eid)) {
             this.#fieldEntityData.get(field).set(eid, value);
         }

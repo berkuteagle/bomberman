@@ -6,5 +6,6 @@ export const Request = defineComponent({
 
 export const addRequest = (ttl = 1) => (world, eid) => {
     addComponent(world, Request, eid);
+
     Request.ttl[eid] = ttl;
 }
