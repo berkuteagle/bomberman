@@ -1,7 +1,7 @@
 import { defineQuery } from '../../bitecs.js';
 import { Input, Math } from '../../phaser.js';
 
-import { createBomb } from '../entity.js';
+import { createBomb } from '../../bomberman/entity.js';
 import Feature from '../feature.js';
 import { Position } from '../position.js';
 

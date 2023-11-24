@@ -8,7 +8,7 @@ export default class Store {
         this.#entityFields.clear();
     }
 
-    registerField(field) {
+    register(field) {
         if (!this.#fieldEntityData.has(field)) {
             this.#fieldEntityData.set(field, new Map());
         }

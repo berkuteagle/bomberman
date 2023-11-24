@@ -1,5 +1,5 @@
 import { Types, addComponent, defineComponent } from '../../bitecs.js';
-import { createRequest } from '../common.js';
+import { createRequest } from '../../ecs.js';
 
 export const AnimationState = Object.freeze({
     STOP: 0,
@@ -15,6 +15,7 @@ export const AnimationRequest = defineComponent({
 
 export const addAnimationRequest = (animationEid, state = AnimationState.STOP, spriteEid) => (world, eid) => {
     addComponent(world, AnimationRequest, eid);
+
     AnimationRequest.animation[eid] = animationEid;
     AnimationRequest.state[eid] = state;
     AnimationRequest.sprite[eid] = spriteEid;

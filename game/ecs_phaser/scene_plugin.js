@@ -1,6 +1,9 @@
 import { ECS } from '../ecs.js';
 import { ScenePlugin as PhaserScenePlugin } from '../phaser.js';
 
+import { AnimationFeature } from './animation.js';
+import { SpriteFeature } from './sprite.js';
+
 export default class ScenePlugin extends PhaserScenePlugin {
 
     /** @type {import('../ecs.js').ECS<{scene: (import '../phaser.js').Scene}>} */
@@ -18,10 +21,18 @@ export default class ScenePlugin extends PhaserScenePlugin {
         return this.#ecs.store;
     }
 
+    get sprite() {
+        return this.#ecs.getFeature('sprite');
+    }
+
+    get animation() {
+        return this.#ecs.getFeature('animation');
+    }
+
     boot() {
         this.#ecs = new ECS({ scene: this.scene });
-        this.#ecs.store.registerField('sprite');
-        this.#ecs.store.registerField('animation');
+        this.#ecs.addFeature('sprite', SpriteFeature);
+        this.#ecs.addFeature('animation', AnimationFeature);
     }
 
     destroy() { }

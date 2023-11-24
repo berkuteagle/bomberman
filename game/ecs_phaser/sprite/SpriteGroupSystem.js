@@ -1,6 +1,5 @@
 import { defineQuery, enterQuery } from '../../bitecs.js';
-
-import System from '../system.js';
+import { System } from '../../ecs.js';
 
 import { SpriteGroup } from './SpriteGroup.js';
 import { SpriteTag } from './SpriteTag.js';
@@ -9,8 +8,8 @@ export default class SpriteGroupSystem extends System {
 
     #enterEntities;
 
-    constructor(ecs, config) {
-        super(ecs, config);
+    constructor(ecs) {
+        super(ecs);
 
         this.#enterEntities = enterQuery(defineQuery([SpriteTag, SpriteGroup]));
     }

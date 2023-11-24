@@ -6,5 +6,6 @@ export const SpriteDepth = defineComponent({
 
 export const addSpriteDepth = (depth) => (world, eid) => {
     addComponent(world, SpriteDepth, eid);
+
     SpriteDepth.depth[eid] = depth;
 }

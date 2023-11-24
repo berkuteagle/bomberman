@@ -1,7 +1,7 @@
 import { defineQuery, defineSystem, enterQuery, exitQuery, removeEntity } from '../../bitecs.js';
 
 import { Belong, Duration, Explosive } from '../../ecs/component.js';
-import { createExplosion } from '../../ecs/entity.js';
+import { createExplosion } from '../entity.js';
 import { createCollision } from '../../ecs/phy.js';
 import { Position } from '../../ecs/position.js';
 import { Sapper } from '../../ecs/sapper.js';

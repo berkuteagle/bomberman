@@ -1,10 +1,10 @@
 import { addComponent } from '../../bitecs.js';
 
-import { AnimationState, addAnimationTag, createAnimationRequest } from '../animation.js';
-import { Duration, Explosion, ExplosionType } from '../component.js';
-import { addCollisionTag } from '../phy.js';
-import { addPosition } from '../position.js';
-import { addSpriteDepth, addSpriteGroup, createSprite } from '../sprite.js';
+import { AnimationState, addAnimationTag, createAnimationRequest } from '../../ecs/animation.js';
+import { Duration, Explosion, ExplosionType } from '../../ecs/component.js';
+import { addCollisionTag } from '../../ecs/phy.js';
+import { addPosition } from '../../ecs/position.js';
+import { addSpriteDepth, addSpriteGroup, createSprite } from '../../ecs/sprite.js';
 
 /**
  * 

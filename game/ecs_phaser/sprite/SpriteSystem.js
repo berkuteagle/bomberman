@@ -1,7 +1,5 @@
 import { defineQuery, enterQuery, exitQuery } from '../../bitecs.js';
-
-import { Position } from '../position.js';
-import System from '../system.js';
+import { Position, System } from '../../ecs.js';
 
 import { SpriteTag } from './SpriteTag.js';
 
@@ -11,8 +9,8 @@ export default class SpriteSystem extends System {
     #exitEntities;
     #allPositionEntities;
 
-    constructor(ecs, config) {
-        super(ecs, config);
+    constructor(ecs) {
+        super(ecs);
 
         const allEntities = defineQuery([SpriteTag]);
 
@@ -23,7 +21,7 @@ export default class SpriteSystem extends System {
 
     preUpdate() {
         for (const entity of this.#enterEntities(this.ecs.world)) {
-            const sprite = this.ecs.sprites.get(entity);
+            const sprite = this.ecs.store.getValue(entity, 'sprite');
 
             if (sprite) {
                 this.ecs.world.scene.add.existing(sprite);
@@ -33,7 +31,7 @@ export default class SpriteSystem extends System {
 
     update() {
         for (const entity of this.#allPositionEntities(this.ecs.world)) {
-            const sprite = this.ecs.sprites.get(entity);
+            const sprite = this.ecs.store.getValue(entity, 'sprite');
 
             if (sprite) {
                 sprite.x = Position.x[entity];
@@ -44,7 +42,12 @@ export default class SpriteSystem extends System {
 
     postUpdate() {
         for (const entity of this.#exitEntities(this.ecs.world)) {
-            this.ecs.sprites.destroy(entity);
+            const sprite = this.ecs.store.getValue(entity, 'sprite');
+
+            if (sprite) {
+                this.ecs.store.removeField(entity, 'sprite');
+                sprite.destroy();
+            }
         }
     }
 }

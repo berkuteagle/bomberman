@@ -4,9 +4,8 @@ export const SpriteGroup = defineComponent({
     key: Types.ui16
 });
 
-export const addSpriteGroup = (groupName) => (world, eid) => {
-    const { scene: { ecs } } = world;
-
+export const addSpriteGroup = (groupEid) => (world, eid) => {
     addComponent(world, SpriteGroup, eid);
-    SpriteGroup.key[eid] = ecs.groups.getIndex(groupName);
+
+    SpriteGroup.group[eid] = groupEid;
 }
