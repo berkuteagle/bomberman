@@ -1,13 +1,13 @@
 import { defineQuery, defineSystem, hasComponent } from '../../bitecs.js';
 import { Math } from '../../phaser.js';
 
-import SceneSystem from '../SceneSystem.js';
+import System from '../system.js';
 
 import { Acceleration } from './Acceleration.js';
 import { Force } from './Force.js';
 import { Mass } from './Mass.js';
 
-export default class ForceSystem extends SceneSystem {
+export default class ForceSystem extends System {
 
     #update;
     #allEntities;

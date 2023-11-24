@@ -16,7 +16,6 @@ export default class Bomberman extends Game {
     constructor(width = 480, height = 480) {
 
         const params = new URL(location).searchParams;
-        const debug = params.has('debug');
         const rival = params.get('r');
         const enabled = params.has('peerjs');
 

@@ -1,14 +1,14 @@
 import { defineQuery, enterQuery, exitQuery, removeEntity } from '../../bitecs.js';
 import { Math } from '../../phaser.js';
 
-import SceneSystem from '../SceneSystem.js';
 import { Position } from '../position.js';
+import System from '../system.js';
 
 import { CollisionEntities } from './CollisionEntities.js';
 import { CollisionState } from './CollisionState.js';
 import { CollisionTag, hasCollisionTag } from './CollisionTag.js';
 
-export default class CollisionSystem extends SceneSystem {
+export default class CollisionSystem extends System {
 
     #allEntities;
     #allCollisionTags;

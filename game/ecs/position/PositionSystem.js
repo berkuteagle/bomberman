@@ -1,6 +1,6 @@
 import { defineQuery, defineSystem } from '../../bitecs.js';
 
-import SceneSystem from '../SceneSystem.js';
+import System from '../system.js';
 
 import { Position } from './Position.js';
 import { PositionBoundaries } from './PositionBoundaries.js';
@@ -8,7 +8,7 @@ import { PositionBoundaries } from './PositionBoundaries.js';
 const MIN = 0;
 const MAX = 1;
 
-export default class PositionSystem extends SceneSystem {
+export default class PositionSystem extends System {
 
     #update;
     #allEntities;

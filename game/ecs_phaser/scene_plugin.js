@@ -10,6 +10,14 @@ export default class ScenePlugin extends PhaserScenePlugin {
         return this.#ecs;
     }
 
+    get world() {
+        return this.#ecs.world;
+    }
+
+    get store() {
+        return this.#ecs.store;
+    }
+
     boot() {
         this.#ecs = new ECS({ scene: this.scene });
         this.#ecs.store.registerField('sprite');

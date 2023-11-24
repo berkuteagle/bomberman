@@ -1,11 +1,11 @@
 import { defineQuery, defineSystem } from '../../bitecs.js';
 
-import SceneSystem from '../SceneSystem.js';
 import { Position } from '../position.js';
+import System from '../system.js';
 
 import { Velocity } from './Velocity.js';
 
-export default class VelocitySystem extends SceneSystem {
+export default class VelocitySystem extends System {
 
     #update;
     #allEntities;

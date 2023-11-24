@@ -3,7 +3,7 @@ import { Input, Scene } from '../phaser.js';
 import {
     createBombSystem,
     createExplosionSystem
-} from '../ecs/system.js';
+} from '../bomberman/system.js';
 
 import { AnimationFeature } from '../ecs/animation.js';
 import { createKeyboardCursorSystem } from '../ecs/input.js';

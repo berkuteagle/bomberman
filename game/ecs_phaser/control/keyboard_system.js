@@ -1,4 +1,4 @@
-import { SceneSystem } from '../../ecs.js';
+import { System } from '../../ecs.js';
 
 /**
  * Keyboard control configuration
@@ -12,7 +12,7 @@ import { SceneSystem } from '../../ecs.js';
 /**
  * Keyboard control system
  */
-export default class KeyboardSystem extends SceneSystem {
+export default class KeyboardSystem extends System {
 
     /**
      * @param {*} ecs 

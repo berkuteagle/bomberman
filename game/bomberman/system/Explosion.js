@@ -1,7 +1,7 @@
 import { defineQuery, defineSystem, enterQuery, exitQuery, removeEntity } from '../../bitecs.js';
 
-import { Position } from '../position.js';
-import { Duration, Explosion } from '../component.js';
+import { Position } from '../../ecs/position.js';
+import { Duration, Explosion } from '../../ecs/component.js';
 
 export const createExplosionSystem = () => {
     const entitiesAll = defineQuery([Explosion, Position, Duration]);

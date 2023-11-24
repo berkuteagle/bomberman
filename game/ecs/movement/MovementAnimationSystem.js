@@ -1,7 +1,7 @@
-import { defineQuery, Changed } from '../../bitecs.js';
+import { Changed, defineQuery } from '../../bitecs.js';
 
-import SceneSystem from '../SceneSystem.js';
 import { AnimationState, createAnimationRequest } from '../animation.js';
+import System from '../system.js';
 
 import { Movement, MovementDirection } from './Movement.js';
 import { MovementAnimation } from './MovementAnimation.js';
@@ -19,7 +19,7 @@ function getMovementAnimation(eid) {
     }
 }
 
-export default class MovementAnimationSystem extends SceneSystem {
+export default class MovementAnimationSystem extends System {
 
     #allEntities;
 

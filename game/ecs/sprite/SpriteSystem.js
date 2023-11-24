@@ -1,11 +1,11 @@
-import { defineQuery, exitQuery, enterQuery } from '../../bitecs.js';
+import { defineQuery, enterQuery, exitQuery } from '../../bitecs.js';
 
-import SceneSystem from '../SceneSystem.js';
 import { Position } from '../position.js';
+import System from '../system.js';
 
 import { SpriteTag } from './SpriteTag.js';
 
-export default class SpriteSystem extends SceneSystem {
+export default class SpriteSystem extends System {
 
     #enterEntities;
     #exitEntities;
