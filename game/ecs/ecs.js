@@ -1,20 +1,33 @@
 import { createWorld } from '../bitecs.js';
 
+import Store from './store.js';
+
 /**
  * Main ECS instance
+ * @template TWorldData extends Object = {}
  */
 export default class ECS {
 
     #world;
+    #store;
+
     #features = new Map();
     #enabledFeatures = new Set();
 
+    /**
+     * @param {TWorldData} worldData 
+     */
     constructor(worldData = {}) {
         this.#world = createWorld(worldData);
+        this.#store = new Store();
     }
 
     get world() {
         return this.#world;
+    }
+
+    get store() {
+        return this.#store;
     }
 
     process(time, delta) {
