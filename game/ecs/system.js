@@ -6,6 +6,8 @@ export default class System {
     /** @type {import('../ecs.js').ECS} */
     #ecs;
 
+    #events = new Set();
+
     /**
      * @param {import('../ecs.js').ECS} ecs - ECS instance
      */
@@ -18,6 +20,23 @@ export default class System {
      */
     get ecs() {
         return this.#ecs;
+    }
+
+    get events() {
+        return this.#events;
+    }
+
+    emit(eventFn) {
+        this.#events.add(eventFn);
+    }
+
+    processEvents() {
+        if (this.#events.size) {
+            for (const eventFn of this.#events) {
+                eventFn(this.ecs.world);
+            }
+            this.#events.clear();
+        }
     }
 
     /**
@@ -37,5 +56,7 @@ export default class System {
      * @param {Number} delta - Time from previous frame
      */
     postUpdate(time, delta) { }
+
+    destroy() { }
 
 }

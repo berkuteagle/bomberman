@@ -1,6 +1,6 @@
-import { defineComponent, Types, addComponent } from '../../bitecs.js';
+import { Types, addComponent, defineComponent } from '../../bitecs.js';
 
-import { ExplosionType } from '../component.js';
+import { ExplosionType } from '../../ecs/component.js';
 
 export const Sapper = defineComponent({
     count: Types.ui8,

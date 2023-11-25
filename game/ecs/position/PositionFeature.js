@@ -3,9 +3,9 @@ import Feature from '../feature.js';
 import PositionLimitsSystem from './PositionLimitsSystem.js';
 import PositionRequestsSystem from './PositionRequestsSystem.js';
 import {
-    createSetPositionRequest,
+    addPosition,
     createChangePositionRequest,
-    addPosition
+    createSetPositionRequest
 } from './utils.js';
 
 export default class PositionFeature extends Feature {
@@ -28,13 +28,13 @@ export default class PositionFeature extends Feature {
     }
 
     changePosition(eid, dx, dy) {
-        this.ecs.sendRequest(
+        this.emit(
             createChangePositionRequest(eid, dx, dy)
         );
     }
 
     setPosition(eid, x, y) {
-        this.ecs.sendRequest(
+        this.emit(
             createSetPositionRequest(eid, x, y)
         );
     }

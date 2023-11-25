@@ -1,7 +1,7 @@
-import { createWorld, defineQuery, removeEntity, addEntity } from '../bitecs.js';
+import { addEntity, createWorld, defineQuery, removeEntity } from '../bitecs.js';
 
-import Store from './store.js';
 import { Event, Request } from './common.js';
+import Store from './store.js';
 
 /**
  * Main ECS instance
@@ -12,12 +12,10 @@ export default class ECS {
     #world;
     #store;
 
-    #requestsQueue = new Set();
-    #eventsQueue = new Set();
-
     #requestsQuery;
     #eventsQuery;
 
+    /** @type {Map<String, import('./feature.js').default>} */
     #features = new Map();
     #enabledFeatures = new Set();
 
@@ -40,15 +38,9 @@ export default class ECS {
     }
 
     process(time, delta) {
-        for (const eventFn of this.#eventsQueue) {
-            eventFn(this.#world);
+        for (const featureKey of this.#enabledFeatures) {
+            this.#features.get(featureKey).processEvents();
         }
-        this.#eventsQueue.clear();
-
-        for (const requestFn of this.#requestsQueue) {
-            requestFn(this.#world);
-        }
-        this.#requestsQueue.clear();
 
         for (const featureKey of this.#enabledFeatures) {
             this.#features.get(featureKey).preUpdate(time, delta);
@@ -106,14 +98,6 @@ export default class ECS {
         return this.#features.get(featureKey);
     }
 
-    sendRequest(requestFn) {
-        this.#requestsQueue.add(requestFn);
-    }
-
-    sendEvent(eventFn) {
-        this.#eventsQueue.add(eventFn);
-    }
-
     addEntity(...ext) {
         const eid = addEntity(this.#world);
 
@@ -126,5 +110,11 @@ export default class ECS {
 
     removeEntity(eid) {
         removeEntity(this.#world, eid);
+    }
+
+    destroy() {
+        for (const feature of this.#features) {
+            feature.destroy();
+        }
     }
 }

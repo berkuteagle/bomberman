@@ -1,8 +1,11 @@
 import { Feature } from '../../ecs.js';
 
+import ControlSystem from './control_system.js';
 import GamepadSystem from './gamepad_system.js';
 import KeyboardSystem from './keyboard_system.js';
 import TouchSystem from './touch_system.js';
+
+import { addControlKeysState, addControlTag } from './utils.js';
 
 /**
  * @typedef {Object} ControlFeatureConfig
@@ -31,7 +34,14 @@ export default class ControlFeature extends Feature {
                 break;
         }
 
-        this.addSystem('control', system);
+        this.addSystem('control_type', system);
+        this.addSystem('control', new ControlSystem(this.ecs));
+
+        this.ecs.addEntity(addControlKeysState());
+    }
+
+    addControlTag() {
+        return addControlTag();
     }
 
     /** @override */

@@ -17,7 +17,7 @@ export default class AnimationFeature extends Feature {
     }
 
     playAnimation(eid, animation) {
-        this.ecs.sendRequest(
+        this.emit(
             createRequest(
                 1,
                 addPlayAnimationRequest(eid),
@@ -27,7 +27,7 @@ export default class AnimationFeature extends Feature {
     }
 
     stopAnimation(eid) {
-        this.ecs.sendRequest(
+        this.emit(
             createRequest(
                 1,
                 addStopAnimationRequest(eid)

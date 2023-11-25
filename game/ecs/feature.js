@@ -8,10 +8,12 @@ export default class Feature {
     #ecs;
     /** @type {TConfig} */
     #config;
-    /** @type {Map<String, String>} */
+    /** @type {Map<String, import('./system.js').default>} */
     #systems = new Map();
     /** @type {Set<String>} */
     #enabledSystems = new Set();
+
+    #events = new Set();
 
     /**
      * @param {import('../ecs.js').ECS} ecs - ECS instance
@@ -66,10 +68,30 @@ export default class Feature {
         }
     }
 
-    /**
-     * 
-     */
     init() { }
+
+    destroy() {
+        for (const system of this.#systems) {
+            system.destroy();
+        }
+    }
+
+    emit(eventFn) {
+        this.#events.add(eventFn);
+    }
+
+    processEvents() {
+        if (this.#events.size) {
+            for (const eventFn of this.#events) {
+                eventFn(this.ecs.world);
+            }
+            this.#events.clear();
+        }
+
+        for (const systemKey of this.#enabledSystems) {
+            this.#systems.get(systemKey).processEvents();
+        }
+    }
 
     /**
      * 

@@ -1,4 +1,6 @@
-import { Scene } from '../phaser.js';
+import { VelocityFeature } from '../ecs.js';
+import { ControlFeature } from '../ecs_phaser.js';
+import { Input, Scene } from '../phaser.js';
 
 export class GameScene extends Scene {
 
@@ -19,9 +21,26 @@ export class GameScene extends Scene {
             lives: 3
         });
 
+        this.ecs.addFeature(
+            'control',
+            ControlFeature,
+            {
+                controlType: 'keyboard',
+                keyboardConfig: {
+                    upKeyCode: Input.Keyboard.KeyCodes.UP,
+                    downKeyCode: Input.Keyboard.KeyCodes.DOWN,
+                    leftKeyCode: Input.Keyboard.KeyCodes.LEFT,
+                    rightKeyCode: Input.Keyboard.KeyCodes.RIGHT,
+                    actionKeyCode: Input.Keyboard.KeyCodes.SPACE
+                }
+            }
+        );
+        this.ecs.addFeature('velocity', VelocityFeature);
+
         this.player = this.ecs.sprite.create(
             64, 64, 'GreenNinja',
-            this.ecs.animation.addAnimationTag()
+            this.ecs.animation.addAnimationTag(),
+            this.ecs.getFeature('velocity').addVelocity()
         );
 
         const map = this.make.tilemap({ key: 'map' });

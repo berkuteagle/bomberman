@@ -1,9 +1,9 @@
 import { defineQuery, defineSystem } from '../../bitecs.js';
 import { Math } from '../../phaser.js';
 
-import { Cursor, CURSOR_STATE } from '../input.js';
-import { Movement, MovementDirection, MovementState } from '../movement.js';
-import { Velocity } from '../phy.js';
+import { Cursor, CURSOR_STATE } from '../../ecs/input.js';
+import { Movement, MovementDirection, MovementState } from '../../ecs/movement.js';
+import { Velocity } from '../../ecs/phy.js';
 
 import { PlayerTag } from './PlayerTag.js';
 

@@ -33,6 +33,14 @@ export default class ScenePlugin extends Plugins.ScenePlugin {
         return this.#ecs.getFeature('position');
     }
 
+    addFeature(featureKey, FeatureClass, config = {}, enabled = true) {
+        this.#ecs.addFeature(featureKey, FeatureClass, config, enabled);
+    }
+
+    getFeature(featureKey) {
+        return this.#ecs.getFeature(featureKey);
+    }
+
     boot() {
         this.#ecs = new ECS({ scene: this.scene });
         this.#ecs.addFeature('position', PositionFeature);
