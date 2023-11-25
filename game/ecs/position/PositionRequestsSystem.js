@@ -2,7 +2,7 @@ import { defineQuery } from '../../bitecs.js';
 
 import System from '../system.js';
 
-import { ChangePositionRequest, SetPositionRequest, Position } from './components.js';
+import { ChangePositionRequest, Position, SetPositionRequest } from './components.js';
 import { hasPosition } from './utils.js';
 
 export default class PositionRequestsSystem extends System {

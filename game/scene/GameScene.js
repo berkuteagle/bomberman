@@ -19,7 +19,10 @@ export class GameScene extends Scene {
             lives: 3
         });
 
-        this.player = this.ecs.sprite.create(64, 64, 'GreenNinja');
+        this.player = this.ecs.sprite.create(
+            64, 64, 'GreenNinja',
+            this.ecs.animation.addAnimationTag()
+        );
 
         const map = this.make.tilemap({ key: 'map' });
         const tilesInterior = map.addTilesetImage('TilesetInterior', 'TilesetInterior');

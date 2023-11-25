@@ -10,9 +10,7 @@ import {
 
 export default class PositionFeature extends Feature {
 
-    /**
-     * @override
-     */
+    /** @override */
     init() {
         this.addSystem('position_requests', new PositionRequestsSystem(this.ecs));
         this.addSystem('position_limits', new PositionLimitsSystem(this.ecs));

@@ -1,8 +1,7 @@
 import { defineQuery, enterQuery } from '../../bitecs.js';
 import { System } from '../../ecs.js';
 
-import { SpriteDepth } from './SpriteDepth.js';
-import { SpriteTag } from './SpriteTag.js';
+import { SpriteDepth, SpriteTag } from './components.js';
 
 export default class SpriteDepthSystem extends System {
 

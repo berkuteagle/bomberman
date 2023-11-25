@@ -1,8 +1,7 @@
 import { defineQuery, enterQuery } from '../../bitecs.js';
 import { System } from '../../ecs.js';
 
-import { SpriteGroup } from './SpriteGroup.js';
-import { SpriteTag } from './SpriteTag.js';
+import { SpriteGroup, SpriteTag } from './components.js';
 
 export default class SpriteGroupSystem extends System {
 

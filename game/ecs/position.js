@@ -1,19 +1,19 @@
+export { default as PositionFeature } from './position/PositionFeature.js';
+
 export {
-    Position,
-    SetPositionRequest,
     ChangePositionRequest,
-    PositionLimits
+    Position,
+    PositionLimits,
+    SetPositionRequest
 } from './position/components.js';
 
 export {
+    addChangePositionRequest,
     addPosition,
     addPositionLimits,
-    hasPosition,
-    hasPositionLimits,
     addSetPositionRequest,
+    createChangePositionRequest,
     createSetPositionRequest,
-    addChangePositionRequest,
-    createChangePositionRequest
+    hasPosition,
+    hasPositionLimits
 } from './position/utils.js';
-
-export { default as PositionFeature } from './position/PositionFeature.js';

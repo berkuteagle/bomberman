@@ -29,6 +29,10 @@ export default class ScenePlugin extends Plugins.ScenePlugin {
         return this.#ecs.getFeature('animation');
     }
 
+    get position() {
+        return this.#ecs.getFeature('position');
+    }
+
     boot() {
         this.#ecs = new ECS({ scene: this.scene });
         this.#ecs.addFeature('position', PositionFeature);

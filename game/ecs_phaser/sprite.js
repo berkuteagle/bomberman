@@ -1,4 +1,16 @@
-export { SpriteDepth, addSpriteDepth } from './sprite/SpriteDepth.js';
 export { default as SpriteFeature } from './sprite/SpriteFeature.js';
-export { SpriteGroup, addSpriteGroup } from './sprite/SpriteGroup.js';
-export { SpriteTag, createSprite, hasSpriteTag, addSpriteTag } from './sprite/SpriteTag.js';
+
+export {
+    SpriteDepth,
+    SpriteGroup,
+    SpriteTag
+} from './sprite/components.js';
+
+export {
+    addSpriteDepth,
+    addSpriteGroup,
+    addSpriteTag,
+    hasSpriteDepth,
+    hasSpriteGroup,
+    hasSpriteTag
+} from './sprite/utils.js';

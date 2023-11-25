@@ -1,7 +1,7 @@
 import { defineQuery, enterQuery, exitQuery } from '../../bitecs.js';
 import { Position, System } from '../../ecs.js';
 
-import { SpriteTag } from './SpriteTag.js';
+import { SpriteTag } from './components.js';
 
 export default class SpriteSystem extends System {
 
