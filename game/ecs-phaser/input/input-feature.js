@@ -1,28 +1,26 @@
 import { Feature } from '../../ecs.js';
 
-import ControlSystem from './control-system.js';
 import GamepadSystem from './gamepad-system.js';
 import KeyboardSystem from './keyboard-system.js';
 import TouchSystem from './touch-system.js';
 
-import { addControlKeysState, addControlTag } from './utils.js';
-
 /**
- * @typedef {Object} ControlFeatureConfig
+ * @typedef {Object} InputFeatureConfig
+ * @property {'keyboard'|'gamepad'|'touch'} inputType
  * @property {import('./keyboard-system.js').KeyboardSystemConfig} keyboardConfig
  */
 
 /**
- * @extends Feature<ControlFeatureConfig>
+ * @extends Feature<InputFeatureConfig>
  */
-export default class ControlFeature extends Feature {
+export default class InputFeature extends Feature {
 
     /** @override */
     init() {
 
         let system;
 
-        switch (this.config.controlType) {
+        switch (this.config.inputType) {
             case 'keyboard':
                 system = new KeyboardSystem(this.ecs, this.config.keyboardConfig);
                 break;
@@ -34,19 +32,12 @@ export default class ControlFeature extends Feature {
                 break;
         }
 
-        this.addSystem('control-type', system);
-        this.addSystem('control', new ControlSystem(this.ecs));
-
-        this.ecs.addEntity(addControlKeysState());
-    }
-
-    addControlTag() {
-        return addControlTag();
+        this.addSystem('input', system);
     }
 
     /** @override */
     static defaultConfig() {
-        return { controlType: 'keyboard' };
+        return { inputType: 'keyboard' };
     }
 
 }

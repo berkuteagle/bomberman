@@ -9,3 +9,8 @@ export const ControlKeyDownEvent = defineComponent({
 export const ControlKeysState = defineComponent({
     state: Types.ui16
 });
+
+export const ControlAnalogState = defineComponent({
+    x: Types.f32,
+    y: Types.f32
+});

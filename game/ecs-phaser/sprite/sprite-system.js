@@ -34,8 +34,10 @@ export default class SpriteSystem extends System {
             const sprite = this.ecs.store.getValue(entity, 'sprite');
 
             if (sprite) {
-                sprite.x = Position.x[entity];
-                sprite.y = Position.y[entity];
+                sprite.setPosition(
+                    Position.x[entity],
+                    Position.y[entity]
+                );
             }
         }
     }

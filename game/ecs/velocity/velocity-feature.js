@@ -1,13 +1,13 @@
 import Feature from '../feature.js';
 
-// import PositionLimitsSystem from './PositionLimitsSystem.js';
 import {
-    addVelocity,
-    createChangeVelocityRequest,
-    createSetVelocityRequest
+    withChangeVelocityRequest,
+    withSetVelocityRequest
 } from './utils.js';
+
 import VelocityLimitSystem from './velocity-limit-system.js';
 import VelocityRequestsSystem from './velocity-requests-system.js';
+import VelocitySystem from './velocity-system.js';
 
 export default class VelocityFeature extends Feature {
 
@@ -15,28 +15,20 @@ export default class VelocityFeature extends Feature {
     init() {
         this.addSystem('velocity-requests', new VelocityRequestsSystem(this.ecs));
         this.addSystem('velocity-limit', new VelocityLimitSystem(this.ecs));
-    }
-
-    addVelocity(x, y) {
-        return addVelocity(x, y);
-    }
-
-    create(x, y, ...ext) {
-        return this.ecs.addEntity(
-            addVelocity(x, y),
-            ...ext
-        );
+        this.addSystem('velocity', new VelocitySystem(this.ecs));
     }
 
     changeVelocity(eid, dx, dy) {
-        this.emit(
-            createChangeVelocityRequest(eid, dx, dy)
+        this.request(
+            1,
+            withChangeVelocityRequest(eid, dx, dy)
         );
     }
 
     setVelocity(eid, x, y) {
-        this.emit(
-            createSetVelocityRequest(eid, x, y)
+        this.request(
+            1,
+            withSetVelocityRequest(eid, x, y)
         );
     }
 }

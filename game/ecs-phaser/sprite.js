@@ -7,10 +7,10 @@ export {
 } from './sprite/components.js';
 
 export {
-    addSpriteDepth,
-    addSpriteGroup,
-    addSpriteTag,
     hasSpriteDepth,
     hasSpriteGroup,
-    hasSpriteTag
+    hasSpriteTag,
+    withSpriteDepth,
+    withSpriteGroup,
+    withSpriteTag
 } from './sprite/utils.js';

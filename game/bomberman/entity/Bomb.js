@@ -1,10 +1,10 @@
 import { addComponent } from '../../bitecs.js';
 
-import { AnimationState, addAnimationTag, createAnimationRequest } from '../../ecs/animation.js';
+import { AnimationState, createAnimationRequest, withAnimationTag } from '../../ecs/animation.js';
 import { Belong, Duration, Explosive } from '../../ecs/component.js';
 import { addCollisionTag } from '../../ecs/phy.js';
-import { addPosition } from '../../ecs/position.js';
-import { addSpriteGroup, createSprite } from '../../ecs/sprite.js';
+import { withPosition } from '../../ecs/position.js';
+import { createSprite, withSpriteGroup } from '../../ecs/sprite.js';
 
 /**
  * 
@@ -19,9 +19,9 @@ export const createBomb = (world, x = 0, y = 0, sapper) => {
 
     const bomb = createSprite(
         { texture: 'Bomb', x, y },
-        addSpriteGroup('Bombs'),
-        addPosition(x, y),
-        addAnimationTag(),
+        withSpriteGroup('Bombs'),
+        withPosition(x, y),
+        withAnimationTag(),
         addCollisionTag()
     )(world);
 

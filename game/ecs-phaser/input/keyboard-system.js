@@ -1,10 +1,12 @@
 import { defineQuery } from '../../bitecs.js';
-import { System, createEvent } from '../../ecs.js';
 import { Input } from '../../phaser.js';
 
-import { ControlKeysState } from './components.js';
-import { ControlKeyCode } from './enums.js';
-import { addControlKeyDownEvent } from './utils.js';
+import {
+    ControlKeyCode,
+    ControlKeysState,
+    System,
+    withControlKeyDownEvent
+} from '../../ecs.js';
 
 /**
  * Keyboard control configuration
@@ -52,15 +54,15 @@ export default class KeyboardSystem extends System {
 
     onKeyDown(key) {
         if (key === this.#keys.up) {
-            this.emit(createEvent(addControlKeyDownEvent(ControlKeyCode.UP)));
+            this.emit(withControlKeyDownEvent(ControlKeyCode.UP));
         } else if (key === this.#keys.down) {
-            this.emit(createEvent(addControlKeyDownEvent(ControlKeyCode.DOWN)));
+            this.emit(withControlKeyDownEvent(ControlKeyCode.DOWN));
         } else if (key === this.#keys.left) {
-            this.emit(createEvent(addControlKeyDownEvent(ControlKeyCode.LEFT)));
+            this.emit(withControlKeyDownEvent(ControlKeyCode.LEFT));
         } else if (key === this.#keys.right) {
-            this.emit(createEvent(addControlKeyDownEvent(ControlKeyCode.RIGHT)));
+            this.emit(withControlKeyDownEvent(ControlKeyCode.RIGHT));
         } else if (key === this.#keys.action) {
-            this.emit(createEvent(addControlKeyDownEvent(ControlKeyCode.ACTION)));
+            this.emit(withControlKeyDownEvent(ControlKeyCode.ACTION));
         }
     }
 
@@ -90,7 +92,7 @@ export default class KeyboardSystem extends System {
         return state;
     }
 
-    preUpdate() {
+    update() {
         const entities = this.#controlKeysState(this.ecs.world);
 
         if (entities.length) {
@@ -100,7 +102,6 @@ export default class KeyboardSystem extends System {
                 ControlKeysState.state[entity] = state;
             }
         }
-
     }
 
     destroy() {
@@ -110,5 +111,4 @@ export default class KeyboardSystem extends System {
         this.#keys.right.off(Input.Keyboard.Events.DOWN, this.onKeyDown);
         this.#keys.action.off(Input.Keyboard.Events.DOWN, this.onKeyDown);
     }
-
 }

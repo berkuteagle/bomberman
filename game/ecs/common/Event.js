@@ -1,7 +1,7 @@
-import { defineComponent, addComponent } from '../../bitecs.js';
+import { addComponent, defineComponent } from '../../bitecs.js';
 
 export const Event = defineComponent();
 
-export const addEvent = () => (world, eid) => {
+export const withEvent = () => (world, eid) => {
     addComponent(world, Event, eid);
 }

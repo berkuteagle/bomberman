@@ -7,12 +7,12 @@ export {
 } from './velocity/components.js';
 
 export {
-    addChangeVelocityRequest,
-    addSetVelocityRequest,
-    addVelocity,
-    addVelocityLimit,
     createChangeVelocityRequest,
     createSetVelocityRequest,
     hasVelocity,
-    hasVelocityLimit
+    hasVelocityLimit,
+    withChangeVelocityRequest,
+    withSetVelocityRequest,
+    withVelocity,
+    withVelocityLimit
 } from './velocity/utils.js';

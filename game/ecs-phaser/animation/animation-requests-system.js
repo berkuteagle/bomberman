@@ -3,7 +3,10 @@ import { System } from '../../ecs.js';
 
 import { hasSpriteTag } from '../sprite.js';
 
-import { PlayAnimationRequest, StopAnimationRequest } from './components.js';
+import {
+    PlayAnimationRequest,
+    StopAnimationRequest
+} from './components.js';
 import { hasAnimationTag } from './utils.js';
 
 export default class AnimationRequestsSystem extends System {

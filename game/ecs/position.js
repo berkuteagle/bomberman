@@ -8,12 +8,12 @@ export {
 } from './position/components.js';
 
 export {
-    addChangePositionRequest,
-    addPosition,
-    addPositionLimits,
-    addSetPositionRequest,
     createChangePositionRequest,
     createSetPositionRequest,
     hasPosition,
-    hasPositionLimits
+    hasPositionLimits,
+    withChangePositionRequest,
+    withPosition,
+    withPositionLimits,
+    withSetPositionRequest
 } from './position/utils.js';

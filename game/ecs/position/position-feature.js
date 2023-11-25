@@ -2,10 +2,11 @@ import Feature from '../feature.js';
 
 import PositionLimitsSystem from './position-limits-system.js';
 import PositionRequestsSystem from './position-requests-system.js';
+
 import {
-    addPosition,
-    createChangePositionRequest,
-    createSetPositionRequest
+    withChangePositionRequest,
+    withPosition,
+    withSetPositionRequest
 } from './utils.js';
 
 export default class PositionFeature extends Feature {
@@ -16,26 +17,28 @@ export default class PositionFeature extends Feature {
         this.addSystem('position-limits', new PositionLimitsSystem(this.ecs));
     }
 
-    addPosition(x, y) {
-        return addPosition(x, y);
+    withPosition(x, y) {
+        return withPosition(x, y);
     }
 
     create(x, y, ...ext) {
         return this.ecs.addEntity(
-            addPosition(x, y),
+            withPosition(x, y),
             ...ext
         );
     }
 
     changePosition(eid, dx, dy) {
-        this.emit(
-            createChangePositionRequest(eid, dx, dy)
+        this.request(
+            1,
+            withChangePositionRequest(eid, dx, dy)
         );
     }
 
     setPosition(eid, x, y) {
-        this.emit(
-            createSetPositionRequest(eid, x, y)
+        this.request(
+            1,
+            withSetPositionRequest(eid, x, y)
         );
     }
 }

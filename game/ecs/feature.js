@@ -1,3 +1,8 @@
+import {
+    createEvent,
+    createRequest
+} from './common.js';
+
 /**
  * Base Feature class
  * @template TConfig
@@ -76,8 +81,20 @@ export default class Feature {
         }
     }
 
-    emit(eventFn) {
-        this.#events.add(eventFn);
+    emit(...ext) {
+        if (ext.length) {
+            this.#events.add(
+                createEvent(...ext)
+            );
+        }
+    }
+
+    request(ttl, ...ext) {
+        if (ttl && ext.length) {
+            this.#events.add(
+                createRequest(ttl, ...ext)
+            );
+        }
     }
 
     processEvents() {
