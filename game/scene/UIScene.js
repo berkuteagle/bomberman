@@ -1,4 +1,4 @@
-import { Scene } from 'https://cdn.jsdelivr.net/npm/phaser/+esm';
+import { Scene } from '../phaser.js';
 
 export class UIScene extends Scene {
     constructor() {

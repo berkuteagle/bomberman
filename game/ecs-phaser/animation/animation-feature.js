@@ -1,6 +1,6 @@
 import { Feature, createRequest } from '../../ecs.js';
 
-import AnimationRequestsSystem from './AnimationRequestsSystem.js';
+import AnimationRequestsSystem from './animation-requests-system.js';
 import { addAnimationTag, addPlayAnimationRequest, addStopAnimationRequest } from './utils.js';
 
 export default class AnimationFeature extends Feature {
@@ -9,7 +9,7 @@ export default class AnimationFeature extends Feature {
     init() {
         this.ecs.store.register('animation');
 
-        this.addSystem('animation_requests', new AnimationRequestsSystem(this.ecs));
+        this.addSystem('animation-requests', new AnimationRequestsSystem(this.ecs));
     }
 
     addAnimationTag() {

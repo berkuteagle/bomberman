@@ -1,7 +1,7 @@
 import { addEntity } from '../bitecs.js';
 
-import { addRequest } from './common/Request.js';
 import { addEvent } from './common/Event.js';
+import { addRequest } from './common/Request.js';
 
 export { Event } from './common/Event.js';
 export { Request } from './common/Request.js';

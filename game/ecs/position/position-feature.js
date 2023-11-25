@@ -1,7 +1,7 @@
 import Feature from '../feature.js';
 
-import PositionLimitsSystem from './PositionLimitsSystem.js';
-import PositionRequestsSystem from './PositionRequestsSystem.js';
+import PositionLimitsSystem from './position-limits-system.js';
+import PositionRequestsSystem from './position-requests-system.js';
 import {
     addPosition,
     createChangePositionRequest,
@@ -12,8 +12,8 @@ export default class PositionFeature extends Feature {
 
     /** @override */
     init() {
-        this.addSystem('position_requests', new PositionRequestsSystem(this.ecs));
-        this.addSystem('position_limits', new PositionLimitsSystem(this.ecs));
+        this.addSystem('position-requests', new PositionRequestsSystem(this.ecs));
+        this.addSystem('position-limits', new PositionLimitsSystem(this.ecs));
     }
 
     addPosition(x, y) {

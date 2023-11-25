@@ -1,4 +1,4 @@
-export { default as VelocityFeature } from './velocity/VelocityFeature.js';
+export { default as VelocityFeature } from './velocity/velocity-feature.js';
 
 export {
     ChangeVelocityRequest,

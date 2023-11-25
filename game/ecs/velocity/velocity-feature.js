@@ -1,19 +1,20 @@
 import Feature from '../feature.js';
 
 // import PositionLimitsSystem from './PositionLimitsSystem.js';
-// import PositionRequestsSystem from './PositionRequestsSystem.js';
 import {
     addVelocity,
     createChangeVelocityRequest,
     createSetVelocityRequest
 } from './utils.js';
+import VelocityLimitSystem from './velocity-limit-system.js';
+import VelocityRequestsSystem from './velocity-requests-system.js';
 
 export default class VelocityFeature extends Feature {
 
     /** @override */
     init() {
-        // this.addSystem('position_requests', new PositionRequestsSystem(this.ecs));
-        // this.addSystem('position_limits', new PositionLimitsSystem(this.ecs));
+        this.addSystem('velocity-requests', new VelocityRequestsSystem(this.ecs));
+        this.addSystem('velocity-limit', new VelocityLimitSystem(this.ecs));
     }
 
     addVelocity(x, y) {

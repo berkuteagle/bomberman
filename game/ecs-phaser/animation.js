@@ -1,4 +1,4 @@
-export { default as AnimationFeature } from './animation/AnimationFeature.js';
+export { default as AnimationFeature } from './animation/animation-feature.js';
 
 export {
     AnimationTag,

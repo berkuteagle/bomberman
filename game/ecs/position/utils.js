@@ -2,7 +2,7 @@ import { addComponent, hasComponent } from '../../bitecs.js';
 
 import { createRequest } from '../common.js';
 
-import { Position, PositionLimits, SetPositionRequest, ChangePositionRequest } from './components.js';
+import { ChangePositionRequest, Position, PositionLimits, SetPositionRequest } from './components.js';
 
 export const addPosition = (x = 0, y = 0) => (world, eid) => {
     addComponent(world, Position, eid);

@@ -1,4 +1,4 @@
-export { default as SpriteFeature } from './sprite/SpriteFeature.js';
+export { default as SpriteFeature } from './sprite/sprite-feature.js';
 
 export {
     SpriteDepth,

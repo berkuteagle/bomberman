@@ -1,4 +1,4 @@
-export { default as PositionFeature } from './position/PositionFeature.js';
+export { default as PositionFeature } from './position/position-feature.js';
 
 export {
     ChangePositionRequest,

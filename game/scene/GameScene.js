@@ -1,5 +1,5 @@
+import { ControlFeature } from '../ecs-phaser.js';
 import { VelocityFeature } from '../ecs.js';
-import { ControlFeature } from '../ecs_phaser.js';
 import { Input, Scene } from '../phaser.js';
 
 export class GameScene extends Scene {

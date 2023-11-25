@@ -1,7 +1,7 @@
 import { Game, Scale, WEBGL } from './phaser.js';
 
-import PeerjsGamePlugin from './PeerjsGamePlugin.js';
-import { ScenePlugin as ECSScenePlugin } from './ecs_phaser.js';
+import { ScenePlugin as ECSScenePlugin } from './ecs-phaser.js';
+import PeerjsGamePlugin from './peerjs-game-plugin.js';
 
 import {
     GameOver,

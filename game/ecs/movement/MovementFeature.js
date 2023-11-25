@@ -9,7 +9,7 @@ export default class MovementFeature extends Feature {
      */
     init() {
         if (this.config.animation) {
-            this.addSystem('movement_animation', new MovementAnimationSystem(this.ecs));
+            this.addSystem('movement-animation', new MovementAnimationSystem(this.ecs));
         }
     }
 
