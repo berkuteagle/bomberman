@@ -32,7 +32,7 @@ export default class MovementAnimationSystem extends System {
     update() {
         for (const entity of this.#allEntities(this.ecs.world)) {
 
-            this.emit(createAnimationRequest(
+            this.ecs.emit(createAnimationRequest(
                 getMovementAnimation(entity),
                 Movement.state[entity] ? AnimationState.PLAY : AnimationState.STOP,
                 entity

@@ -29,14 +29,14 @@ export default class PositionFeature extends Feature {
     }
 
     changePosition(eid, dx, dy) {
-        this.request(
+        this.ecs.request(
             1,
             withChangePositionRequest(eid, dx, dy)
         );
     }
 
     setPosition(eid, x, y) {
-        this.request(
+        this.ecs.request(
             1,
             withSetPositionRequest(eid, x, y)
         );

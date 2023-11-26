@@ -7,8 +7,6 @@ export {
 } from './velocity/components.js';
 
 export {
-    createChangeVelocityRequest,
-    createSetVelocityRequest,
     hasVelocity,
     hasVelocityLimit,
     withChangeVelocityRequest,

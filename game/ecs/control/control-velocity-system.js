@@ -63,7 +63,7 @@ export default class ControlVelocitySystem extends System {
 
                 const needSetDirection = hasDirection(this.ecs.world, controlled) && direction && direction !== Direction.direction[controlled];
 
-                this.request(1,
+                this.ecs.request(1,
                     withSetVelocityRequest(controlled, velocityX, velocityY),
                     needSetDirection && withSetDirectionRequest(controlled, direction)
                 );

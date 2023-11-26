@@ -1,4 +1,7 @@
-import { Feature } from '../../ecs.js';
+import {
+    Feature,
+    withStore
+} from '../../ecs.js';
 
 import AnimationRequestsSystem from './animation-requests-system.js';
 import {
@@ -16,15 +19,15 @@ export default class AnimationFeature extends Feature {
     }
 
     playAnimation(eid, animation) {
-        this.request(
+        this.ecs.request(
             1,
             withPlayAnimationRequest(eid),
-            (_, request) => this.ecs.store.setValue(request, 'animation', animation)
+            withStore({ animation })
         );
     }
 
     stopAnimation(eid) {
-        this.request(
+        this.ecs.request(
             1,
             withStopAnimationRequest(eid)
         )

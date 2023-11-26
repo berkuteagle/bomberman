@@ -1,8 +1,3 @@
-import {
-    createEvent,
-    createRequest
-} from './common.js';
-
 /**
  * Base Feature class
  * @template TConfig
@@ -17,8 +12,6 @@ export default class Feature {
     #systems = new Map();
     /** @type {Set<String>} */
     #enabledSystems = new Set();
-
-    #events = new Set();
 
     /**
      * @param {import('../ecs.js').ECS} ecs - ECS instance
@@ -79,35 +72,7 @@ export default class Feature {
         for (const system of this.#systems) {
             system.destroy();
         }
-    }
-
-    emit(...ext) {
-        if (ext.length) {
-            this.#events.add(
-                createEvent(...ext)
-            );
-        }
-    }
-
-    request(ttl, ...ext) {
-        if (ttl && ext.length) {
-            this.#events.add(
-                createRequest(ttl, ...ext)
-            );
-        }
-    }
-
-    processEvents() {
-        if (this.#events.size) {
-            for (const eventFn of this.#events) {
-                eventFn(this.ecs.world);
-            }
-            this.#events.clear();
-        }
-
-        for (const systemKey of this.#enabledSystems) {
-            this.#systems.get(systemKey).processEvents();
-        }
+        this.#systems.clear();
     }
 
     /**

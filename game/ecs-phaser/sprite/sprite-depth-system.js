@@ -14,8 +14,11 @@ export default class SpriteDepthSystem extends System {
     }
 
     preUpdate() {
-        for (const entity of this.#enterEntities(this.ecs.world)) {
-            const sprite = this.ecs.store.getValue(entity, 'sprite');
+
+        const { store, world } = this.ecs;
+
+        for (const entity of this.#enterEntities(world)) {
+            const sprite = store.get(entity, 'sprite');
 
             if (sprite) {
                 sprite.setDepth(SpriteDepth.depth[entity]);

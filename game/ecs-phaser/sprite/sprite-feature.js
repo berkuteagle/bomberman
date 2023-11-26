@@ -1,4 +1,9 @@
-import { Feature } from '../../ecs.js';
+import {
+    Feature,
+    withPosition,
+    withStore
+} from '../../ecs.js';
+
 import { GameObjects } from '../../phaser.js';
 
 import { withSpriteTag } from './utils.js';
@@ -19,10 +24,13 @@ export default class SpriteFeature extends Feature {
     }
 
     create(x, y, texture, ...ext) {
-        return this.ecs.getFeature('position').create(
-            x, y,
+
+        const sprite = new GameObjects.Sprite(this.ecs.world.scene, x, y, texture);
+
+        return this.ecs.addEntity(
+            withPosition(x, y),
             withSpriteTag(),
-            (_, eid) => this.ecs.store.setValue(eid, 'sprite', new GameObjects.Sprite(this.ecs.world.scene, x, y, texture)),
+            withStore({ sprite }),
             ...ext
         );
     }

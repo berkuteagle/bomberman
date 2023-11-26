@@ -1,7 +1,5 @@
 import { addComponent, hasComponent } from '../../bitecs.js';
 
-import { createRequest } from '../common.js';
-
 import { ChangeVelocityRequest, SetVelocityRequest, Velocity, VelocityLimit } from './components.js';
 
 export const withVelocity = (x = 0, y = 0) => (world, eid) => {
@@ -29,8 +27,6 @@ export const withSetVelocityRequest = (entity, x, y) => (world, eid) => {
     SetVelocityRequest.y[eid] = y;
 }
 
-export const createSetVelocityRequest = (entity, x, y) => createRequest(1, withSetVelocityRequest(entity, x, y));
-
 export const withChangeVelocityRequest = (entity, dx, dy) => (world, eid) => {
     addComponent(world, ChangeVelocityRequest, eid);
 
@@ -38,5 +34,3 @@ export const withChangeVelocityRequest = (entity, dx, dy) => (world, eid) => {
     ChangeVelocityRequest.dx[eid] = dx;
     ChangeVelocityRequest.dy[eid] = dy;
 }
-
-export const createChangeVelocityRequest = (entity, dx, dy) => createRequest(1, withChangeVelocityRequest(entity, dx, dy));

@@ -54,15 +54,15 @@ export default class KeyboardSystem extends System {
 
     onKeyDown(key) {
         if (key === this.#keys.up) {
-            this.emit(withControlKeyDownEvent(ControlKeyCode.UP));
+            this.ecs.emit(withControlKeyDownEvent(ControlKeyCode.UP));
         } else if (key === this.#keys.down) {
-            this.emit(withControlKeyDownEvent(ControlKeyCode.DOWN));
+            this.ecs.emit(withControlKeyDownEvent(ControlKeyCode.DOWN));
         } else if (key === this.#keys.left) {
-            this.emit(withControlKeyDownEvent(ControlKeyCode.LEFT));
+            this.ecs.emit(withControlKeyDownEvent(ControlKeyCode.LEFT));
         } else if (key === this.#keys.right) {
-            this.emit(withControlKeyDownEvent(ControlKeyCode.RIGHT));
+            this.ecs.emit(withControlKeyDownEvent(ControlKeyCode.RIGHT));
         } else if (key === this.#keys.action) {
-            this.emit(withControlKeyDownEvent(ControlKeyCode.ACTION));
+            this.ecs.emit(withControlKeyDownEvent(ControlKeyCode.ACTION));
         }
     }
 

@@ -22,12 +22,15 @@ export default class AnimationRequestsSystem extends System {
     }
 
     preUpdate() {
-        for (const request of this.#playAnimationQuery(this.ecs.world)) {
+
+        const { store, world } = this.ecs;
+
+        for (const request of this.#playAnimationQuery(world)) {
             const entity = PlayAnimationRequest.sprite[request];
 
-            if (hasAnimationTag(this.ecs.world, entity) && hasSpriteTag(this.ecs.world, entity)) {
-                const sprite = this.ecs.store.getValue(entity, 'sprite');
-                const animation = this.ecs.store.getValue(request, 'animation');
+            if (hasAnimationTag(world, entity) && hasSpriteTag(world, entity)) {
+                const sprite = store.get(entity, 'sprite');
+                const animation = store.get(request, 'animation');
 
                 if (sprite && animation) {
                     sprite.play(animation);
@@ -36,11 +39,11 @@ export default class AnimationRequestsSystem extends System {
 
         }
 
-        for (const request of this.#stopAnimationQuery(this.ecs.world)) {
+        for (const request of this.#stopAnimationQuery(world)) {
             const entity = StopAnimationRequest.sprite[request];
 
-            if (hasAnimationTag(this.ecs.world, entity) && hasSpriteTag(this.ecs.world, entity)) {
-                const sprite = this.ecs.store.getValue(entity, 'sprite');
+            if (hasAnimationTag(world, entity) && hasSpriteTag(world, entity)) {
+                const sprite = store.get(entity, 'sprite');
 
                 if (sprite) {
                     sprite.stop();

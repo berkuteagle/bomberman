@@ -1,8 +1,3 @@
-import {
-    createEvent,
-    createRequest
-} from './common.js';
-
 /**
  * Base System class
  */
@@ -10,8 +5,6 @@ export default class System {
 
     /** @type {import('../ecs.js').ECS} */
     #ecs;
-
-    #events = new Set();
 
     /**
      * @param {import('../ecs.js').ECS} ecs - ECS instance
@@ -25,35 +18,6 @@ export default class System {
      */
     get ecs() {
         return this.#ecs;
-    }
-
-    get events() {
-        return this.#events;
-    }
-
-    emit(...ext) {
-        if (ext.length) {
-            this.#events.add(
-                createEvent(...ext)
-            );
-        }
-    }
-
-    request(ttl, ...ext) {
-        if (ttl && ext.length) {
-            this.#events.add(
-                createRequest(ttl, ...ext)
-            );
-        }
-    }
-
-    processEvents() {
-        if (this.#events.size) {
-            for (const eventFn of this.#events) {
-                eventFn(this.ecs.world);
-            }
-            this.#events.clear();
-        }
     }
 
     /**

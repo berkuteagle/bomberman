@@ -15,11 +15,11 @@ export default class SpriteGroupSystem extends System {
 
     preUpdate() {
 
-        const { world, sprites, groups } = this.ecs;
+        const { world, store } = this.ecs;
 
         for (const entity of this.#enterEntities(world)) {
-            const sprite = sprites.get(entity);
-            const group = groups.get(SpriteGroup.key[entity]);
+            const sprite = store.get(entity, 'sprite');
+            const group = store.get(SpriteGroup.key[entity], 'group');
 
             if (sprite && group) {
                 group.add(sprite);

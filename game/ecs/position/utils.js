@@ -1,7 +1,5 @@
 import { addComponent, hasComponent } from '../../bitecs.js';
 
-import { createRequest } from '../common.js';
-
 import { ChangePositionRequest, Position, PositionLimits, SetPositionRequest } from './components.js';
 
 export const withPosition = (x = 0, y = 0) => (world, eid) => {
@@ -32,8 +30,6 @@ export const withSetPositionRequest = (entity, x, y) => (world, eid) => {
     SetPositionRequest.y[eid] = y;
 }
 
-export const createSetPositionRequest = (entity, x, y) => createRequest(1, withSetPositionRequest(entity, x, y));
-
 export const withChangePositionRequest = (entity, dx, dy) => (world, eid) => {
     addComponent(world, ChangePositionRequest, eid);
 
@@ -41,5 +37,3 @@ export const withChangePositionRequest = (entity, dx, dy) => (world, eid) => {
     ChangePositionRequest.dx[eid] = dx;
     ChangePositionRequest.dy[eid] = dy;
 }
-
-export const createChangePositionRequest = (entity, dx, dy) => createRequest(1, withChangePositionRequest(entity, dx, dy));

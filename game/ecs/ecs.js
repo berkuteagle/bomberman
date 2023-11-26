@@ -1,6 +1,19 @@
-import { addEntity, createWorld, defineQuery, removeEntity } from '../bitecs.js';
+import {
+    addEntity,
+    createWorld,
+    defineQuery,
+    exitQuery,
+    removeEntity
+} from '../bitecs.js';
 
-import { Event, Request } from './common.js';
+import {
+    Event,
+    Request,
+    createEntity,
+    withEvent,
+    withRequest
+} from './common.js';
+
 import Store from './store.js';
 
 /**
@@ -11,9 +24,12 @@ export default class ECS {
 
     #world;
     #store;
+    #events;
+    #requests;
 
     #requestsQuery;
     #eventsQuery;
+    #storeQuery;
 
     /** @type {Map<String, import('./feature.js').default>} */
     #features = new Map();
@@ -23,10 +39,18 @@ export default class ECS {
      * @param {TWorldData} worldData 
      */
     constructor(worldData = {}) {
-        this.#world = createWorld(worldData);
+        this.#store = new Store();
+        this.#events = new Set();
+        this.#requests = new Set();
+
+        this.#world = createWorld({
+            [Symbol.for('ecs-store')]: this.#store,
+            ...worldData
+        });
+
         this.#requestsQuery = defineQuery([Request]);
         this.#eventsQuery = defineQuery([Event]);
-        this.#store = new Store();
+        this.#storeQuery = exitQuery(defineQuery([Store]));
     }
 
     get world() {
@@ -38,8 +62,18 @@ export default class ECS {
     }
 
     process(time, delta) {
-        for (const featureKey of this.#enabledFeatures) {
-            this.#features.get(featureKey).processEvents();
+        if (this.#requests.size) {
+            for (const requestFn of this.#requests) {
+                requestFn(this.#world);
+            }
+            this.#requests.clear();
+        }
+
+        if (this.#events.size) {
+            for (const eventFn of this.#events) {
+                eventFn(this.#world);
+            }
+            this.#events.clear();
         }
 
         for (const featureKey of this.#enabledFeatures) {
@@ -62,6 +96,10 @@ export default class ECS {
             if (!--Request.ttl[entity]) {
                 removeEntity(this.#world, entity);
             }
+        }
+
+        for (const entity of this.#storeQuery(this.#world)) {
+            this.#store.delete(entity);
         }
     }
 
@@ -112,9 +150,29 @@ export default class ECS {
         removeEntity(this.#world, eid);
     }
 
+    emit(...ext) {
+        if (ext.length) {
+            this.#events.add(createEntity(withEvent(), ...ext));
+        }
+    }
+
+    request(ttl, ...ext) {
+        if (ttl && ext.length) {
+            this.#requests.add(createEntity(withRequest(ttl), ...ext));
+        }
+    }
+
     destroy() {
+        this.#events.clear();
+        this.#requests.clear();
+        this.#enabledFeatures.clear();
+
+        this.#store.destroy();
+
         for (const feature of this.#features) {
             feature.destroy();
         }
+
+        this.#features.clear();
     }
 }

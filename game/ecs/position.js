@@ -8,8 +8,6 @@ export {
 } from './position/components.js';
 
 export {
-    createChangePositionRequest,
-    createSetPositionRequest,
     hasPosition,
     hasPositionLimits,
     withChangePositionRequest,

@@ -20,18 +20,24 @@ export default class SpriteSystem extends System {
     }
 
     preUpdate() {
-        for (const entity of this.#enterEntities(this.ecs.world)) {
-            const sprite = this.ecs.store.getValue(entity, 'sprite');
+
+        const { store, world } = this.ecs;
+
+        for (const entity of this.#enterEntities(world)) {
+            const sprite = store.get(entity, 'sprite');
 
             if (sprite) {
-                this.ecs.world.scene.add.existing(sprite);
+                world.scene.add.existing(sprite);
             }
         }
     }
 
     update() {
-        for (const entity of this.#allPositionEntities(this.ecs.world)) {
-            const sprite = this.ecs.store.getValue(entity, 'sprite');
+
+        const { store, world } = this.ecs;
+
+        for (const entity of this.#allPositionEntities(world)) {
+            const sprite = store.get(entity, 'sprite');
 
             if (sprite) {
                 sprite.setPosition(
@@ -43,11 +49,14 @@ export default class SpriteSystem extends System {
     }
 
     postUpdate() {
-        for (const entity of this.#exitEntities(this.ecs.world)) {
-            const sprite = this.ecs.store.getValue(entity, 'sprite');
+
+        const { store, world } = this.ecs;
+
+        for (const entity of this.#exitEntities(world)) {
+            const sprite = store.get(entity, 'sprite');
 
             if (sprite) {
-                this.ecs.store.removeField(entity, 'sprite');
+                store.unset(entity, 'sprite');
                 sprite.destroy();
             }
         }

@@ -1,10 +1,28 @@
-import { addEntity } from '../bitecs.js';
+import { addComponent, addEntity, defineComponent, Types } from '../bitecs.js';
 
-import { withEvent } from './common/Event.js';
-import { withRequest } from './common/Request.js';
+export const Store = defineComponent();
 
-export { Event } from './common/Event.js';
-export { Request } from './common/Request.js';
+export const Event = defineComponent();
+
+export const Request = defineComponent({
+    ttl: Types.i8
+});
+
+export const withStore = (data = {}) => (world, eid) => {
+    addComponent(world, Store, eid);
+
+    world[Symbol.for('ecs-store')].set(eid, data);
+}
+
+export const withEvent = () => (world, eid) => {
+    addComponent(world, Event, eid);
+}
+
+export const withRequest = (ttl = 1) => (world, eid) => {
+    addComponent(world, Request, eid);
+
+    Request.ttl[eid] = ttl;
+}
 
 export const createEntity = (...ext) => world => {
     const eid = addEntity(world);
@@ -17,7 +35,3 @@ export const createEntity = (...ext) => world => {
 
     return eid;
 }
-
-export const createRequest = (ttl, ...ext) => createEntity(withRequest(ttl), ...ext);
-
-export const createEvent = (...ext) => createEntity(withEvent(), ...ext);
