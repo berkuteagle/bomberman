@@ -10,7 +10,9 @@ export const createEntity = (...ext) => world => {
     const eid = addEntity(world);
 
     for (const fn of ext) {
-        fn(world, eid);
+        if (fn) {
+            fn(world, eid);
+        }
     }
 
     return eid;

@@ -9,6 +9,13 @@ export {
 } from './ecs/common.js';
 
 export {
+    Direction,
+    DirectionFeature,
+    DirectionValue,
+    withDirection
+} from './ecs/direction.js';
+
+export {
     ControlFeature,
     ControlKeyCode,
     ControlKeyDownEvent,

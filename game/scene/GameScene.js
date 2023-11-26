@@ -6,8 +6,10 @@ import {
 
 import {
     ControlFeature,
+    DirectionFeature,
     VelocityFeature,
     withControlTag,
+    withDirection,
     withPositionLimits,
     withVelocity,
     withVelocityLimit
@@ -38,6 +40,7 @@ export class GameScene extends Scene {
         });
 
         this.ecs.addFeature('velocity', VelocityFeature);
+        this.ecs.addFeature('direction', DirectionFeature);
         this.ecs.addFeature('control', ControlFeature);
         this.ecs.addFeature('input', InputFeature, {
             inputType: 'keyboard',
@@ -57,7 +60,8 @@ export class GameScene extends Scene {
             withVelocity(0, 0),
             withVelocityLimit(70),
             withSpriteDepth(10),
-            withPositionLimits(64, 416, 64, 416)
+            withPositionLimits(64, 416, 64, 416),
+            withDirection()
         );
 
         const map = this.make.tilemap({ key: 'map' });

@@ -1,4 +1,4 @@
-export const ControlKeyCode = Object.freeze({
+export const DirectionValue = Object.freeze({
     UP: 1,
     DOWN: 1 << 1,
     LEFT: 1 << 2,
