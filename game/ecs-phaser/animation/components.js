@@ -9,3 +9,5 @@ export const PlayAnimationRequest = defineComponent({
 export const StopAnimationRequest = defineComponent({
     sprite: Types.eid
 });
+
+export const MovementAnimationTag = defineComponent();

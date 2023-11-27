@@ -7,7 +7,6 @@ import {
     PlayAnimationRequest,
     StopAnimationRequest
 } from './components.js';
-import { hasAnimationTag } from './utils.js';
 
 export default class AnimationRequestsSystem extends System {
 
@@ -28,7 +27,7 @@ export default class AnimationRequestsSystem extends System {
         for (const request of this.#playAnimationQuery(world)) {
             const entity = PlayAnimationRequest.sprite[request];
 
-            if (hasAnimationTag(world, entity) && hasSpriteTag(world, entity)) {
+            if (hasSpriteTag(world, entity)) {
                 const sprite = store.get(entity, 'sprite');
                 const animation = store.get(request, 'animation');
 
@@ -42,7 +41,7 @@ export default class AnimationRequestsSystem extends System {
         for (const request of this.#stopAnimationQuery(world)) {
             const entity = StopAnimationRequest.sprite[request];
 
-            if (hasAnimationTag(world, entity) && hasSpriteTag(world, entity)) {
+            if (hasSpriteTag(world, entity)) {
                 const sprite = store.get(entity, 'sprite');
 
                 if (sprite) {

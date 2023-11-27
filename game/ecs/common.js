@@ -24,14 +24,18 @@ export const withRequest = (ttl = 1) => (world, eid) => {
     Request.ttl[eid] = ttl;
 }
 
+export const chain = (...ext) => (world, eid) => {
+    for (const extFn of ext) {
+        if (extFn) {
+            extFn(world, eid);
+        }
+    }
+}
+
 export const createEntity = (...ext) => world => {
     const eid = addEntity(world);
 
-    for (const fn of ext) {
-        if (fn) {
-            fn(world, eid);
-        }
-    }
+    chain(...ext)(world, eid);
 
     return eid;
 }

@@ -2,7 +2,10 @@ export { default as ECS } from './ecs/ecs.js';
 export { default as Feature } from './ecs/feature.js';
 export { default as System } from './ecs/system.js';
 
-export { withStore } from './ecs/common.js';
+export {
+    chain,
+    withStore
+} from './ecs/common.js';
 
 export {
     Direction,

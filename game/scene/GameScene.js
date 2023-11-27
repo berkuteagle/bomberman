@@ -1,6 +1,6 @@
 import {
     InputFeature,
-    withAnimationTag,
+    withAnimation,
     withSpriteDepth
 } from '../ecs-phaser.js';
 
@@ -55,13 +55,13 @@ export class GameScene extends Scene {
 
         this.player = this.ecs.sprite.create(
             64, 64, 'GreenNinja',
-            withAnimationTag(),
             withControlTag(),
             withVelocity(0, 0),
             withVelocityLimit(70),
             withSpriteDepth(10),
             withPositionLimits(64, 416, 64, 416),
-            withDirection()
+            withDirection(),
+            withAnimation('GreenNinja_walk_down')
         );
 
         const map = this.make.tilemap({ key: 'map' });

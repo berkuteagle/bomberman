@@ -4,7 +4,13 @@ export {
     AnimationFeature,
     AnimationTag,
     hasAnimationTag,
-    withAnimationTag
+    hasMovementAnimationTag,
+    withAnimation,
+    withAnimationTag,
+    withMovementAnimation,
+    withMovementAnimationTag,
+    withPlayAnimationRequest,
+    withStopAnimationRequest
 } from './ecs-phaser/animation.js';
 
 export { InputFeature } from './ecs-phaser/input.js';
@@ -14,6 +20,9 @@ export {
     SpriteFeature,
     SpriteGroup,
     SpriteTag,
+    hasSpriteDepth,
+    hasSpriteGroup,
+    hasSpriteTag,
     withSpriteDepth,
     withSpriteGroup,
     withSpriteTag

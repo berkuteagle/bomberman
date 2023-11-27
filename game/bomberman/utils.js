@@ -1,6 +1,5 @@
 import { addComponent } from '../bitecs.js';
 
-import { withAnimationTag } from '../ecs/animation.js';
 import { Destructible } from '../ecs/component.js';
 import { addMovement, addMovementAnimation } from '../ecs/movement.js';
 import { Velocity, addCollisionTag } from '../ecs/phy.js';
@@ -25,7 +24,6 @@ export const createPlayer = (x = 0, y = 0) => world => {
         withSpriteGroup('Player'),
         withPosition(x, y),
         withPositionBoundaries(64, 416, 64, 416),
-        withAnimationTag(),
         addCollisionTag(),
         addSapper(),
         addMovement(),

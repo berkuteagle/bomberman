@@ -4,5 +4,11 @@ export { AnimationTag } from './animation/components.js';
 
 export {
     hasAnimationTag,
-    withAnimationTag
+    hasMovementAnimationTag,
+    withAnimation,
+    withAnimationTag,
+    withMovementAnimation,
+    withMovementAnimationTag,
+    withPlayAnimationRequest,
+    withStopAnimationRequest
 } from './animation/utils.js';
