@@ -44,18 +44,18 @@ export default class ControlVelocitySystem extends System {
                 let direction = 0;
 
                 if (state) {
-                    if (state & ControlKeyCode.LEFT && !(state & ControlKeyCode.RIGHT)) {
+                    if (state & ControlKeyCode.BUTTON_LEFT && !(state & ControlKeyCode.BUTTON_RIGHT)) {
                         velocityX = -VelocityLimit.max[controlled];
                         direction = DirectionValue.LEFT;
-                    } else if (state & ControlKeyCode.RIGHT && !(state & ControlKeyCode.LEFT)) {
+                    } else if (state & ControlKeyCode.BUTTON_RIGHT && !(state & ControlKeyCode.BUTTON_LEFT)) {
                         velocityX = VelocityLimit.max[controlled];
                         direction = DirectionValue.RIGHT;
                     }
 
-                    if (state & ControlKeyCode.UP && !(state & ControlKeyCode.DOWN)) {
+                    if (state & ControlKeyCode.BUTTON_UP && !(state & ControlKeyCode.BUTTON_DOWN)) {
                         velocityY = -VelocityLimit.max[controlled];
                         direction = DirectionValue.UP;
-                    } else if (state & ControlKeyCode.DOWN && !(state & ControlKeyCode.UP)) {
+                    } else if (state & ControlKeyCode.BUTTON_DOWN && !(state & ControlKeyCode.BUTTON_UP)) {
                         velocityY = VelocityLimit.max[controlled];
                         direction = DirectionValue.DOWN;
                     }
@@ -63,7 +63,7 @@ export default class ControlVelocitySystem extends System {
 
                 const needSetDirection = hasDirection(this.ecs.world, controlled) && direction && direction !== Direction.direction[controlled];
 
-                this.ecs.request(1,
+                this.ecs.request(
                     withSetVelocityRequest(controlled, velocityX, velocityY),
                     needSetDirection && withSetDirectionRequest(controlled, direction)
                 );

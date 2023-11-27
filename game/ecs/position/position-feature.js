@@ -30,14 +30,12 @@ export default class PositionFeature extends Feature {
 
     changePosition(eid, dx, dy) {
         this.ecs.request(
-            1,
             withChangePositionRequest(eid, dx, dy)
         );
     }
 
     setPosition(eid, x, y) {
         this.ecs.request(
-            1,
             withSetPositionRequest(eid, x, y)
         );
     }

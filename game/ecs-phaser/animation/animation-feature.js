@@ -26,7 +26,6 @@ export default class AnimationFeature extends Feature {
 
     playAnimation(eid, animation) {
         this.ecs.request(
-            1,
             withPlayAnimationRequest(eid),
             withStore({ animation })
         );
@@ -34,7 +33,6 @@ export default class AnimationFeature extends Feature {
 
     stopAnimation(eid) {
         this.ecs.request(
-            1,
             withStopAnimationRequest(eid)
         )
     }

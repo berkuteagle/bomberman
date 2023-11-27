@@ -20,14 +20,12 @@ export default class VelocityFeature extends Feature {
 
     changeVelocity(eid, dx, dy) {
         this.ecs.request(
-            1,
             withChangeVelocityRequest(eid, dx, dy)
         );
     }
 
     setVelocity(eid, x, y) {
         this.ecs.request(
-            1,
             withSetVelocityRequest(eid, x, y)
         );
     }

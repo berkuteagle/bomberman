@@ -2,7 +2,11 @@ import Feature from '../feature.js';
 
 import ControlVelocitySystem from './control-velocity-system.js';
 
-import { withControlKeysState } from './utils.js';
+import {
+    withControlKeysState,
+    withControlLeftStickState,
+    withControlRightStickState
+} from './utils.js';
 
 export default class ControlFeature extends Feature {
 
@@ -10,7 +14,11 @@ export default class ControlFeature extends Feature {
     init() {
         this.addSystem('control-velocity', new ControlVelocitySystem(this.ecs));
 
-        this.ecs.addEntity(withControlKeysState());
+        this.ecs.addEntity(
+            withControlKeysState(),
+            withControlLeftStickState(),
+            withControlRightStickState()
+        );
     }
 
 }

@@ -1,24 +1,23 @@
 import {
+    AnimationFeature,
     InputFeature,
-    withMovementAnimation,
-    withSpriteDepth
+    SpriteFeature
 } from '../ecs-phaser.js';
 
 import {
     ControlFeature,
     DirectionFeature,
-    VelocityFeature,
-    withControlTag,
-    withDirection,
-    withPositionLimits,
-    withVelocity,
-    withVelocityLimit
+    PositionFeature,
+    VelocityFeature
 } from '../ecs.js';
 
 import {
     Input,
     Scene
 } from '../phaser.js';
+
+import { BombFeature } from '../bomberman/bomb.js';
+import { PlayerFeature } from '../bomberman/player.js';
 
 export class GameScene extends Scene {
 
@@ -39,9 +38,13 @@ export class GameScene extends Scene {
             lives: 3
         });
 
+        this.ecs.addFeature('position', PositionFeature);
         this.ecs.addFeature('velocity', VelocityFeature);
         this.ecs.addFeature('direction', DirectionFeature);
         this.ecs.addFeature('control', ControlFeature);
+
+        this.ecs.addFeature('sprite', SpriteFeature);
+        this.ecs.addFeature('animation', AnimationFeature);
         this.ecs.addFeature('input', InputFeature, {
             inputType: 'keyboard',
             keyboardConfig: {
@@ -49,25 +52,12 @@ export class GameScene extends Scene {
                 downKeyCode: Input.Keyboard.KeyCodes.DOWN,
                 leftKeyCode: Input.Keyboard.KeyCodes.LEFT,
                 rightKeyCode: Input.Keyboard.KeyCodes.RIGHT,
-                actionKeyCode: Input.Keyboard.KeyCodes.SPACE
+                aKeyCode: Input.Keyboard.KeyCodes.SPACE
             }
         });
 
-        this.player = this.ecs.sprite.create(
-            64, 64, 'GreenNinja',
-            withControlTag(),
-            withVelocity(0, 0),
-            withVelocityLimit(70),
-            withSpriteDepth(10),
-            withPositionLimits(64, 416, 64, 416),
-            withDirection(),
-            withMovementAnimation({
-                up: 'GreenNinja_walk_up',
-                down: 'GreenNinja_walk_down',
-                left: 'GreenNinja_walk_left',
-                right: 'GreenNinja_walk_right'
-            })
-        );
+        this.ecs.addFeature('bomb', BombFeature);
+        this.ecs.addFeature('player', PlayerFeature);
 
         const map = this.make.tilemap({ key: 'map' });
         const tilesInterior = map.addTilesetImage('TilesetInterior', 'TilesetInterior');

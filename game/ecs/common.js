@@ -1,12 +1,11 @@
-import { addComponent, addEntity, defineComponent, Types } from '../bitecs.js';
+import {
+    addComponent,
+    defineComponent
+} from '../bitecs.js';
 
 export const Store = defineComponent();
-
 export const Event = defineComponent();
-
-export const Request = defineComponent({
-    ttl: Types.i8
-});
+export const Request = defineComponent();
 
 export const withStore = (data = {}) => (world, eid) => {
     addComponent(world, Store, eid);
@@ -18,10 +17,8 @@ export const withEvent = () => (world, eid) => {
     addComponent(world, Event, eid);
 }
 
-export const withRequest = (ttl = 1) => (world, eid) => {
+export const withRequest = () => (world, eid) => {
     addComponent(world, Request, eid);
-
-    Request.ttl[eid] = ttl;
 }
 
 export const chain = (...ext) => (world, eid) => {
@@ -30,12 +27,6 @@ export const chain = (...ext) => (world, eid) => {
             extFn(world, eid);
         }
     }
-}
-
-export const createEntity = (...ext) => world => {
-    const eid = addEntity(world);
-
-    chain(...ext)(world, eid);
 
     return eid;
 }

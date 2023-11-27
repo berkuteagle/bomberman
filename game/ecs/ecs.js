@@ -9,7 +9,7 @@ import {
 import {
     Event,
     Request,
-    createEntity,
+    chain,
     withEvent,
     withRequest
 } from './common.js';
@@ -64,14 +64,14 @@ export default class ECS {
     process(time, delta) {
         if (this.#requests.size) {
             for (const requestFn of this.#requests) {
-                requestFn(this.#world);
+                this.addEntity(requestFn);
             }
             this.#requests.clear();
         }
 
         if (this.#events.size) {
             for (const eventFn of this.#events) {
-                eventFn(this.#world);
+                this.addEntity(eventFn);
             }
             this.#events.clear();
         }
@@ -93,9 +93,7 @@ export default class ECS {
         }
 
         for (const entity of this.#requestsQuery(this.#world)) {
-            if (!--Request.ttl[entity]) {
-                removeEntity(this.#world, entity);
-            }
+            removeEntity(this.#world, entity);
         }
 
         for (const entity of this.#storeQuery(this.#world)) {
@@ -137,13 +135,7 @@ export default class ECS {
     }
 
     addEntity(...ext) {
-        const eid = addEntity(this.#world);
-
-        for (const fn of ext) {
-            fn(this.#world, eid);
-        }
-
-        return eid;
+        return chain(...ext)(this.#world, addEntity(this.#world));
     }
 
     removeEntity(eid) {
@@ -152,13 +144,13 @@ export default class ECS {
 
     emit(...ext) {
         if (ext.length) {
-            this.#events.add(createEntity(withEvent(), ...ext));
+            this.#events.add(chain(withEvent(), ...ext));
         }
     }
 
-    request(ttl, ...ext) {
-        if (ttl && ext.length) {
-            this.#requests.add(createEntity(withRequest(ttl), ...ext));
+    request(...ext) {
+        if (ext.length) {
+            this.#requests.add(chain(withRequest(), ...ext));
         }
     }
 

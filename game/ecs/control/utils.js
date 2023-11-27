@@ -4,9 +4,11 @@ import {
 } from '../../bitecs.js';
 
 import {
-    ControlAnalogState,
     ControlKeyDownEvent,
+    ControlKeyUpEvent,
     ControlKeysState,
+    ControlLeftStickState,
+    ControlRightStickState,
     ControlTag
 } from './components.js';
 
@@ -22,15 +24,28 @@ export const withControlKeyDownEvent = (code) => (world, eid) => {
     ControlKeyDownEvent.code[eid] = code;
 }
 
+export const withControlKeyUpEvent = (code) => (world, eid) => {
+    addComponent(world, ControlKeyUpEvent, eid);
+
+    ControlKeyUpEvent.code[eid] = code;
+}
+
 export const withControlKeysState = (state = 0) => (world, eid) => {
     addComponent(world, ControlKeysState, eid);
 
     ControlKeysState.state[eid] = state;
 }
 
-export const withControlAnalogState = (x = 0, y = 0) => (world, eid) => {
-    addComponent(world, ControlAnalogState, eid);
+export const withControlLeftStickState = (x = 0, y = 0) => (world, eid) => {
+    addComponent(world, ControlLeftStickState, eid);
 
-    ControlAnalogState.x[eid] = x;
-    ControlAnalogState.y[eid] = y;
+    ControlLeftStickState.x[eid] = x;
+    ControlLeftStickState.y[eid] = y;
+}
+
+export const withControlRightStickState = (x = 0, y = 0) => (world, eid) => {
+    addComponent(world, ControlRightStickState, eid);
+
+    ControlRightStickState.x[eid] = x;
+    ControlRightStickState.y[eid] = y;
 }

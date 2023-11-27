@@ -19,11 +19,15 @@ export {
     ControlKeyCode,
     ControlKeyDownEvent,
     ControlKeysState,
+    ControlLeftStickState,
+    ControlRightStickState,
     ControlTag,
     hasControlTag,
-    withControlAnalogState,
     withControlKeyDownEvent,
+    withControlKeyUpEvent,
     withControlKeysState,
+    withControlLeftStickState,
+    withControlRightStickState,
     withControlTag
 } from './ecs/control.js';
 

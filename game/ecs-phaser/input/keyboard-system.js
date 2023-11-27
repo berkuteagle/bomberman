@@ -5,7 +5,8 @@ import {
     ControlKeyCode,
     ControlKeysState,
     System,
-    withControlKeyDownEvent
+    withControlKeyDownEvent,
+    withControlKeyUpEvent
 } from '../../ecs.js';
 
 /**
@@ -15,7 +16,7 @@ import {
  * @property {Number} downKeyCode
  * @property {Number} leftKeyCode
  * @property {Number} rightKeyCode
- * @property {Number} actionKeyCode
+ * @property {Number} aKeyCode
  */
 
 /**
@@ -38,7 +39,7 @@ export default class KeyboardSystem extends System {
             downKeyCode: down = Input.Keyboard.KeyCodes.DOWN,
             leftKeyCode: left = Input.Keyboard.KeyCodes.LEFT,
             rightKeyCode: right = Input.Keyboard.KeyCodes.RIGHT,
-            actionKeyCode: action = Input.Keyboard.KeyCodes.SPACE
+            aKeyCode: action = Input.Keyboard.KeyCodes.SPACE
         } = config;
 
         this.#keys = this.ecs.world.scene.input.keyboard.addKeys({ up, down, left, right, action });
@@ -49,20 +50,60 @@ export default class KeyboardSystem extends System {
         this.#keys.right.on(Input.Keyboard.Events.DOWN, this.onKeyDown, this);
         this.#keys.action.on(Input.Keyboard.Events.DOWN, this.onKeyDown, this);
 
+        this.#keys.up.on(Input.Keyboard.Events.UP, this.onKeyUp, this);
+        this.#keys.down.on(Input.Keyboard.Events.UP, this.onKeyUp, this);
+        this.#keys.left.on(Input.Keyboard.Events.UP, this.onKeyUp, this);
+        this.#keys.right.on(Input.Keyboard.Events.UP, this.onKeyUp, this);
+        this.#keys.action.on(Input.Keyboard.Events.UP, this.onKeyUp, this);
+
         this.#controlKeysState = defineQuery([ControlKeysState]);
     }
 
     onKeyDown(key) {
         if (key === this.#keys.up) {
-            this.ecs.emit(withControlKeyDownEvent(ControlKeyCode.UP));
+            this.ecs.emit(
+                withControlKeyDownEvent(ControlKeyCode.BUTTON_UP)
+            );
         } else if (key === this.#keys.down) {
-            this.ecs.emit(withControlKeyDownEvent(ControlKeyCode.DOWN));
+            this.ecs.emit(
+                withControlKeyDownEvent(ControlKeyCode.BUTTON_DOWN)
+            );
         } else if (key === this.#keys.left) {
-            this.ecs.emit(withControlKeyDownEvent(ControlKeyCode.LEFT));
+            this.ecs.emit(
+                withControlKeyDownEvent(ControlKeyCode.BUTTON_LEFT)
+            );
         } else if (key === this.#keys.right) {
-            this.ecs.emit(withControlKeyDownEvent(ControlKeyCode.RIGHT));
+            this.ecs.emit(
+                withControlKeyDownEvent(ControlKeyCode.BUTTON_RIGHT)
+            );
         } else if (key === this.#keys.action) {
-            this.ecs.emit(withControlKeyDownEvent(ControlKeyCode.ACTION));
+            this.ecs.emit(
+                withControlKeyDownEvent(ControlKeyCode.BUTTON_A)
+            );
+        }
+    }
+
+    onKeyUp(key) {
+        if (key === this.#keys.up) {
+            this.ecs.emit(
+                withControlKeyUpEvent(ControlKeyCode.BUTTON_UP)
+            );
+        } else if (key === this.#keys.down) {
+            this.ecs.emit(
+                withControlKeyUpEvent(ControlKeyCode.BUTTON_DOWN)
+            );
+        } else if (key === this.#keys.left) {
+            this.ecs.emit(
+                withControlKeyUpEvent(ControlKeyCode.BUTTON_LEFT)
+            );
+        } else if (key === this.#keys.right) {
+            this.ecs.emit(
+                withControlKeyUpEvent(ControlKeyCode.BUTTON_RIGHT)
+            );
+        } else if (key === this.#keys.action) {
+            this.ecs.emit(
+                withControlKeyUpEvent(ControlKeyCode.BUTTON_A)
+            );
         }
     }
 
@@ -70,23 +111,23 @@ export default class KeyboardSystem extends System {
         let state = 0;
 
         if (this.#keys.up.isDown) {
-            state |= ControlKeyCode.UP;
+            state |= ControlKeyCode.BUTTON_UP;
         }
 
         if (this.#keys.down.isDown) {
-            state |= ControlKeyCode.DOWN;
+            state |= ControlKeyCode.BUTTON_DOWN;
         }
 
         if (this.#keys.left.isDown) {
-            state |= ControlKeyCode.LEFT;
+            state |= ControlKeyCode.BUTTON_LEFT;
         }
 
         if (this.#keys.right.isDown) {
-            state |= ControlKeyCode.RIGHT;
+            state |= ControlKeyCode.BUTTON_RIGHT;
         }
 
         if (this.#keys.action.isDown) {
-            state |= ControlKeyCode.ACTION;
+            state |= ControlKeyCode.BUTTON_A;
         }
 
         return state;
@@ -110,5 +151,10 @@ export default class KeyboardSystem extends System {
         this.#keys.left.off(Input.Keyboard.Events.DOWN, this.onKeyDown);
         this.#keys.right.off(Input.Keyboard.Events.DOWN, this.onKeyDown);
         this.#keys.action.off(Input.Keyboard.Events.DOWN, this.onKeyDown);
+        this.#keys.up.off(Input.Keyboard.Events.UP, this.onKeyUp);
+        this.#keys.down.off(Input.Keyboard.Events.UP, this.onKeyUp);
+        this.#keys.left.off(Input.Keyboard.Events.UP, this.onKeyUp);
+        this.#keys.right.off(Input.Keyboard.Events.UP, this.onKeyUp);
+        this.#keys.action.off(Input.Keyboard.Events.UP, this.onKeyUp);
     }
 }

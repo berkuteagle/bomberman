@@ -52,14 +52,12 @@ export default class MovementAnimationSystem extends System {
                 const animation = getMovementAnimation(entity, store, Direction.direction[entity]);
                 if (animation) {
                     this.ecs.request(
-                        1,
                         withPlayAnimationRequest(entity),
                         withStore({ animation })
                     );
                 }
             } else {
                 this.ecs.request(
-                    1,
                     withStopAnimationRequest(entity)
                 );
             }
