@@ -1,24 +1,15 @@
 import { defineQuery } from '../../bitecs.js';
 import {
-    withAnimation,
-    withSpriteDepth,
-    withSpriteTag
-} from '../../ecs-phaser.js';
-import {
     Position,
-    System,
-    withPosition,
-    withStore
+    System
 } from '../../ecs.js';
-import {
-    GameObjects,
-    Math
-} from '../../phaser.js';
+import { Math } from '../../phaser.js';
 import {
     BombTag,
     PlaceBombRequest
 } from './components.js';
-import { withBombTag } from './utils.js';
+
+import BombSprite from './bomb-sprite.js';
 
 export default class BombRequestsSystem extends System {
 
@@ -46,20 +37,7 @@ export default class BombRequestsSystem extends System {
                 continue;
             }
 
-            const sprite = new GameObjects.Sprite(
-                world.scene,
-                x, y,
-                'Bomb'
-            );
-
-            this.ecs.addEntity(
-                withSpriteTag(),
-                withBombTag(),
-                withPosition(x, y),
-                withStore({ sprite }),
-                withAnimation('Bomb'),
-                withSpriteDepth(5)
-            );
+            world.scene.add.existing(new BombSprite(world.scene, x, y));
 
         }
     }

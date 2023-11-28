@@ -11,8 +11,10 @@ export default class PlayerFeature extends Feature {
     /** @override */
     init() {
 
-        this.#player = new PlayerSprite(this.ecs.world.scene, 64, 64, this.ecs);
+        this.#player = new PlayerSprite(this.ecs.world.scene, 64, 64);
 
-        this.addSystem('input-events', new InputEventsSystem(this.ecs, this.#player.eid));
+        this.ecs.world.scene.add.existing(this.#player);
+
+        this.addSystem('input-events', new InputEventsSystem(this.ecs, this.#player));
     }
 }

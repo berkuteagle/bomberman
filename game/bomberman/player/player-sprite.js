@@ -1,31 +1,20 @@
 import {
+    Sprite,
     withMovementAnimation,
     withSpriteDepth,
-    withSpriteTag
 } from '../../ecs-phaser.js';
 import {
     withControlTag,
     withDirection,
-    withPosition,
     withPositionLimits,
-    withStore,
     withVelocity,
     withVelocityLimit
 } from '../../ecs.js';
 
-import { GameObjects } from '../../phaser.js';
-
-export default class PlayerSprite extends GameObjects.Sprite {
-
-    #eid;
-
-    constructor(scene, x, y, ecs) {
-        super(scene, x, y, 'GreenNinja');
-
-        this.#eid = ecs.addEntity(
-            withPosition(x, y),
-            withSpriteTag(),
-            withStore({ sprite: this }),
+export default class PlayerSprite extends Sprite {
+    constructor(scene, x, y) {
+        super(
+            scene, x, y, 'GreenNinja',
             withControlTag(),
             withVelocity(0, 0),
             withVelocityLimit(70),
@@ -39,10 +28,5 @@ export default class PlayerSprite extends GameObjects.Sprite {
                 right: 'GreenNinja_walk_right'
             })
         );
-
-    }
-
-    get eid() {
-        return this.#eid;
     }
 }

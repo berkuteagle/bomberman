@@ -5,7 +5,6 @@ import {
 } from '../../ecs-phaser.js';
 import {
     Feature,
-    withControlTag,
     withDirection,
     withPosition,
     withPositionLimits,

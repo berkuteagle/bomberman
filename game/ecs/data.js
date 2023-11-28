@@ -8,12 +8,6 @@ export default class Data {
         this.#entityFields.clear();
     }
 
-    register(field) {
-        if (!this.#fieldEntityData.has(field)) {
-            this.#fieldEntityData.set(field, new Map());
-        }
-    }
-
     unset(eid, field) {
         if (field) {
             if (this.#fieldEntityData.has(field) && this.#entityFields.has(eid)) {
@@ -32,17 +26,16 @@ export default class Data {
 
     set(eid, field, value) {
         if (typeof field === 'string') {
-            if (this.#fieldEntityData.has(field)) {
-                if (!this.#entityFields.has(eid)) {
-                    this.#entityFields.set(eid, new Set());
-                }
-
-                this.#entityFields.get(eid).add(field);
+            if (!this.#fieldEntityData.has(field)) {
+                this.#fieldEntityData.set(field, new Map());
             }
 
-            if (this.#fieldEntityData.has(field) && this.#entityFields.has(eid)) {
-                this.#fieldEntityData.get(field).set(eid, value);
+            if (!this.#entityFields.has(eid)) {
+                this.#entityFields.set(eid, new Set());
             }
+
+            this.#entityFields.get(eid).add(field);
+            this.#fieldEntityData.get(field).set(eid, value);
         } else if (typeof field === 'object') {
             for (const [k, v] of Object.entries(field)) {
                 this.set(eid, k, v);

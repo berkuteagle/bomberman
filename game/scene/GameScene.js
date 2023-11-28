@@ -1,7 +1,6 @@
 import {
     AnimationFeature,
     InputFeature,
-    SpriteFeature
 } from '../ecs-phaser.js';
 
 import {
@@ -44,7 +43,6 @@ export class GameScene extends Scene {
         this.ecs.addFeature('direction', DirectionFeature);
         this.ecs.addFeature('control', ControlFeature);
 
-        this.ecs.addFeature('sprite', SpriteFeature);
         this.ecs.addFeature('animation', AnimationFeature);
         this.ecs.addFeature('input', InputFeature, {
             inputType: 'keyboard',

@@ -16,9 +16,6 @@ export default class AnimationFeature extends Feature {
 
     /** @override */
     init() {
-        this.ecs.store.register('animation');
-        this.ecs.store.register('movement-animation');
-
         this.addSystem('animation-requests', new AnimationRequestsSystem(this.ecs));
         this.addSystem('animation', new AnimationSystem(this.ecs));
         this.addSystem('movement-animation', new MovementAnimationSystem(this.ecs));

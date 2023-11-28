@@ -16,14 +16,11 @@ export {
 export { InputFeature } from './ecs-phaser/input.js';
 
 export {
+    default as Sprite,
     SpriteDepth,
-    SpriteFeature,
-    SpriteGroup,
     SpriteTag,
     hasSpriteDepth,
-    hasSpriteGroup,
     hasSpriteTag,
     withSpriteDepth,
-    withSpriteGroup,
     withSpriteTag
 } from './ecs-phaser/sprite.js';
