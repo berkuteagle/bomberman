@@ -2,6 +2,7 @@ import {
     addEntity,
     createWorld,
     defineQuery,
+    defineSerializer,
     exitQuery,
     removeEntity
 } from '../bitecs.js';
@@ -9,12 +10,13 @@ import {
 import {
     Event,
     Request,
+    Store,
     chain,
     withEvent,
     withRequest
 } from './common.js';
 
-import Store from './store.js';
+import Data from './data.js';
 
 /**
  * Main ECS instance
@@ -23,13 +25,15 @@ import Store from './store.js';
 export default class ECS {
 
     #world;
-    #store;
+    #data;
     #events;
     #requests;
 
     #requestsQuery;
     #eventsQuery;
-    #storeQuery;
+    #dataQuery;
+
+    #serializer;
 
     /** @type {Map<String, import('./feature.js').default>} */
     #features = new Map();
@@ -39,18 +43,20 @@ export default class ECS {
      * @param {TWorldData} worldData 
      */
     constructor(worldData = {}) {
-        this.#store = new Store();
+        this.#data = new Data();
         this.#events = new Set();
         this.#requests = new Set();
 
         this.#world = createWorld({
-            [Symbol.for('ecs-store')]: this.#store,
+            [Symbol.for('ecs-data')]: this.#data,
             ...worldData
         });
 
         this.#requestsQuery = defineQuery([Request]);
         this.#eventsQuery = defineQuery([Event]);
-        this.#storeQuery = exitQuery(defineQuery([Store]));
+        this.#dataQuery = exitQuery(defineQuery([Store]));
+
+        this.#serializer = defineSerializer(this.#world);
     }
 
     get world() {
@@ -58,7 +64,7 @@ export default class ECS {
     }
 
     get store() {
-        return this.#store;
+        return this.#data;
     }
 
     process(time, delta) {
@@ -96,8 +102,8 @@ export default class ECS {
             removeEntity(this.#world, entity);
         }
 
-        for (const entity of this.#storeQuery(this.#world)) {
-            this.#store.delete(entity);
+        for (const entity of this.#dataQuery(this.#world)) {
+            this.#data.unset(entity);
         }
     }
 
@@ -159,7 +165,7 @@ export default class ECS {
         this.#requests.clear();
         this.#enabledFeatures.clear();
 
-        this.#store.destroy();
+        this.#data.destroy();
 
         for (const feature of this.#features) {
             feature.destroy();

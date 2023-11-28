@@ -10,7 +10,7 @@ export const Request = defineComponent();
 export const withStore = (data = {}) => (world, eid) => {
     addComponent(world, Store, eid);
 
-    world[Symbol.for('ecs-store')].set(eid, data);
+    world[Symbol.for('ecs-data')].set(eid, data);
 }
 
 export const withEvent = () => (world, eid) => {

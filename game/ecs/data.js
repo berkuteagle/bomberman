@@ -1,4 +1,4 @@
-export default class Store {
+export default class Data {
 
     #fieldEntityData = new Map();
     #entityFields = new Map();
