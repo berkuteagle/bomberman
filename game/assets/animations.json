@@ -153,6 +153,158 @@
             "hideOnComplete": false
         },
         {
+            "key": "RedNinja_walk_up",
+            "type": "frame",
+            "frames": [
+                {
+                    "key": "RedNinja",
+                    "frame": 1,
+                    "duration": 0,
+                    "visible": false
+                },
+                {
+                    "key": "RedNinja",
+                    "frame": 5,
+                    "duration": 0,
+                    "visible": false
+                },
+                {
+                    "key": "RedNinja",
+                    "frame": 9,
+                    "duration": 0,
+                    "visible": false
+                },
+                {
+                    "key": "RedNinja",
+                    "frame": 13,
+                    "duration": 0,
+                    "visible": false
+                }
+            ],
+            "frameRate": 8,
+            "skipMissedFrames": true,
+            "delay": 0,
+            "repeat": -1,
+            "repeatDelay": 0,
+            "yoyo": false,
+            "showOnStart": false,
+            "hideOnComplete": false
+        },
+        {
+            "key": "RedNinja_walk_down",
+            "type": "frame",
+            "frames": [
+                {
+                    "key": "RedNinja",
+                    "frame": 0,
+                    "duration": 0,
+                    "visible": false
+                },
+                {
+                    "key": "RedNinja",
+                    "frame": 4,
+                    "duration": 0,
+                    "visible": false
+                },
+                {
+                    "key": "RedNinja",
+                    "frame": 8,
+                    "duration": 0,
+                    "visible": false
+                },
+                {
+                    "key": "RedNinja",
+                    "frame": 12,
+                    "duration": 0,
+                    "visible": false
+                }
+            ],
+            "frameRate": 8,
+            "skipMissedFrames": true,
+            "delay": 0,
+            "repeat": -1,
+            "repeatDelay": 0,
+            "yoyo": false,
+            "showOnStart": false,
+            "hideOnComplete": false
+        },
+        {
+            "key": "RedNinja_walk_left",
+            "type": "frame",
+            "frames": [
+                {
+                    "key": "RedNinja",
+                    "frame": 2,
+                    "duration": 0,
+                    "visible": false
+                },
+                {
+                    "key": "RedNinja",
+                    "frame": 6,
+                    "duration": 0,
+                    "visible": false
+                },
+                {
+                    "key": "RedNinja",
+                    "frame": 10,
+                    "duration": 0,
+                    "visible": false
+                },
+                {
+                    "key": "RedNinja",
+                    "frame": 14,
+                    "duration": 0,
+                    "visible": false
+                }
+            ],
+            "frameRate": 8,
+            "skipMissedFrames": true,
+            "delay": 0,
+            "repeat": -1,
+            "repeatDelay": 0,
+            "yoyo": false,
+            "showOnStart": false,
+            "hideOnComplete": false
+        },
+        {
+            "key": "RedNinja_walk_right",
+            "type": "frame",
+            "frames": [
+                {
+                    "key": "RedNinja",
+                    "frame": 3,
+                    "duration": 0,
+                    "visible": false
+                },
+                {
+                    "key": "RedNinja",
+                    "frame": 7,
+                    "duration": 0,
+                    "visible": false
+                },
+                {
+                    "key": "RedNinja",
+                    "frame": 11,
+                    "duration": 0,
+                    "visible": false
+                },
+                {
+                    "key": "RedNinja",
+                    "frame": 15,
+                    "duration": 0,
+                    "visible": false
+                }
+            ],
+            "frameRate": 8,
+            "skipMissedFrames": true,
+            "delay": 0,
+            "repeat": -1,
+            "repeatDelay": 0,
+            "yoyo": false,
+            "showOnStart": false,
+            "hideOnComplete": false
+        },
+        {
             "key": "Bomb",
             "type": "frame",
             "frames": [

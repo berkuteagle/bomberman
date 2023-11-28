@@ -23,15 +23,4 @@ export default class SpriteFeature extends Feature {
         this.addSystem('sprite-depth', new SpriteDepthSystem(this.ecs));
     }
 
-    create(x, y, texture, ...ext) {
-
-        const sprite = new GameObjects.Sprite(this.ecs.world.scene, x, y, texture);
-
-        return this.ecs.addEntity(
-            withPosition(x, y),
-            withSpriteTag(),
-            withStore({ sprite }),
-            ...ext
-        );
-    }
 }

@@ -12,8 +12,8 @@
             },
             {
                 "type": "spritesheet",
-                "key": "DarkNinja",
-                "url": "assets/DarkNinja.png",
+                "key": "RedNinja",
+                "url": "assets/RedNinja.png",
                 "frameConfig": {
                     "frameWidth": 16,
                     "frameHeight": 16

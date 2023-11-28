@@ -17,17 +17,6 @@ export default class PositionFeature extends Feature {
         this.addSystem('position-limits', new PositionLimitsSystem(this.ecs));
     }
 
-    withPosition(x, y) {
-        return withPosition(x, y);
-    }
-
-    create(x, y, ...ext) {
-        return this.ecs.addEntity(
-            withPosition(x, y),
-            ...ext
-        );
-    }
-
     changePosition(eid, dx, dy) {
         this.ecs.request(
             withChangePositionRequest(eid, dx, dy)

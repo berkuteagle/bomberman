@@ -18,6 +18,7 @@ import {
 
 import { BombFeature } from '../bomberman/bomb.js';
 import { PlayerFeature } from '../bomberman/player.js';
+import { RivalFeature } from '../bomberman/rival.js';
 
 export class GameScene extends Scene {
 
@@ -58,6 +59,7 @@ export class GameScene extends Scene {
 
         this.ecs.addFeature('bomb', BombFeature);
         this.ecs.addFeature('player', PlayerFeature);
+        this.ecs.addFeature('rival', RivalFeature);
 
         const map = this.make.tilemap({ key: 'map' });
         const tilesInterior = map.addTilesetImage('TilesetInterior', 'TilesetInterior');

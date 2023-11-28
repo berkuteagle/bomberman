@@ -12,13 +12,13 @@ import { withPlaceBombRequest } from '../bomb.js';
 
 export default class InputEventsSystem extends System {
 
-    #playerEid;
+    #player;
     #inputEventsQuery;
 
-    constructor(ecs, playerEid) {
+    constructor(ecs, player) {
         super(ecs);
 
-        this.#playerEid = playerEid;
+        this.#player = player;
         this.#inputEventsQuery = enterQuery(defineQuery([ControlKeyDownEvent]));
     }
 
@@ -27,8 +27,8 @@ export default class InputEventsSystem extends System {
             if (ControlKeyDownEvent.code[request] === ControlKeyCode.BUTTON_A) {
                 this.ecs.request(
                     withPlaceBombRequest(
-                        Position.x[this.#playerEid],
-                        Position.y[this.#playerEid]
+                        Position.x[this.#player.eid],
+                        Position.y[this.#player.eid]
                     )
                 )
             }
