@@ -1,7 +1,12 @@
 import { Scene } from 'phaser';
 import { create } from 'qrcode';
 
+import { GamePlugin as PeerjsGamePlugin } from '../peerjs';
+
 export default class InviteLinkScene extends Scene {
+
+    peerjs!: PeerjsGamePlugin;
+
     constructor() {
         super({
             key: 'InviteLink'

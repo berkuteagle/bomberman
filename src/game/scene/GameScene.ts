@@ -15,11 +15,15 @@ import {
     Scene
 } from 'phaser';
 
+import { ScenePlugin as ECSScenePlugin } from '../ecs';
+
 // import { BombFeature } from '../bomberman/bomb.js';
 // import { PlayerFeature } from '../bomberman/player.js';
 // import { RivalFeature } from '../bomberman/rival.js';
 
 export default class GameScene extends Scene {
+
+    ecs!: ECSScenePlugin;
 
     constructor() {
         super('Game');

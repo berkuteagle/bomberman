@@ -1,6 +1,11 @@
 import { Scene } from 'phaser';
 
+import { GamePlugin as PeerjsGamePlugin } from '../peerjs';
+
 export default class PreloadScene extends Scene {
+
+    peerjs!: PeerjsGamePlugin;
+
     constructor() {
         super({
             key: 'Preload'

@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Bomberman p2p game",
   "type": "module",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/berkuteagle/bomberman.git"

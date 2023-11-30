@@ -1,35 +1,23 @@
 import { addComponent, defineComponent, IWorld } from 'bitecs';
 
-export const Store = defineComponent();
-export const Event = defineComponent();
-export const Request = defineComponent();
+export type WithComponentFn<W extends IWorld> = (world: W, eid: number) => number;
 
-export interface W extends IWorld {
-    [key: symbol]: Map<number, any>;
+export const DataTag = defineComponent();
+export const EventTag = defineComponent();
+export const RequestTag = defineComponent();
+
+export function withData<W extends IWorld>(): WithComponentFn<W> {
+    return (world: W, eid: number) => (addComponent(world, DataTag, eid), eid);
 }
 
-export type WorldFn = (world: IWorld, eid: number) => void;
-
-export const withStore = (data = {}) => (world: W, eid: number) => {
-    addComponent(world, Store, eid);
-
-    world[Symbol.for('ecs-data')].set(eid, data);
+export function withEvent<W extends IWorld>(): WithComponentFn<W> {
+    return (world: W, eid: number) => (addComponent(world, Event, eid), eid);
 }
 
-export const withEvent = () => (world: IWorld, eid: number) => {
-    addComponent(world, Event, eid);
+export function withRequest<W extends IWorld>(): WithComponentFn<W> {
+    return (world: W, eid: number) => (addComponent(world, Request, eid), eid);
 }
 
-export const withRequest = () => (world: IWorld, eid: number) => {
-    addComponent(world, Request, eid);
-}
-
-export const chain = (...ext: WorldFn[]): WorldFn => (world: IWorld, eid: number) => {
-    for (const extFn of ext) {
-        if (extFn) {
-            extFn(world, eid);
-        }
-    }
-
-    return eid;
+export function chain<W extends IWorld>(...ext: (WithComponentFn<W> | null)[]): WithComponentFn<W> {
+    return (world: W, eid: number) => (ext.forEach(withComponentFn => withComponentFn?.(world, eid)), eid);
 }
