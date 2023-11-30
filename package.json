@@ -1,0 +1,35 @@
+{
+  "name": "bomberman",
+  "version": "0.0.1",
+  "description": "Bomberman p2p game",
+  "type": "module",
+  "main": "src/index.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/berkuteagle/bomberman.git"
+  },
+  "author": "Anton Snigirev <berkuteagle@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/berkuteagle/bomberman/issues"
+  },
+  "homepage": "https://berkuteagle.github.io/bomberman/",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
+  },
+  "devDependencies": {
+    "@types/qrcode": "^1.5.5",
+    "bitecs": "^0.3.40",
+    "gh-pages": "^6.1.0",
+    "peerjs": "^1.5.1",
+    "phaser": "^3.70.0",
+    "qrcode": "^1.5.3",
+    "typescript": "^5.2.2",
+    "vite": "^5.0.0",
+    "vite-plugin-pwa": "^0.17.2"
+  }
+}
