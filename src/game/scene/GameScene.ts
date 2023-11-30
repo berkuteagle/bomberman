@@ -15,7 +15,7 @@ import {
     Scene
 } from 'phaser';
 
-import { ScenePlugin as ECSScenePlugin } from '../ecs';
+import { ScenePlugin as ECSScenePlugin, position } from '../ecs';
 
 // import { BombFeature } from '../bomberman/bomb.js';
 // import { PlayerFeature } from '../bomberman/player.js';
@@ -41,6 +41,18 @@ export default class GameScene extends Scene {
             level: 0,
             lives: 3
         });
+
+        this.ecs.addSystem('position-request', new position.RequestSystem());
+        this.ecs.addSystem('position-limits', new position.LimitsSystem());
+
+        const entity = this.ecs.addEntity(
+            position.withPosition(10, 10),
+            position.withPositionLimits(0, 0, 40, 40)
+        );
+
+        this.ecs.request(
+            position.setRequest(entity, 30, 50)
+        );
 
         // this.ecs.addFeature('position', PositionFeature);
         // this.ecs.addFeature('velocity', VelocityFeature);

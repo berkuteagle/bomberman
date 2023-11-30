@@ -1,37 +1,28 @@
-import { IWorld, Query, addEntity, createWorld, defineQuery, exitQuery, removeEntity } from 'bitecs';
-import { Plugins, Scene, Scenes } from 'phaser';
+import { Query, addEntity, createWorld, defineQuery, deleteWorld, exitQuery, removeEntity, removeQuery } from 'bitecs';
+import { Plugins, Scenes } from 'phaser';
 
-import Data from './Data';
-import { DataTag, EventTag, RequestTag, WithComponentFn, chain, withEvent, withRequest } from './common';
+import Data, { DataTag } from './Data';
+import { EventTag, withEvent } from './Event';
+import { RequestTag, withRequest } from './Request';
+import { chain } from './chain';
 
-export interface ISceneWorld extends IWorld {
-    data: Data;
-    scene: Scene;
-}
-
-export type TUpdateCallback<W extends IWorld> = (world: W, time: number, delta: number) => void;
-
-export interface ISceneSystem<W extends IWorld> {
-    preUpdate?: TUpdateCallback<W>;
-    update?: TUpdateCallback<W>;
-    postUpdate?: TUpdateCallback<W>;
-}
+import { ISceneSystem, ISceneWorld, WorldEidFunction } from './types';
 
 export default class ScenePlugin extends Plugins.ScenePlugin {
 
     #world!: ISceneWorld;
 
-    #systems: Map<string, ISceneSystem<ISceneWorld>> = new Map();
+    #systems: Map<string, ISceneSystem> = new Map();
     #enabledSystems: Set<string> = new Set();
 
-    #events: Set<WithComponentFn<ISceneWorld>> = new Set();
-    #requests: Set<WithComponentFn<ISceneWorld>> = new Set();
+    #events: Set<WorldEidFunction> = new Set();
+    #requests: Set<WorldEidFunction> = new Set();
 
     #exitDataQuery: Query<ISceneWorld> | null = null;
     #eventsQuery: Query<ISceneWorld> | null = null;
     #requestsQuery: Query<ISceneWorld> | null = null;
 
-    addSystem(systemKey: string, system: ISceneSystem<ISceneWorld>, enable: boolean = true): void {
+    addSystem(systemKey: string, system: ISceneSystem, enable: boolean = true): void {
         this.#systems.set(systemKey, system);
         if (enable) {
             this.#enabledSystems.add(systemKey);
@@ -52,6 +43,20 @@ export default class ScenePlugin extends Plugins.ScenePlugin {
     }
 
     preUpdate(time: number, delta: number): void {
+        if (this.#requests.size) {
+            for (const requestFn of this.#requests) {
+                this.addEntity(requestFn);
+            }
+            this.#requests.clear();
+        }
+
+        if (this.#events.size) {
+            for (const eventFn of this.#events) {
+                this.addEntity(eventFn);
+            }
+            this.#events.clear();
+        }
+
         for (const systemKey of this.#enabledSystems) {
             this.#systems.get(systemKey)!.preUpdate?.(this.#world, time, delta);
         }
@@ -76,14 +81,12 @@ export default class ScenePlugin extends Plugins.ScenePlugin {
             removeEntity(this.#world, entity);
         }
 
-        const { data } = this.#world;
-
         for (const entity of (this.#exitDataQuery?.(this.#world) || [])) {
-            data.unset(entity);
+            this.#world.data.unset(entity);
         }
     }
 
-    addEntity(...ext: WithComponentFn<ISceneWorld>[]): number {
+    addEntity(...ext: (WorldEidFunction | null)[]): number {
         return chain(...ext)(this.#world, addEntity(this.#world));
     }
 
@@ -91,13 +94,13 @@ export default class ScenePlugin extends Plugins.ScenePlugin {
         removeEntity(this.#world, eid);
     }
 
-    emit(...ext: WithComponentFn<ISceneWorld>[]): void {
+    emit(...ext: (WorldEidFunction | null)[]): void {
         if (ext.length) {
             this.#events.add(chain(withEvent(), ...ext));
         }
     }
 
-    request(...ext: WithComponentFn<ISceneWorld>[]): void {
+    request(...ext: (WorldEidFunction | null)[]): void {
         if (ext.length) {
             this.#requests.add(chain(withRequest(), ...ext));
         }
@@ -122,6 +125,15 @@ export default class ScenePlugin extends Plugins.ScenePlugin {
         this.scene!.events.off(Scenes.Events.PRE_UPDATE, this.preUpdate);
         this.scene!.events.off(Scenes.Events.UPDATE, this.update);
         this.scene!.events.off(Scenes.Events.POST_UPDATE, this.postUpdate);
-    }
+        this.#enabledSystems.clear();
+        this.#systems.clear();
+        this.#events.clear();
+        this.#requests.clear();
 
+        removeQuery(this.#world, this.#eventsQuery!);
+        removeQuery(this.#world, this.#requestsQuery!);
+        removeQuery(this.#world, this.#exitDataQuery!);
+
+        deleteWorld(this.#world);
+    }
 }

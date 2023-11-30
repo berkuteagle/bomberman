@@ -1,3 +1,12 @@
+import { addComponent, defineComponent } from 'bitecs';
+import { WorldEidFunction } from './types';
+
+export const DataTag = defineComponent();
+
+export function withData(): WorldEidFunction {
+    return (world, eid) => (addComponent(world, DataTag, eid), eid);
+}
+
 export default class Data {
 
     #fieldEntityData = new Map();
@@ -58,5 +67,4 @@ export default class Data {
             }
         }
     }
-
 }
