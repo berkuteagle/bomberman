@@ -2,4 +2,8 @@ import './index.css';
 
 import Bomberman from './game/Bomberman';
 
-new Bomberman();
+declare global {
+    var bomberman: Bomberman;
+}
+
+window.bomberman = new Bomberman();

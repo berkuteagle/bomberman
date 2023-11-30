@@ -20,6 +20,9 @@ export default class InviteLinkScene extends Scene {
 
     create() {
         const url = `${location.origin}${location.pathname}?r=${this.peerjs.id}`;
+
+        console.log(url);
+
         const { modules: { size, data } } = create(url);
         const layout = Array.from(
             { length: size },
@@ -39,6 +42,10 @@ export default class InviteLinkScene extends Scene {
         );
 
         map.createLayer(0, [map.addTilesetImage('TilesetDungeon')!], 92, 92)!.setScale(0.5);
+
+        this.peerjs.connect.then(() => {
+            this.scene.switch('Game');
+        });
     }
 
     startGame() {
