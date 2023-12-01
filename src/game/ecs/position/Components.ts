@@ -4,7 +4,7 @@ import { WorldEidFunction, mat2, vec2 } from '../index';
 export enum PositionRequestType {
     Set = 0,
     Add = 1
-}
+};
 
 
 export const Position = defineComponent({

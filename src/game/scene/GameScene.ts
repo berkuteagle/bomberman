@@ -11,11 +11,12 @@
 // } from '../ecs.js';
 
 import {
+    GameObjects,
     // Input,
     Scene
 } from 'phaser';
 
-import { ScenePlugin as ECSScenePlugin, position } from '../ecs';
+import { ScenePlugin as ECSScenePlugin, position, sprite, velocity, withData } from '../ecs';
 
 // import { BombFeature } from '../bomberman/bomb.js';
 // import { PlayerFeature } from '../bomberman/player.js';
@@ -24,13 +25,10 @@ import { ScenePlugin as ECSScenePlugin, position } from '../ecs';
 export default class GameScene extends Scene {
 
     ecs!: ECSScenePlugin;
+    player!: GameObjects.Sprite;
 
     constructor() {
         super('Game');
-    }
-
-    init() {
-
     }
 
     create() {
@@ -43,15 +41,21 @@ export default class GameScene extends Scene {
         });
 
         this.ecs.addSystem('position-request', new position.RequestSystem());
+        this.ecs.addSystem('velocity-request', new velocity.RequestSystem());
         this.ecs.addSystem('position-limits', new position.LimitsSystem());
+        this.ecs.addSystem('velocity', new velocity.System());
+        this.ecs.addSystem('sprite', new sprite.System());
+
+        this.player = this.add.sprite(64, 64, 'GreenNinja');
 
         const entity = this.ecs.addEntity(
-            position.withPosition(10, 10),
-            position.withPositionLimits(0, 0, 40, 40)
+            sprite.withSprite(10),
+            position.withPosition(this.player.x, this.player.y),
+            withData('sprite', this.player)
         );
 
         this.ecs.request(
-            position.setRequest(entity, 30, 50)
+            position.setRequest(entity, 80, 64)
         );
 
         // this.ecs.addFeature('position', PositionFeature);
