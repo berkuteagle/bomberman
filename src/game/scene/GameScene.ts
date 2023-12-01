@@ -12,8 +12,10 @@
 
 import {
     GameObjects,
+    Math,
     // Input,
-    Scene
+    Scene,
+    Time
 } from 'phaser';
 
 import { ScenePlugin as ECSScenePlugin, position, sprite, velocity, withData } from '../ecs';
@@ -26,6 +28,7 @@ export default class GameScene extends Scene {
 
     ecs!: ECSScenePlugin;
     player!: GameObjects.Sprite;
+    timer!: Time.TimerEvent;
 
     constructor() {
         super('Game');
@@ -46,17 +49,29 @@ export default class GameScene extends Scene {
         this.ecs.addSystem('velocity', new velocity.System());
         this.ecs.addSystem('sprite', new sprite.System());
 
-        this.player = this.add.sprite(64, 64, 'GreenNinja');
+        this.player = this.add.sprite(96, 96, 'GreenNinja');
 
         const entity = this.ecs.addEntity(
             sprite.withSprite(10),
             position.withPosition(this.player.x, this.player.y),
-            withData('sprite', this.player)
+            position.withPositionLimits(64, 64, 416, 416),
+            withData('sprite', this.player),
+            velocity.withVelocity(0, 0, 100)
         );
 
         this.ecs.request(
-            position.setRequest(entity, 80, 64)
+            position.setRequest(entity, 200, 200)
         );
+
+        this.timer = this.time.addEvent({
+            delay: 2000,
+            callback: () => {
+                this.ecs.request(
+                    velocity.setRequest(entity, Math.FloatBetween(-30, 30), Math.FloatBetween(-30, 30))
+                );
+            },
+            loop: true
+        });
 
         // this.ecs.addFeature('position', PositionFeature);
         // this.ecs.addFeature('velocity', VelocityFeature);
