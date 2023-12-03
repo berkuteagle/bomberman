@@ -19,36 +19,44 @@ export default class InviteLinkScene extends Scene {
     }
 
     create() {
-        const url = `${location.origin}${location.pathname}?r=${this.peerjs.id}`;
 
-        console.log(url);
+        const remote = new URL(location.href).searchParams.get('r');
+        let green: string;
+        let red: string;
 
-        const { modules: { size, data } } = create(url);
-        const layout = Array.from(
-            { length: size },
-            (_, i) => Array
-                .from(data.subarray(size * i, size * (i + 1)))
-                .map(v => 45 - v)
-        );
-        const map = this.make.tilemap({ data: layout, tileWidth: 16, tileHeight: 16 });
+        if (remote) {
+            green = remote;
+            red = this.peerjs.id!;
+            this.peerjs.connectRemote(remote);
+        } else {
+            const url = `${location.origin}${location.pathname}?r=${this.peerjs.id}`;
 
-        this.add.nineslice(
-            this.scale.width / 2,
-            this.scale.height / 2,
-            'nineLight', 'nineLight',
-            340, 340,
-            16, 16,
-            16, 16
-        );
+            console.log(url);
 
-        map.createLayer(0, [map.addTilesetImage('TilesetDungeon')!], 92, 92)!.setScale(0.5);
+            green = this.peerjs.id!;
 
-        this.peerjs.connect.then(() => {
-            this.scene.switch('Game');
+            this.add.nineslice(
+                this.scale.width / 2,
+                this.scale.height / 2,
+                'nineLight', 'nineLight',
+                340, 340,
+                16, 16,
+                16, 16
+            );
+
+            const { modules: { size, data } } = create(url);
+            const layout = Array.from(
+                { length: size },
+                (_, i) => Array
+                    .from(data.subarray(size * i, size * (i + 1)))
+                    .map(v => 45 - v)
+            );
+            const map = this.make.tilemap({ data: layout, tileWidth: 16, tileHeight: 16 });
+            map.createLayer(0, [map.addTilesetImage('TilesetDungeon')!], 92, 92)!.setScale(0.5);
+        }
+
+        this.peerjs.connect.then((remote: string) => {
+            this.scene.start('Game', { mode: 'vs', green, red: red || remote });
         });
-    }
-
-    startGame() {
-        this.scene.switch('Game');
     }
 }

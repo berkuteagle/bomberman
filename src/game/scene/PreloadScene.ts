@@ -20,14 +20,10 @@ export default class PreloadScene extends Scene {
     create() {
         if (this.peerjs.enabled) {
             this.peerjs.open.then(() => {
-                if (!this.peerjs.remote) {
-                    this.scene.switch('InviteLink');
-                } else {
-                    this.scene.switch('Game');
-                }
+                this.scene.start('InviteLink');
             });
         } else {
-            this.scene.switch('Game');
+            this.scene.start('Game', { mode: 'single' });
         }
     }
 }

@@ -46,20 +46,20 @@ export default class PeerjsGamePlugin extends Plugins.BasePlugin {
 
     #enabled: boolean = false;
 
-    #open: Promise<void>;
-    #open_resolver!: () => void;
+    #open: Promise<string>;
+    #open_resolver!: (id: string) => void;
 
-    #connect: Promise<void>;
-    #connect_resolver!: () => void;
+    #connect: Promise<string>;
+    #connect_resolver!: (remote: string) => void;
 
     constructor(pluginManager: Plugins.PluginManager) {
         super(pluginManager);
 
-        this.#open = new Promise<void>(resolve => {
+        this.#open = new Promise<string>(resolve => {
             this.#open_resolver = resolve;
         });
 
-        this.#connect = new Promise<void>(resolve => {
+        this.#connect = new Promise<string>(resolve => {
             this.#connect_resolver = resolve;
         });
     }
@@ -92,7 +92,7 @@ export default class PeerjsGamePlugin extends Plugins.BasePlugin {
             this.#remote = connection.peer;
         }
 
-        this.#connect_resolver();
+        this.#connect_resolver(this.#remote);
 
         this.#connection.on('open', () => this.#onConnectionOpen());
     }
@@ -100,25 +100,16 @@ export default class PeerjsGamePlugin extends Plugins.BasePlugin {
     #onOpen(id: string): void {
         this.#id = id;
 
-        this.#open_resolver();
-
-        if (this.#remote) {
-            this.#onConnection(this.#peer!.connect(this.#remote));
-        }
+        this.#open_resolver(this.#id);
     }
 
     #onError(err: PeerError<`${PeerErrorType}`>): void {
         console.error(err);
     }
 
-    init({ remote = null, enabled = false }: IPeerjsGamePluginData): void {
-
-        this.#remote = checkId(remote);
-
-        if (this.#enabled = (enabled || !!remote)) {
-
+    init({ enabled = false }: IPeerjsGamePluginData): void {
+        if (this.#enabled = enabled) {
             this.#peer = new Peer();
-
             this.#peer
                 .on('connection', c => this.#onConnection(c))
                 .on('open', id => this.#onOpen(id))
@@ -141,6 +132,16 @@ export default class PeerjsGamePlugin extends Plugins.BasePlugin {
     stop(): void {
         if (this.#enabled) {
             this.#peer!.disconnect();
+        }
+    }
+
+    connectRemote(remote: string): void {
+        if (this.#enabled) {
+            const uuid = checkId(remote);
+
+            if (uuid) {
+                this.#onConnection(this.#peer!.connect(uuid));
+            }
         }
     }
 
@@ -170,11 +171,11 @@ export default class PeerjsGamePlugin extends Plugins.BasePlugin {
         return this.#remote;
     }
 
-    get open(): Promise<void> {
+    get open(): Promise<string> {
         return this.#open;
     }
 
-    get connect(): Promise<void> {
+    get connect(): Promise<string> {
         return this.#connect;
     }
 

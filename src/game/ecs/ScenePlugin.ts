@@ -1,4 +1,4 @@
-import { Query, addEntity, createWorld, defineQuery, deleteWorld, exitQuery, removeEntity, removeQuery } from 'bitecs';
+import { Deserializer, Query, Serializer, addEntity, createWorld, defineDeserializer, defineQuery, defineSerializer, deleteWorld, exitQuery, removeEntity, removeQuery } from 'bitecs';
 import { Plugins, Scenes } from 'phaser';
 
 import Data, { DataTag } from './Data';
@@ -21,6 +21,9 @@ export default class ScenePlugin extends Plugins.ScenePlugin {
     #exitDataQuery: Query<ISceneWorld> | null = null;
     #eventsQuery: Query<ISceneWorld> | null = null;
     #requestsQuery: Query<ISceneWorld> | null = null;
+
+    #serializer: Serializer<ISceneWorld> | null = null;
+    #deserializer: Deserializer<ISceneWorld> | null = null;
 
     addSystem(systemKey: string, system: ISceneSystem, enable: boolean = true): void {
         this.#systems.set(systemKey, system);
@@ -106,11 +109,22 @@ export default class ScenePlugin extends Plugins.ScenePlugin {
         }
     }
 
+    get serializer(): Serializer<ISceneWorld> | null {
+        return this.#serializer;
+    }
+
+    get deserializer(): Deserializer<ISceneWorld> | null {
+        return this.#deserializer;
+    }
+
     boot() {
         this.#world = createWorld<ISceneWorld>({
             data: new Data(),
             scene: this.scene!
         });
+
+        this.#serializer = defineSerializer(this.#world);
+        this.#deserializer = defineDeserializer(this.#world);
 
         this.#exitDataQuery = exitQuery(defineQuery([DataTag]));
         this.#eventsQuery = defineQuery([EventTag]);

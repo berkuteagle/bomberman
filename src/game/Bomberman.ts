@@ -16,8 +16,7 @@ export default class Bomberman extends Game {
     constructor(width: number = 480, height: number = 480) {
 
         const params = new URL(location.href).searchParams;
-        const remote = params.get('r');
-        const enabled = params.has('peerjs');
+        const enabled = params.has('peerjs') || !!params.get('r');
 
         const config = {
             type: WEBGL,
@@ -35,7 +34,7 @@ export default class Bomberman extends Game {
                         plugin: PeerjsGamePlugin,
                         start: true,
                         mapping: 'peerjs',
-                        data: { remote, enabled }
+                        data: { enabled }
                     },
                 ],
                 scene: [
