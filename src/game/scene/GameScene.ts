@@ -76,24 +76,41 @@ export default class GameScene extends Scene {
             console.log(rivalEntry);
             console.log(red);
 
-            this.timer = this.time.addEvent({
-                delay: 2000,
-                callback: () => {
-                    this.ecs.request(
-                        velocity.setRequest(
-                            green === this.peerjs.id ? playerEntry : rivalEntry,
-                            Math.FloatBetween(-30, 30),
-                            Math.FloatBetween(-30, 30)
-                        )
-                    );
-                },
-                loop: true
-            });
+            if (green === this.peerjs.id) {
+                this.timer = this.time.addEvent({
+                    delay: 2000,
+                    callback: () => {
+                        this.ecs.request(
+                            velocity.setRequest(
+                                green === this.peerjs.id ? playerEntry : rivalEntry,
+                                Math.FloatBetween(-30, 30),
+                                Math.FloatBetween(-30, 30)
+                            )
+                        );
+                    },
+                    loop: true
+                });
+            }
 
+            this.outSync();
+            this.inSync();
         }
 
+        // this.timer = this.time.addEvent({
+        //     delay: 2000,
+        //     callback: () => {
+        //         this.ecs.request(
+        //             velocity.setRequest(
+        //                 playerEntry,
+        //                 Math.FloatBetween(-30, 30),
+        //                 Math.FloatBetween(-30, 30)
+        //             )
+        //         );
+        //     },
+        //     loop: true
+        // });
 
-
+        // this.outSync();
 
         // this.ecs.addFeature('position', PositionFeature);
         // this.ecs.addFeature('velocity', VelocityFeature);
@@ -130,6 +147,22 @@ export default class GameScene extends Scene {
         stoneLayer!.setCollision(739);
 
         this.sys.events.on('wake', this.wake, this);
+    }
+
+    async outSync() {
+        for await (const sync of this.ecs.outSync()) {
+            if (sync.byteLength) {
+                this.peerjs.outSync(sync);
+            }
+        }
+    }
+
+    async inSync() {
+        for await (const sync of this.peerjs.inSync()) {
+            if (sync.byteLength) {
+                this.ecs.inSync(sync);
+            }
+        }
     }
 
     openMenu() {

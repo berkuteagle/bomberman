@@ -1,4 +1,18 @@
-import { Deserializer, Query, Serializer, addEntity, createWorld, defineDeserializer, defineQuery, defineSerializer, deleteWorld, exitQuery, removeEntity, removeQuery } from 'bitecs';
+import {
+    DESERIALIZE_MODE,
+    Deserializer,
+    Query,
+    Serializer,
+    addEntity,
+    createWorld,
+    defineDeserializer,
+    defineQuery,
+    defineSerializer,
+    deleteWorld,
+    exitQuery,
+    removeEntity,
+    removeQuery
+} from 'bitecs';
 import { Plugins, Scenes } from 'phaser';
 
 import Data, { DataTag } from './Data';
@@ -24,6 +38,22 @@ export default class ScenePlugin extends Plugins.ScenePlugin {
 
     #serializer: Serializer<ISceneWorld> | null = null;
     #deserializer: Deserializer<ISceneWorld> | null = null;
+
+    #out_sync_resolver: Function | null = null;
+    #in_sync_packets: Set<ArrayBuffer> = new Set();
+    #destroyed: boolean = false;
+
+    async *outSync(): AsyncGenerator<ArrayBuffer> {
+        while (!this.#destroyed) {
+            yield new Promise<ArrayBuffer>(resolve => {
+                this.#out_sync_resolver = resolve;
+            });
+        }
+    }
+
+    inSync(packet: ArrayBuffer): void {
+        this.#in_sync_packets.add(packet);
+    }
 
     addSystem(systemKey: string, system: ISceneSystem, enable: boolean = true): void {
         this.#systems.set(systemKey, system);
@@ -58,6 +88,18 @@ export default class ScenePlugin extends Plugins.ScenePlugin {
                 this.addEntity(eventFn);
             }
             this.#events.clear();
+        }
+
+        this.#out_sync_resolver?.(this.#serializer!(this.#requestsQuery!(this.#world)));
+
+        if (this.#in_sync_packets.size) {
+
+            const in_sync_packets = Array.from(this.#in_sync_packets);
+            this.#in_sync_packets.clear();
+
+            for (const packet of in_sync_packets) {
+                this.#deserializer!(this.#world, packet, DESERIALIZE_MODE.MAP);
+            }
         }
 
         for (const systemKey of this.#enabledSystems) {

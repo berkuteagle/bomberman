@@ -52,6 +52,8 @@ export default class PeerjsGamePlugin extends Plugins.BasePlugin {
     #connect: Promise<string>;
     #connect_resolver!: (remote: string) => void;
 
+    #in_sync_resolver: Function | null = null;
+
     constructor(pluginManager: Plugins.PluginManager) {
         super(pluginManager);
 
@@ -69,7 +71,7 @@ export default class PeerjsGamePlugin extends Plugins.BasePlugin {
 
         this.#connection!
             .on('close', () => this.#onConnectionClose())
-            .on('data', data => this.#onConnectionData(data))
+            .on('data', data => this.#onConnectionData(data as { type: string; packet?: ArrayBuffer }))
             .on('error', err => this.#onConnectionError(err))
     }
 
@@ -77,8 +79,11 @@ export default class PeerjsGamePlugin extends Plugins.BasePlugin {
         console.log('close');
     }
 
-    #onConnectionData(data: unknown): void {
+    #onConnectionData(data: { type: string, packet?: ArrayBuffer }): void {
         console.log(data);
+        if (data.type === 'sync' && data.packet) {
+            this.#in_sync_resolver?.(data.packet);
+        }
     }
 
     #onConnectionError(err: PeerError<`${DataConnectionErrorType | BaseConnectionErrorType}`>): void {
@@ -151,9 +156,18 @@ export default class PeerjsGamePlugin extends Plugins.BasePlugin {
         }
     }
 
-    sendSync(message: IMessageSync): void {
+    outSync(packet: ArrayBuffer): void {
+        console.log('out sync: ', packet);
         if (this.#enabled && this.#connection) {
-            this.#connection.send(message);
+            this.#connection.send({ type: 'sync', packet });
+        }
+    }
+
+    async *inSync(): AsyncGenerator<ArrayBuffer> {
+        while (this.#peer && !this.#peer.disconnected) {
+            yield new Promise<ArrayBuffer>(resolve => {
+                this.#in_sync_resolver = resolve;
+            });
         }
     }
 
