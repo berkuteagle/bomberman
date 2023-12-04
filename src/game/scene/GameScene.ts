@@ -78,21 +78,19 @@ export default class GameScene extends Scene {
 
         if (mode === 'vs') {
 
-            if (green === this.peerjs.id) {
-                this.timer = this.time.addEvent({
-                    delay: 2000,
-                    callback: () => {
-                        this.ecs.request(
-                            velocity.setRequest(
-                                playerEntry,
-                                Math.FloatBetween(-30, 30),
-                                Math.FloatBetween(-30, 30)
-                            )
-                        );
-                    },
-                    loop: true
-                });
-            }
+            this.timer = this.time.addEvent({
+                delay: 2000,
+                callback: () => {
+                    this.ecs.request(
+                        velocity.setRequest(
+                            playerEntry,
+                            Math.FloatBetween(-30, 30),
+                            Math.FloatBetween(-30, 30)
+                        )
+                    );
+                },
+                loop: true
+            });
 
             this.outSync();
             this.inSync();
@@ -152,17 +150,17 @@ export default class GameScene extends Scene {
     }
 
     async outSync() {
-        for await (const sync of this.ecs.outSync()) {
-            if (sync.byteLength) {
-                this.peerjs.outSync(sync);
+        for await (const packet of this.ecs.outSync()) {
+            if (packet.sync?.byteLength || packet.requests?.byteLength) {
+                this.peerjs.outSync(packet);
             }
         }
     }
 
     async inSync() {
-        for await (const sync of this.peerjs.inSync()) {
-            if (sync.byteLength) {
-                this.ecs.inSync(sync);
+        for await (const packet of this.peerjs.inSync()) {
+            if (packet.sync?.byteLength || packet.requests?.byteLength) {
+                this.ecs.inSync(packet);
             }
         }
     }

@@ -69,6 +69,12 @@ export default class PeerjsGamePlugin extends Plugins.BasePlugin {
     #onConnectionOpen(): void {
         console.log('open');
 
+        if (!this.#remote) {
+            this.#remote = this.#connection!.peer;
+        }
+
+        this.#connect_resolver(this.#remote);
+
         this.#connection!
             .on('close', () => this.#onConnectionClose())
             .on('data', data => this.#onConnectionData(data as { type: string; packet?: ArrayBuffer }))
@@ -79,10 +85,9 @@ export default class PeerjsGamePlugin extends Plugins.BasePlugin {
         console.log('close');
     }
 
-    #onConnectionData(data: { type: string, packet?: ArrayBuffer }): void {
-        console.log(data);
-        if (data.type === 'sync' && data.packet) {
-            this.#in_sync_resolver?.(data.packet);
+    #onConnectionData({ type, sync, requests }: { type: string; sync?: ArrayBuffer; requests?: ArrayBuffer; }): void {
+        if (type === 'sync' && (requests?.byteLength || sync?.byteLength)) {
+            this.#in_sync_resolver?.({ sync, requests });
         }
     }
 
@@ -92,13 +97,6 @@ export default class PeerjsGamePlugin extends Plugins.BasePlugin {
 
     #onConnection(connection: DataConnection): void {
         this.#connection = connection;
-
-        if (!this.#remote) {
-            this.#remote = connection.peer;
-        }
-
-        this.#connect_resolver(this.#remote);
-
         this.#connection.on('open', () => this.#onConnectionOpen());
     }
 
@@ -156,16 +154,15 @@ export default class PeerjsGamePlugin extends Plugins.BasePlugin {
         }
     }
 
-    outSync(packet: ArrayBuffer): void {
-        console.log('out sync: ', packet);
+    outSync({ sync, requests }: { sync?: ArrayBuffer, requests?: ArrayBuffer }): void {
         if (this.#enabled && this.#connection) {
-            this.#connection.send({ type: 'sync', packet });
+            this.#connection.send({ type: 'sync', sync, requests });
         }
     }
 
-    async *inSync(): AsyncGenerator<ArrayBuffer> {
+    async *inSync(): AsyncGenerator<{ sync?: ArrayBuffer, requests?: ArrayBuffer }> {
         while (this.#peer && !this.#peer.disconnected) {
-            yield new Promise<ArrayBuffer>(resolve => {
+            yield new Promise<{ sync?: ArrayBuffer, requests?: ArrayBuffer }>(resolve => {
                 this.#in_sync_resolver = resolve;
             });
         }

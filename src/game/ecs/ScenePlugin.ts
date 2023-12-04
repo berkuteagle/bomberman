@@ -10,6 +10,7 @@ import {
     defineSerializer,
     deleteWorld,
     enterQuery,
+    removeComponent,
     removeEntity,
     removeQuery
 } from 'bitecs';
@@ -18,7 +19,7 @@ import { Plugins, Scenes } from 'phaser';
 import { EventTag, withEvent } from './Event';
 import { RequestTag, withRequest } from './Request';
 import Store from './Store';
-import { SyncTag, withSync } from './Sync';
+import { SyncTag } from './Sync';
 import { chain } from './chain';
 
 import { ISceneSystem, ISceneWorld, WorldEidFunction } from './types';
@@ -43,19 +44,25 @@ export default class ScenePlugin extends Plugins.ScenePlugin {
     #syncQuery: Query<ISceneWorld> | null = null;
     #out_sync_resolver: Function | null = null;
     #in_sync_packets: Set<ArrayBuffer> = new Set();
+    #in_requests_packets: Set<ArrayBuffer> = new Set();
 
     #destroyed: boolean = false;
 
-    async *outSync(): AsyncGenerator<ArrayBuffer> {
+    async *outSync(): AsyncGenerator<{ sync?: ArrayBuffer, requests?: ArrayBuffer }> {
         while (!this.#destroyed) {
-            yield new Promise<ArrayBuffer>(resolve => {
+            yield new Promise<{ sync?: ArrayBuffer, requests?: ArrayBuffer }>(resolve => {
                 this.#out_sync_resolver = resolve;
             });
         }
     }
 
-    inSync(packet: ArrayBuffer): void {
-        this.#in_sync_packets.add(packet);
+    inSync({ sync, requests }: { sync?: ArrayBuffer, requests?: ArrayBuffer }): void {
+        if (sync?.byteLength) {
+            this.#in_sync_packets.add(sync);
+        }
+        if (requests?.byteLength) {
+            this.#in_requests_packets.add(requests);
+        }
     }
 
     addSystem(systemKey: string, system: ISceneSystem, enable: boolean = true): void {
@@ -93,7 +100,10 @@ export default class ScenePlugin extends Plugins.ScenePlugin {
             this.#events.clear();
         }
 
-        this.#out_sync_resolver?.(this.#serializer!(this.#syncQuery!(this.#world)));
+        this.#out_sync_resolver?.({
+            sync: this.#serializer!(this.#syncQuery!(this.#world)),
+            requests: this.#serializer!(this.#requestsQuery!(this.#world))
+        });
 
         if (this.#in_sync_packets.size) {
 
@@ -101,7 +111,19 @@ export default class ScenePlugin extends Plugins.ScenePlugin {
             this.#in_sync_packets.clear();
 
             for (const packet of in_sync_packets) {
-                this.#deserializer!(this.#world, packet, DESERIALIZE_MODE.MAP);
+                for (const entity of this.#deserializer!(this.#world, packet, DESERIALIZE_MODE.MAP)) {
+                    removeComponent(this.#world, SyncTag, entity);
+                }
+            }
+        }
+
+        if (this.#in_requests_packets.size) {
+
+            const in_requests_packets = Array.from(this.#in_requests_packets);
+            this.#in_requests_packets.clear();
+
+            for (const packet of in_requests_packets) {
+                this.#deserializer!(this.#world, packet);
             }
         }
 
@@ -146,16 +168,8 @@ export default class ScenePlugin extends Plugins.ScenePlugin {
 
     request(...ext: (WorldEidFunction | null)[]): void {
         if (ext.length) {
-            this.#requests.add(chain(withRequest(), withSync(), ...ext));
+            this.#requests.add(chain(withRequest(), ...ext));
         }
-    }
-
-    get serializer(): Serializer<ISceneWorld> | null {
-        return this.#serializer;
-    }
-
-    get deserializer(): Deserializer<ISceneWorld> | null {
-        return this.#deserializer;
     }
 
     boot() {
