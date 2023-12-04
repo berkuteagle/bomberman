@@ -1,18 +1,3 @@
-import { addComponent, defineComponent } from 'bitecs';
-import { WorldEidFunction } from './types';
-
-export const DataTag = defineComponent();
-
-export function withData<V>(field: string, value: V): WorldEidFunction {
-    return (world, eid) => {
-        addComponent(world, DataTag, eid);
-
-        world.data.set(eid, field, value);
-
-        return eid;
-    };
-}
-
 export default class Data {
 
     #fieldEntityData = new Map();

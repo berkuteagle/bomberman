@@ -11,25 +11,33 @@
 // } from '../ecs.js';
 
 import {
-    GameObjects,
+    // GameObjects,
     Math,
     // Input,
     Scene,
     Time
 } from 'phaser';
 
-import { ScenePlugin as ECSScenePlugin, position, sprite, velocity, withData } from '../ecs';
+import { ScenePlugin as ECSScenePlugin, position, sprite, velocity, withSync } from '../ecs';
 import { GamePlugin as PeerjsGamePlugin } from '../peerjs';
 
 // import { BombFeature } from '../bomberman/bomb.js';
 // import { PlayerFeature } from '../bomberman/player.js';
 // import { RivalFeature } from '../bomberman/rival.js';
 
+enum TEXTURES {
+    GreenNinja = 0,
+    RedNinja
+}
+
+const TEXTURES_LIST = [
+    'GreenNinja',
+    'RedNinja'
+];
+
 export default class GameScene extends Scene {
 
     ecs!: ECSScenePlugin;
-    player!: GameObjects.Sprite;
-    rival!: GameObjects.Sprite;
     timer!: Time.TimerEvent;
     peerjs!: PeerjsGamePlugin;
 
@@ -37,7 +45,7 @@ export default class GameScene extends Scene {
         super('Game');
     }
 
-    create({ mode, green, red }: { mode: 'vs' | 'single'; green: string; red: string; }) {
+    create({ mode, green }: { mode: 'vs' | 'single'; green: string; red: string; }) {
 
         this.scene.launch('UI');
 
@@ -50,31 +58,25 @@ export default class GameScene extends Scene {
         this.ecs.addSystem('velocity-request', new velocity.RequestSystem());
         this.ecs.addSystem('position-limits', new position.LimitsSystem());
         this.ecs.addSystem('velocity', new velocity.System());
-        this.ecs.addSystem('sprite', new sprite.System());
+        this.ecs.addSystem('sprite', new sprite.System({ textures: TEXTURES_LIST }));
 
-        this.player = this.add.sprite(64, 64, 'GreenNinja');
-
-        const playerEntry = this.ecs.addEntity(
-            sprite.withSprite(10),
-            position.withPosition(this.player.x, this.player.y),
-            position.withPositionLimits(64, 64, 416, 416),
-            withData('sprite', this.player),
-            velocity.withVelocity(0, 0, 100)
-        );
-
-        if (mode === 'vs') {
-            this.rival = this.add.sprite(416, 416, 'RedNinja');
-
-            const rivalEntry = this.ecs.addEntity(
-                sprite.withSprite(10),
-                position.withPosition(this.rival.x, this.rival.y),
+        const playerEntry = green === this.peerjs.id || mode === 'single'
+            ? this.ecs.addEntity(
+                withSync(),
+                sprite.withSprite(10, TEXTURES.GreenNinja),
+                position.withPosition(64, 64),
                 position.withPositionLimits(64, 64, 416, 416),
-                withData('sprite', this.rival),
+                velocity.withVelocity(0, 0, 100)
+            )
+            : this.ecs.addEntity(
+                withSync(),
+                sprite.withSprite(10, TEXTURES.RedNinja),
+                position.withPosition(416, 416),
+                position.withPositionLimits(64, 64, 416, 416),
                 velocity.withVelocity(0, 0, 100)
             );
 
-            console.log(rivalEntry);
-            console.log(red);
+        if (mode === 'vs') {
 
             if (green === this.peerjs.id) {
                 this.timer = this.time.addEvent({
@@ -82,7 +84,7 @@ export default class GameScene extends Scene {
                     callback: () => {
                         this.ecs.request(
                             velocity.setRequest(
-                                green === this.peerjs.id ? playerEntry : rivalEntry,
+                                playerEntry,
                                 Math.FloatBetween(-30, 30),
                                 Math.FloatBetween(-30, 30)
                             )

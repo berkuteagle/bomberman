@@ -9,15 +9,16 @@ import {
     defineQuery,
     defineSerializer,
     deleteWorld,
-    exitQuery,
+    enterQuery,
     removeEntity,
     removeQuery
 } from 'bitecs';
 import { Plugins, Scenes } from 'phaser';
 
-import Data, { DataTag } from './Data';
 import { EventTag, withEvent } from './Event';
 import { RequestTag, withRequest } from './Request';
+import Store from './Store';
+import { SyncTag, withSync } from './Sync';
 import { chain } from './chain';
 
 import { ISceneSystem, ISceneWorld, WorldEidFunction } from './types';
@@ -39,8 +40,10 @@ export default class ScenePlugin extends Plugins.ScenePlugin {
     #serializer: Serializer<ISceneWorld> | null = null;
     #deserializer: Deserializer<ISceneWorld> | null = null;
 
+    #syncQuery: Query<ISceneWorld> | null = null;
     #out_sync_resolver: Function | null = null;
     #in_sync_packets: Set<ArrayBuffer> = new Set();
+
     #destroyed: boolean = false;
 
     async *outSync(): AsyncGenerator<ArrayBuffer> {
@@ -90,7 +93,7 @@ export default class ScenePlugin extends Plugins.ScenePlugin {
             this.#events.clear();
         }
 
-        this.#out_sync_resolver?.(this.#serializer!(this.#requestsQuery!(this.#world)));
+        this.#out_sync_resolver?.(this.#serializer!(this.#syncQuery!(this.#world)));
 
         if (this.#in_sync_packets.size) {
 
@@ -125,10 +128,6 @@ export default class ScenePlugin extends Plugins.ScenePlugin {
         for (const entity of (this.#requestsQuery?.(this.#world)) || []) {
             removeEntity(this.#world, entity);
         }
-
-        for (const entity of (this.#exitDataQuery?.(this.#world) || [])) {
-            this.#world.data.unset(entity);
-        }
     }
 
     addEntity(...ext: (WorldEidFunction | null)[]): number {
@@ -147,7 +146,7 @@ export default class ScenePlugin extends Plugins.ScenePlugin {
 
     request(...ext: (WorldEidFunction | null)[]): void {
         if (ext.length) {
-            this.#requests.add(chain(withRequest(), ...ext));
+            this.#requests.add(chain(withRequest(), withSync(), ...ext));
         }
     }
 
@@ -161,14 +160,14 @@ export default class ScenePlugin extends Plugins.ScenePlugin {
 
     boot() {
         this.#world = createWorld<ISceneWorld>({
-            data: new Data(),
-            scene: this.scene!
+            scene: this.scene!,
+            store: new Store()
         });
 
         this.#serializer = defineSerializer(this.#world);
         this.#deserializer = defineDeserializer(this.#world);
 
-        this.#exitDataQuery = exitQuery(defineQuery([DataTag]));
+        this.#syncQuery = enterQuery(defineQuery([SyncTag]));
         this.#eventsQuery = defineQuery([EventTag]);
         this.#requestsQuery = defineQuery([RequestTag]);
 

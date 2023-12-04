@@ -1,7 +1,8 @@
-export { default as Data, DataTag, withData } from './Data';
 export { EventTag, withEvent } from './Event';
 export { RequestTag, withRequest } from './Request';
 export { default as ScenePlugin } from './ScenePlugin';
+export { default as Store } from './Store';
+export { SyncTag, withSync } from './Sync';
 export { chain } from './chain';
 
 export * as position from './position';

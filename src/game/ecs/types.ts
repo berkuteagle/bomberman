@@ -1,10 +1,10 @@
 import { IWorld } from 'bitecs';
 import { Scene } from 'phaser';
 
-import Data from './Data';
+import Store from './Store';
 
 export interface ISceneWorld extends IWorld {
-    data: Data;
+    store: Store;
     scene: Scene;
 }
 
