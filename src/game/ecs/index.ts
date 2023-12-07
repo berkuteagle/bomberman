@@ -13,4 +13,4 @@ export * as mat2 from './mat2'
 export * as vec2 from './vec2'
 
 export type { WorldFunction } from './chain'
-export type { ISceneSystem, ISceneWorld, Mat2, Vec2, WorldEidFunction, WorldUpdateFunction } from './types'
+export type { ISceneWorld, Mat2, Vec2, WorldEidFunction, WorldUpdateFunction, SceneSystem, SceneSystemArgs } from './types'

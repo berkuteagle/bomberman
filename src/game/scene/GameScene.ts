@@ -1,32 +1,14 @@
-// import {
-//     AnimationFeature,
-//     InputFeature,
-// } from '../ecs-phaser.js';
-
-// import {
-//     ControlFeature,
-//     DirectionFeature,
-//     PositionFeature,
-//     VelocityFeature
-// } from '../ecs.js';
-
 import type {
   Time,
 } from 'phaser'
 import {
-  // GameObjects,
   Math,
-  // Input,
   Scene,
 } from 'phaser'
 
 import type { ScenePlugin as ECSScenePlugin } from '../ecs'
 import { position, sprite, velocity, withSync } from '../ecs'
 import type { GamePlugin as PeerjsGamePlugin } from '../peerjs'
-
-// import { BombFeature } from '../bomberman/bomb.js';
-// import { PlayerFeature } from '../bomberman/player.js';
-// import { RivalFeature } from '../bomberman/rival.js';
 
 enum TEXTURES {
   GreenNinja = 0,
@@ -55,11 +37,22 @@ export default class GameScene extends Scene {
       lives: 3,
     })
 
-    this.ecs.addSystem('position-request', new position.RequestSystem())
-    this.ecs.addSystem('velocity-request', new velocity.RequestSystem())
-    this.ecs.addSystem('position-limits', new position.LimitsSystem())
-    this.ecs.addSystem('velocity', new velocity.System())
-    this.ecs.addSystem('sprite', new sprite.System({ textures: TEXTURES_LIST }))
+    this.ecs.definePreSystems(
+      position.requestsSystem(),
+      velocity.requestsSystem(),
+      position.limitsPreSystem(),
+      sprite.preSystem(TEXTURES_LIST),
+    )
+
+    this.ecs.defineUpdateSystems(
+      velocity.updateSystem(),
+      sprite.updateSystem(),
+    )
+
+    this.ecs.definePostSystems(
+      position.limitsPostSystem(),
+      sprite.postSystem(),
+    )
 
     const playerEntry = green === this.peerjs.id || mode === 'single'
       ? this.ecs.addEntity(
@@ -95,43 +88,6 @@ export default class GameScene extends Scene {
       this.outSync()
       this.inSync()
     }
-
-    // this.timer = this.time.addEvent({
-    //     delay: 2000,
-    //     callback: () => {
-    //         this.ecs.request(
-    //             velocity.setRequest(
-    //                 playerEntry,
-    //                 Math.FloatBetween(-30, 30),
-    //                 Math.FloatBetween(-30, 30)
-    //             )
-    //         );
-    //     },
-    //     loop: true
-    // });
-
-    // this.outSync();
-
-    // this.ecs.addFeature('position', PositionFeature);
-    // this.ecs.addFeature('velocity', VelocityFeature);
-    // this.ecs.addFeature('direction', DirectionFeature);
-    // this.ecs.addFeature('control', ControlFeature);
-
-    // this.ecs.addFeature('animation', AnimationFeature);
-    // this.ecs.addFeature('input', InputFeature, {
-    //     inputType: 'keyboard',
-    //     keyboardConfig: {
-    //         upKeyCode: Input.Keyboard.KeyCodes.UP,
-    //         downKeyCode: Input.Keyboard.KeyCodes.DOWN,
-    //         leftKeyCode: Input.Keyboard.KeyCodes.LEFT,
-    //         rightKeyCode: Input.Keyboard.KeyCodes.RIGHT,
-    //         aKeyCode: Input.Keyboard.KeyCodes.SPACE
-    //     }
-    // });
-
-    // this.ecs.addFeature('bomb', BombFeature);
-    // this.ecs.addFeature('player', PlayerFeature);
-    // this.ecs.addFeature('rival', RivalFeature);
 
     const map = this.make.tilemap({ key: 'map' })
     const tilesInterior = map.addTilesetImage('TilesetInterior', 'TilesetInterior')

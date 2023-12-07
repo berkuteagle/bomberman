@@ -3,6 +3,7 @@ import type {
   Query,
   Serializer,
 } from 'bitecs'
+
 import {
   DESERIALIZE_MODE,
   addEntity,
@@ -16,7 +17,9 @@ import {
   removeEntity,
   removeQuery,
 } from 'bitecs'
+
 import { Plugins, Scenes } from 'phaser'
+import type { ISceneWorld, SceneSystem, WorldEidFunction } from './types'
 
 import { EventTag, withEvent } from './Event'
 import { RequestTag, withRequest } from './Request'
@@ -24,13 +27,12 @@ import Store from './Store'
 import { SyncTag } from './Sync'
 import { chain } from './chain'
 
-import type { ISceneSystem, ISceneWorld, WorldEidFunction } from './types'
-
 export default class ScenePlugin extends Plugins.ScenePlugin {
   #world!: ISceneWorld
 
-  #systems: Map<string, ISceneSystem> = new Map()
-  #enabledSystems: Set<string> = new Set()
+  #pre_systems: Set<SceneSystem> = new Set()
+  #update_systems: Set<SceneSystem> = new Set()
+  #post_systems: Set<SceneSystem> = new Set()
 
   #events: Set<WorldEidFunction> = new Set()
   #requests: Set<WorldEidFunction> = new Set()
@@ -65,23 +67,16 @@ export default class ScenePlugin extends Plugins.ScenePlugin {
       this.#in_requests_packets.add(requests)
   }
 
-  addSystem(systemKey: string, system: ISceneSystem, enable: boolean = true): void {
-    this.#systems.set(systemKey, system)
-    if (enable)
-      this.#enabledSystems.add(systemKey)
+  definePreSystems(...fns: SceneSystem[]): void {
+    fns.forEach(this.#pre_systems.add, this.#pre_systems)
   }
 
-  removeSystem(systemKey: string): void {
-    this.#systems.delete(systemKey)
-    this.#enabledSystems.delete(systemKey)
+  defineUpdateSystems(...fns: SceneSystem[]): void {
+    fns.forEach(this.#update_systems.add, this.#update_systems)
   }
 
-  disableSystem(systemKey: string): void {
-    this.#enabledSystems.delete(systemKey)
-  }
-
-  enableSystem(systemKey: string): void {
-    this.#enabledSystems.add(systemKey)
+  definePostSystems(...fns: SceneSystem[]): void {
+    fns.forEach(this.#post_systems.add, this.#post_systems)
   }
 
   preUpdate(time: number, delta: number): void {
@@ -122,18 +117,18 @@ export default class ScenePlugin extends Plugins.ScenePlugin {
         this.#deserializer!(this.#world, packet)
     }
 
-    for (const systemKey of this.#enabledSystems)
-      this.#systems.get(systemKey)!.preUpdate?.(this.#world, time, delta)
+    for (const systemFn of this.#pre_systems)
+      systemFn(this.#world, time, delta)
   }
 
   update(time: number, delta: number): void {
-    for (const systemKey of this.#enabledSystems)
-      this.#systems.get(systemKey)!.update?.(this.#world, time, delta)
+    for (const systemFn of this.#update_systems)
+      systemFn(this.#world, time, delta)
   }
 
   postUpdate(time: number, delta: number): void {
-    for (const systemKey of this.#enabledSystems)
-      this.#systems.get(systemKey)!.postUpdate?.(this.#world, time, delta)
+    for (const systemFn of this.#post_systems)
+      systemFn(this.#world, time, delta)
 
     for (const entity of (this.#eventsQuery?.(this.#world)) || [])
       removeEntity(this.#world, entity)
@@ -182,8 +177,11 @@ export default class ScenePlugin extends Plugins.ScenePlugin {
     this.scene!.events.off(Scenes.Events.PRE_UPDATE, this.preUpdate)
     this.scene!.events.off(Scenes.Events.UPDATE, this.update)
     this.scene!.events.off(Scenes.Events.POST_UPDATE, this.postUpdate)
-    this.#enabledSystems.clear()
-    this.#systems.clear()
+
+    this.#pre_systems.clear()
+    this.#update_systems.clear()
+    this.#post_systems.clear()
+
     this.#events.clear()
     this.#requests.clear()
 
