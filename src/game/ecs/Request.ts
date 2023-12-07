@@ -1,9 +1,13 @@
-import { addComponent, defineComponent } from 'bitecs';
+import { addComponent, defineComponent } from 'bitecs'
 
-import { WorldEidFunction } from './types';
+import type { WorldEidFunction } from './types'
 
-export const RequestTag = defineComponent();
+export const RequestTag = defineComponent()
 
 export function withRequest(): WorldEidFunction {
-    return (world, eid) => (addComponent(world, RequestTag, eid), eid);
+  return (world, eid) => {
+    addComponent(world, RequestTag, eid)
+
+    return eid
+  }
 }

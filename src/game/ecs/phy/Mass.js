@@ -1,5 +1,5 @@
-import { defineComponent, Types } from 'bitecs';
+import { Types, defineComponent } from 'bitecs'
 
 export const Mass = defineComponent({
-    mass: Types.f32
-});
+  mass: Types.f32,
+})

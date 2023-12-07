@@ -1,3 +1,3 @@
-import { defineComponent } from 'bitecs';
+import { defineComponent } from 'bitecs'
 
-export const Shooter = defineComponent();
+export const Shooter = defineComponent()

@@ -1,10 +1,10 @@
-import { defineComponent, Types } from 'bitecs';
+import { Types, defineComponent } from 'bitecs'
 
 export const Direction = defineComponent({
-    direction: Types.ui8
-});
+  direction: Types.ui8,
+})
 
 export const SetDirectionRequest = defineComponent({
-    entity: Types.eid,
-    direction: Types.eid
-});
+  entity: Types.eid,
+  direction: Types.eid,
+})

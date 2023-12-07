@@ -1,17 +1,17 @@
-import { Scene } from 'phaser';
+import { Scene } from 'phaser'
 
 export default class MenuScene extends Scene {
-    constructor() {
-        super({
-            key: 'Menu'
-        });
-    }
+  constructor() {
+    super({
+      key: 'Menu',
+    })
+  }
 
-    preload() { }
+  preload() { }
 
-    create() { }
+  create() { }
 
-    closeMenu() {
-        this.scene.switch('Game');
-    }
+  closeMenu() {
+    this.scene.switch('Game')
+  }
 }

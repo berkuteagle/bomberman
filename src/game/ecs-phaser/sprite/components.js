@@ -1,7 +1,7 @@
-import { Types, defineComponent } from 'bitecs';
+import { Types, defineComponent } from 'bitecs'
 
-export const SpriteTag = defineComponent();
+export const SpriteTag = defineComponent()
 
 export const SpriteDepth = defineComponent({
-    depth: Types.ui16
-});
+  depth: Types.ui16,
+})

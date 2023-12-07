@@ -1,51 +1,63 @@
 import {
-    addComponent,
-    hasComponent
-} from 'bitecs';
+  addComponent,
+  hasComponent,
+} from 'bitecs'
 
 import {
-    ControlKeyDownEvent,
-    ControlKeyUpEvent,
-    ControlKeysState,
-    ControlLeftStickState,
-    ControlRightStickState,
-    ControlTag
-} from './components.js';
+  ControlKeyDownEvent,
+  ControlKeyUpEvent,
+  ControlKeysState,
+  ControlLeftStickState,
+  ControlRightStickState,
+  ControlTag,
+} from './components.js'
 
-export const withControlTag = () => (world, eid) => {
-    addComponent(world, ControlTag, eid);
+export function withControlTag() {
+  return (world, eid) => {
+    addComponent(world, ControlTag, eid)
+  }
 }
 
-export const hasControlTag = (world, eid) => hasComponent(world, ControlTag, eid);
+export const hasControlTag = (world, eid) => hasComponent(world, ControlTag, eid)
 
-export const withControlKeyDownEvent = (code) => (world, eid) => {
-    addComponent(world, ControlKeyDownEvent, eid);
+export function withControlKeyDownEvent(code) {
+  return (world, eid) => {
+    addComponent(world, ControlKeyDownEvent, eid)
 
-    ControlKeyDownEvent.code[eid] = code;
+    ControlKeyDownEvent.code[eid] = code
+  }
 }
 
-export const withControlKeyUpEvent = (code) => (world, eid) => {
-    addComponent(world, ControlKeyUpEvent, eid);
+export function withControlKeyUpEvent(code) {
+  return (world, eid) => {
+    addComponent(world, ControlKeyUpEvent, eid)
 
-    ControlKeyUpEvent.code[eid] = code;
+    ControlKeyUpEvent.code[eid] = code
+  }
 }
 
-export const withControlKeysState = (state = 0) => (world, eid) => {
-    addComponent(world, ControlKeysState, eid);
+export function withControlKeysState(state = 0) {
+  return (world, eid) => {
+    addComponent(world, ControlKeysState, eid)
 
-    ControlKeysState.state[eid] = state;
+    ControlKeysState.state[eid] = state
+  }
 }
 
-export const withControlLeftStickState = (x = 0, y = 0) => (world, eid) => {
-    addComponent(world, ControlLeftStickState, eid);
+export function withControlLeftStickState(x = 0, y = 0) {
+  return (world, eid) => {
+    addComponent(world, ControlLeftStickState, eid)
 
-    ControlLeftStickState.x[eid] = x;
-    ControlLeftStickState.y[eid] = y;
+    ControlLeftStickState.x[eid] = x
+    ControlLeftStickState.y[eid] = y
+  }
 }
 
-export const withControlRightStickState = (x = 0, y = 0) => (world, eid) => {
-    addComponent(world, ControlRightStickState, eid);
+export function withControlRightStickState(x = 0, y = 0) {
+  return (world, eid) => {
+    addComponent(world, ControlRightStickState, eid)
 
-    ControlRightStickState.x[eid] = x;
-    ControlRightStickState.y[eid] = y;
+    ControlRightStickState.x[eid] = x
+    ControlRightStickState.y[eid] = y
+  }
 }

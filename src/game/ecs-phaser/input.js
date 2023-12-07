@@ -1,1 +1,1 @@
-export { default as InputFeature } from './input/input-feature.js';
+export { default as InputFeature } from './input/input-feature.js'

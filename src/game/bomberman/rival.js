@@ -1,1 +1,1 @@
-export { default as RivalFeature } from './rival/rival-feature.js';
+export { default as RivalFeature } from './rival/rival-feature.js'

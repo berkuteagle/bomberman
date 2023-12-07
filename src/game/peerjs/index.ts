@@ -1,1 +1,1 @@
-export { default as GamePlugin } from './GamePlugin';
+export { default as GamePlugin } from './GamePlugin'

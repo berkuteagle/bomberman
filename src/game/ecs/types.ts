@@ -1,21 +1,21 @@
-import { IWorld } from 'bitecs';
-import { Scene } from 'phaser';
+import type { IWorld } from 'bitecs'
+import type { Scene } from 'phaser'
 
-import Store from './Store';
+import type Store from './Store'
 
 export interface ISceneWorld extends IWorld {
-    store: Store;
-    scene: Scene;
+  store: Store
+  scene: Scene
 }
 
-export type WorldUpdateFunction = (world: ISceneWorld, time: number, delta: number) => void;
-export type WorldEidFunction = (world: ISceneWorld, eid: number) => number;
+export type WorldUpdateFunction = (world: ISceneWorld, time: number, delta: number) => void
+export type WorldEidFunction = (world: ISceneWorld, eid: number) => number
 
 export interface ISceneSystem {
-    preUpdate?: WorldUpdateFunction;
-    update?: WorldUpdateFunction;
-    postUpdate?: WorldUpdateFunction;
+  preUpdate?: WorldUpdateFunction
+  update?: WorldUpdateFunction
+  postUpdate?: WorldUpdateFunction
 }
 
-export type Vec2 = Float32Array;
-export type Mat2 = Float32Array;
+export type Vec2 = Float32Array
+export type Mat2 = Float32Array

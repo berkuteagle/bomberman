@@ -1,83 +1,76 @@
-import { Changed, Query, defineQuery, enterQuery, exitQuery, } from 'bitecs';
-import { GameObjects } from 'phaser';
-import { ISceneSystem, ISceneWorld, position } from '../index';
-import { Sprite } from './Components';
+import type { Query } from 'bitecs'
+import { Changed, defineQuery, enterQuery, exitQuery } from 'bitecs'
+import { GameObjects } from 'phaser'
+import type { ISceneSystem, ISceneWorld } from '../index'
+import { position } from '../index'
+import { Sprite } from './Components'
 
 export interface ISystemOptions {
-    textures: string[];
+  textures: string[]
 }
 
 export default class System implements ISceneSystem {
+  #textures: ISystemOptions['textures']
 
-    #textures: ISystemOptions['textures'];
+  #entriesQuery: Query<ISceneWorld>
+  #enterQuery: Query<ISceneWorld>
+  #exitQuery: Query<ISceneWorld>
+  #changedPositionQuery: Query<ISceneWorld>
+  #changedDepthQuery: Query<ISceneWorld>
 
-    #entriesQuery: Query<ISceneWorld>;
-    #enterQuery: Query<ISceneWorld>;
-    #exitQuery: Query<ISceneWorld>;
-    #changedPositionQuery: Query<ISceneWorld>;
-    #changedDepthQuery: Query<ISceneWorld>;
+  constructor({ textures }: ISystemOptions) {
+    this.#textures = textures
 
-    constructor({ textures }: ISystemOptions) {
+    this.#entriesQuery = defineQuery([Sprite])
+    this.#enterQuery = enterQuery(this.#entriesQuery)
+    this.#exitQuery = exitQuery(this.#entriesQuery)
 
-        this.#textures = textures;
+    this.#changedPositionQuery = defineQuery([Changed(position.Position), Sprite])
+    this.#changedDepthQuery = defineQuery([Changed(Sprite)])
+  }
 
-        this.#entriesQuery = defineQuery([Sprite]);
-        this.#enterQuery = enterQuery(this.#entriesQuery);
-        this.#exitQuery = exitQuery(this.#entriesQuery);
+  preUpdate(world: ISceneWorld): void {
+    this.#enterQuery(world).forEach((entity) => {
+      const { scene, store } = world
 
-        this.#changedPositionQuery = defineQuery([Changed(position.Position), Sprite]);
-        this.#changedDepthQuery = defineQuery([Changed(Sprite)]);
-    }
+      const sprite = scene.add.sprite(
+        position.Position.vec2[entity][0],
+        position.Position.vec2[entity][1],
+        this.#textures[Sprite.texture[entity]],
+      )
 
-    preUpdate(world: ISceneWorld): void {
-        this.#enterQuery(world).forEach(entity => {
+      sprite.setPosition(...position.Position.vec2[entity])
+      sprite.setDepth(Sprite.depth[entity])
+      sprite.setData({ eid: entity })
 
-            const { scene, store } = world;
+      store.set(entity, 'sprite', sprite)
+    })
+  }
 
-            const sprite = scene.add.sprite(
-                position.Position.vec2[entity][0],
-                position.Position.vec2[entity][1],
-                this.#textures[Sprite.texture[entity]]
-            );
+  update(world: ISceneWorld): void {
+    this.#changedPositionQuery(world).forEach((entity) => {
+      const sprite = world.store.get<GameObjects.Sprite>(entity, 'sprite')
 
-            sprite.setPosition(...position.Position.vec2[entity]);
-            sprite.setDepth(Sprite.depth[entity]);
-            sprite.setData({ eid: entity });
+      if (sprite instanceof GameObjects.Sprite)
+        sprite.setPosition(...position.Position.vec2[entity])
+    })
 
-            store.set(entity, 'sprite', sprite);
-        });
-    }
+    this.#changedDepthQuery(world).forEach((entity) => {
+      const sprite = world.store.get<GameObjects.Sprite>(entity, 'sprite')
 
-    update(world: ISceneWorld): void {
-        this.#changedPositionQuery(world).forEach(entity => {
+      if (sprite instanceof GameObjects.Sprite)
+        sprite.setDepth(Sprite.depth[entity])
+    })
+  }
 
-            const sprite = world.store.get<GameObjects.Sprite>(entity, 'sprite');
+  postUpdate(world: ISceneWorld): void {
+    this.#exitQuery(world).forEach((entity) => {
+      const sprite = world.store.get<GameObjects.Sprite>(entity, 'sprite')
 
-            if (sprite instanceof GameObjects.Sprite) {
-                sprite.setPosition(...position.Position.vec2[entity]);
-            }
-        });
+      if (sprite instanceof GameObjects.Sprite)
+        sprite.destroy()
 
-        this.#changedDepthQuery(world).forEach(entity => {
-
-            const sprite = world.store.get<GameObjects.Sprite>(entity, 'sprite');
-
-            if (sprite instanceof GameObjects.Sprite) {
-                sprite.setDepth(Sprite.depth[entity]);
-            }
-        });
-    }
-
-    postUpdate(world: ISceneWorld): void {
-        this.#exitQuery(world).forEach(entity => {
-
-            const sprite = world.store.get<GameObjects.Sprite>(entity, 'sprite');
-
-            if (sprite instanceof GameObjects.Sprite) {
-                sprite.destroy();
-            }
-
-            world.store.unset(entity, 'sprite');
-        });
-    }
+      world.store.unset(entity, 'sprite')
+    })
+  }
 }

@@ -1,25 +1,27 @@
 {
   "name": "bomberman",
+  "type": "module",
   "version": "0.0.1",
   "description": "Bomberman p2p game",
-  "type": "module",
-  "main": "dist/index.js",
+  "author": "Anton Snigirev <berkuteagle@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://berkuteagle.github.io/bomberman/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/berkuteagle/bomberman.git"
   },
-  "author": "Anton Snigirev <berkuteagle@gmail.com>",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/berkuteagle/bomberman/issues"
   },
-  "homepage": "https://berkuteagle.github.io/bomberman/",
+  "main": "dist/index.js",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "devDependencies": {
     "@types/qrcode": "^1.5.5",

@@ -1,50 +1,62 @@
 import {
-    addComponent,
-    hasComponent
-} from 'bitecs';
+  addComponent,
+  hasComponent,
+} from 'bitecs'
 
 import {
-    chain,
-    withStore
-} from '../../ecs.js';
+  chain,
+  withStore,
+} from '../../ecs.js'
 
 import {
-    AnimationTag,
-    MovementAnimationTag,
-    PlayAnimationRequest,
-    StopAnimationRequest
-} from './components.js';
+  AnimationTag,
+  MovementAnimationTag,
+  PlayAnimationRequest,
+  StopAnimationRequest,
+} from './components.js'
 
-export const withAnimationTag = () => (world, eid) => {
-    addComponent(world, AnimationTag, eid);
-};
+export function withAnimationTag() {
+  return (world, eid) => {
+    addComponent(world, AnimationTag, eid)
+  }
+}
 
-export const hasAnimationTag = (world, eid) => hasComponent(world, AnimationTag, eid);
+export const hasAnimationTag = (world, eid) => hasComponent(world, AnimationTag, eid)
 
-export const withAnimation = animation => chain(
+export function withAnimation(animation) {
+  return chain(
     withAnimationTag(),
-    withStore({ animation })
-);
+    withStore({ animation }),
+  )
+}
 
-export const withPlayAnimationRequest = (sprite) => (world, eid) => {
-    addComponent(world, PlayAnimationRequest, eid);
+export function withPlayAnimationRequest(sprite) {
+  return (world, eid) => {
+    addComponent(world, PlayAnimationRequest, eid)
 
-    PlayAnimationRequest.sprite[eid] = sprite;
-};
+    PlayAnimationRequest.sprite[eid] = sprite
+  }
+}
 
-export const withStopAnimationRequest = (sprite) => (world, eid) => {
-    addComponent(world, StopAnimationRequest, eid);
+export function withStopAnimationRequest(sprite) {
+  return (world, eid) => {
+    addComponent(world, StopAnimationRequest, eid)
 
-    StopAnimationRequest.sprite[eid] = sprite;
-};
+    StopAnimationRequest.sprite[eid] = sprite
+  }
+}
 
-export const withMovementAnimationTag = () => (world, eid) => {
-    addComponent(world, MovementAnimationTag, eid);
-};
+export function withMovementAnimationTag() {
+  return (world, eid) => {
+    addComponent(world, MovementAnimationTag, eid)
+  }
+}
 
-export const hasMovementAnimationTag = (world, eid) => hasComponent(world, MovementAnimationTag, eid);
+export const hasMovementAnimationTag = (world, eid) => hasComponent(world, MovementAnimationTag, eid)
 
-export const withMovementAnimation = ({ up, down, left, right }) => chain(
+export function withMovementAnimation({ up, down, left, right }) {
+  return chain(
     withMovementAnimationTag(),
-    withStore({ ['movement-animation']: { up, down, left, right } })
-);
+    withStore({ 'movement-animation': { up, down, left, right } }),
+  )
+}

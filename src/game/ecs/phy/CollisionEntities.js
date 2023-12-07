@@ -1,13 +1,15 @@
-import { Types, addComponent, defineComponent } from 'bitecs';
+import { Types, addComponent, defineComponent } from 'bitecs'
 
 export const CollisionEntities = defineComponent({
-    first: Types.eid,
-    second: Types.eid
-});
+  first: Types.eid,
+  second: Types.eid,
+})
 
-export const addCollisionEntities = (first, second) => (world, eid) => {
-    addComponent(world, CollisionEntities, eid);
+export function addCollisionEntities(first, second) {
+  return (world, eid) => {
+    addComponent(world, CollisionEntities, eid)
 
-    CollisionEntities.first[eid] = first;
-    CollisionEntities.second[eid] = second;
+    CollisionEntities.first[eid] = first
+    CollisionEntities.second[eid] = second
+  }
 }

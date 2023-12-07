@@ -1,29 +1,29 @@
-import { Scene } from 'phaser';
+import { Scene } from 'phaser'
 
-import { GamePlugin as PeerjsGamePlugin } from '../peerjs';
+import type { GamePlugin as PeerjsGamePlugin } from '../peerjs'
 
 export default class PreloadScene extends Scene {
+  peerjs!: PeerjsGamePlugin
 
-    peerjs!: PeerjsGamePlugin;
+  constructor() {
+    super({
+      key: 'Preload',
+    })
+  }
 
-    constructor() {
-        super({
-            key: 'Preload'
-        });
+  preload() {
+    this.load.pack('pack', 'assets/pack.json')
+    this.load.atlasXML('ui', 'assets/ui/atlas.png', 'assets/ui/atlas.xml')
+  }
+
+  create() {
+    if (this.peerjs.enabled) {
+      this.peerjs.open.then(() => {
+        this.scene.start('InviteLink')
+      })
     }
-
-    preload() {
-        this.load.pack('pack', 'assets/pack.json');
-        this.load.atlasXML('ui', 'assets/ui/atlas.png', 'assets/ui/atlas.xml');
+    else {
+      this.scene.start('Game', { mode: 'single' })
     }
-
-    create() {
-        if (this.peerjs.enabled) {
-            this.peerjs.open.then(() => {
-                this.scene.start('InviteLink');
-            });
-        } else {
-            this.scene.start('Game', { mode: 'single' });
-        }
-    }
+  }
 }

@@ -1,20 +1,18 @@
-import { Feature } from '../../ecs.js';
+import { Feature } from '../../ecs.js'
 
-import InputEventsSystem from './input-events-system.js';
+import InputEventsSystem from './input-events-system.js'
 
-import PlayerSprite from './player-sprite.js';
+import PlayerSprite from './player-sprite.js'
 
 export default class PlayerFeature extends Feature {
+  #player
 
-    #player;
+  /** @override */
+  init() {
+    this.#player = new PlayerSprite(this.ecs.world.scene, 64, 64)
 
-    /** @override */
-    init() {
+    this.ecs.world.scene.add.existing(this.#player)
 
-        this.#player = new PlayerSprite(this.ecs.world.scene, 64, 64);
-
-        this.ecs.world.scene.add.existing(this.#player);
-
-        this.addSystem('input-events', new InputEventsSystem(this.ecs, this.#player));
-    }
+    this.addSystem('input-events', new InputEventsSystem(this.ecs, this.#player))
+  }
 }

@@ -1,5 +1,5 @@
-import { defineComponent, Types } from 'bitecs';
+import { Types, defineComponent } from 'bitecs'
 
 export const Duration = defineComponent({
-    timeout: Types.ui32
-});
+  timeout: Types.ui32,
+})

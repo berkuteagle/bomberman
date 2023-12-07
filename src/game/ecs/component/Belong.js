@@ -1,5 +1,5 @@
-import { defineComponent, Types } from 'bitecs';
+import { Types, defineComponent } from 'bitecs'
 
 export const Belong = defineComponent({
-    owner: Types.eid
-});
+  owner: Types.eid,
+})
