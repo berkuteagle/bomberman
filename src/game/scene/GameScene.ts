@@ -13,11 +13,41 @@ import type { GamePlugin as PeerjsGamePlugin } from '../peerjs'
 enum TEXTURES {
   GreenNinja = 0,
   RedNinja,
+  Bomb,
+  Explosion,
 }
 
+enum ANIMATIONS {
+  GreenNinjaWalkUp = 0,
+  GreenNinjaWalkDown,
+  GreenNinjaWalkLeft,
+  GreenNinjaWalkRight,
+  RedNinjaWalkUp,
+  RedNinjaWalkDown,
+  RedNinjaWalkLeft,
+  RedNinjaWalkRight,
+  Bomb,
+  Explosion,
+}
+
+const ANIMATIONS_LIST = [
+  ANIMATIONS[ANIMATIONS.GreenNinjaWalkUp],
+  ANIMATIONS[ANIMATIONS.GreenNinjaWalkDown],
+  ANIMATIONS[ANIMATIONS.GreenNinjaWalkLeft],
+  ANIMATIONS[ANIMATIONS.GreenNinjaWalkRight],
+  ANIMATIONS[ANIMATIONS.RedNinjaWalkUp],
+  ANIMATIONS[ANIMATIONS.RedNinjaWalkDown],
+  ANIMATIONS[ANIMATIONS.RedNinjaWalkLeft],
+  ANIMATIONS[ANIMATIONS.RedNinjaWalkRight],
+  ANIMATIONS[ANIMATIONS.Bomb],
+  ANIMATIONS[ANIMATIONS.Explosion],
+]
+
 const TEXTURES_LIST = [
-  'GreenNinja',
-  'RedNinja',
+  TEXTURES[TEXTURES.GreenNinja],
+  TEXTURES[TEXTURES.RedNinja],
+  TEXTURES[TEXTURES.Bomb],
+  TEXTURES[TEXTURES.Explosion],
 ]
 
 export default class GameScene extends Scene {
@@ -36,6 +66,9 @@ export default class GameScene extends Scene {
       level: 0,
       lives: 3,
     })
+
+    // eslint-disable-next-line no-console
+    console.log(ANIMATIONS_LIST)
 
     this.ecs.definePreSystems(
       position.requestsSystem(),

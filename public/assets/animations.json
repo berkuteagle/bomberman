@@ -1,7 +1,7 @@
 {
   "anims": [
     {
-      "key": "GreenNinja_walk_up",
+      "key": "GreenNinjaWalkUp",
       "type": "frame",
       "frames": [
         {
@@ -39,7 +39,7 @@
       "hideOnComplete": false
     },
     {
-      "key": "GreenNinja_walk_down",
+      "key": "GreenNinjaWalkDown",
       "type": "frame",
       "frames": [
         {
@@ -77,7 +77,7 @@
       "hideOnComplete": false
     },
     {
-      "key": "GreenNinja_walk_left",
+      "key": "GreenNinjaWalkLeft",
       "type": "frame",
       "frames": [
         {
@@ -115,7 +115,7 @@
       "hideOnComplete": false
     },
     {
-      "key": "GreenNinja_walk_right",
+      "key": "GreenNinjaWalkRight",
       "type": "frame",
       "frames": [
         {
@@ -153,7 +153,7 @@
       "hideOnComplete": false
     },
     {
-      "key": "RedNinja_walk_up",
+      "key": "RedNinjaWalkUp",
       "type": "frame",
       "frames": [
         {
@@ -191,7 +191,7 @@
       "hideOnComplete": false
     },
     {
-      "key": "RedNinja_walk_down",
+      "key": "RedNinjaWalkDown",
       "type": "frame",
       "frames": [
         {
@@ -229,7 +229,7 @@
       "hideOnComplete": false
     },
     {
-      "key": "RedNinja_walk_left",
+      "key": "RedNinjaWalkLeft",
       "type": "frame",
       "frames": [
         {
@@ -267,7 +267,7 @@
       "hideOnComplete": false
     },
     {
-      "key": "RedNinja_walk_right",
+      "key": "RedNinjaWalkRight",
       "type": "frame",
       "frames": [
         {
