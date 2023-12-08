@@ -7,7 +7,7 @@ import {
 } from 'phaser'
 
 import type { ScenePlugin as ECSScenePlugin } from '../ecs'
-import { position, sprite, velocity, withSync } from '../ecs'
+import { animation, position, sprite, velocity, withSync } from '../ecs'
 import type { GamePlugin as PeerjsGamePlugin } from '../peerjs'
 
 enum TEXTURES {
@@ -67,14 +67,13 @@ export default class GameScene extends Scene {
       lives: 3,
     })
 
-    // eslint-disable-next-line no-console
-    console.log(ANIMATIONS_LIST)
-
     this.ecs.definePreSystems(
-      position.requestsSystem(),
       velocity.requestsSystem(),
+      position.requestsSystem(new Float32Array([64, 64, 416, 416])),
+      animation.requestsSystem(),
       position.limitsPreSystem(),
       sprite.preSystem(TEXTURES_LIST),
+      animation.preSystem(ANIMATIONS_LIST),
     )
 
     this.ecs.defineUpdateSystems(
@@ -91,15 +90,14 @@ export default class GameScene extends Scene {
       ? this.ecs.addEntity(
         withSync(),
         sprite.withSprite(10, TEXTURES.GreenNinja),
+        animation.withAnimation(ANIMATIONS.GreenNinjaWalkDown, animation.AnimationState.Play),
         position.withPosition(64, 64),
-        position.withPositionLimits(64, 64, 416, 416),
         velocity.withVelocity(0, 0, 100),
       )
       : this.ecs.addEntity(
         withSync(),
         sprite.withSprite(10, TEXTURES.RedNinja),
         position.withPosition(416, 416),
-        position.withPositionLimits(64, 64, 416, 416),
         velocity.withVelocity(0, 0, 100),
       )
 

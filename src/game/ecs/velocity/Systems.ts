@@ -1,6 +1,6 @@
-import { defineQuery, defineSystem, enterQuery, hasComponent } from 'bitecs'
+import { addEntity, defineQuery, defineSystem, enterQuery, hasComponent } from 'bitecs'
 import type { SceneSystem } from '..'
-import { position, vec2 } from '..'
+import { chain, position, vec2, withRequest } from '..'
 import { Velocity, VelocityRequest, VelocityRequestType } from './Components'
 
 export function requestsSystem(): SceneSystem {
@@ -30,16 +30,21 @@ export function requestsSystem(): SceneSystem {
 }
 
 export function updateSystem(): SceneSystem {
-  const entitiesQ = defineQuery([Velocity, position.Position])
+  const entitiesQ = defineQuery([Velocity])
 
   return defineSystem((world, _time, delta) => {
     for (const entity of entitiesQ(world)) {
       if (!vec2.isZero(Velocity.vec2[entity])) {
-        vec2.add(
-          position.Position.vec2[entity],
-          Velocity.vec2[entity],
-          delta! / 1000,
-        )
+        const scale = delta! / 1000
+
+        chain(
+          withRequest(),
+          position.addRequest(
+            entity,
+            Velocity.vec2[entity][0] * scale,
+            Velocity.vec2[entity][1] * scale,
+          ),
+        )(world, addEntity(world))
       }
     }
 

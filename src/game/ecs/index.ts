@@ -8,6 +8,7 @@ export { chain } from './chain'
 export * as position from './position'
 export * as sprite from './sprite'
 export * as velocity from './velocity'
+export * as animation from './animation'
 
 export * as mat2 from './mat2'
 export * as vec2 from './vec2'
