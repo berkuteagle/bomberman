@@ -13,7 +13,6 @@ import {
   defineSerializer,
   defineSystem,
   deleteWorld,
-  enterQuery,
   removeComponent,
   removeEntity,
   removeQuery,
