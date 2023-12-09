@@ -1,4 +1,12 @@
+import type { Input } from 'phaser'
 import type { Vec2 } from '..'
+
+export interface IKeyboardSystemOptions {
+  up: Input.Keyboard.Key
+  down: Input.Keyboard.Key
+  left: Input.Keyboard.Key
+  right: Input.Keyboard.Key
+}
 
 export interface IJoyPadState {
   leftStick: Vec2

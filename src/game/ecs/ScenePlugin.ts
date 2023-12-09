@@ -11,6 +11,7 @@ import {
   defineDeserializer,
   defineQuery,
   defineSerializer,
+  defineSystem,
   deleteWorld,
   enterQuery,
   removeComponent,
@@ -26,6 +27,7 @@ import { RequestTag, withRequest } from './Request'
 import Store from './Store'
 import { SyncTag } from './Sync'
 import { chain } from './chain'
+import { PlayerTag } from './player'
 
 export default class ScenePlugin extends Plugins.ScenePlugin {
   #world!: ISceneWorld
@@ -47,7 +49,6 @@ export default class ScenePlugin extends Plugins.ScenePlugin {
   #syncQuery: Query<ISceneWorld> | null = null
   #out_sync_resolver: Function | null = null
   #in_sync_packets: Set<ArrayBuffer> = new Set()
-  #in_requests_packets: Set<ArrayBuffer> = new Set()
 
   #destroyed: boolean = false
 
@@ -59,44 +60,26 @@ export default class ScenePlugin extends Plugins.ScenePlugin {
     }
   }
 
-  inSync({ sync, requests }: { sync?: ArrayBuffer, requests?: ArrayBuffer }): void {
+  inSync({ sync }: { sync?: ArrayBuffer }): void {
     if (sync?.byteLength)
       this.#in_sync_packets.add(sync)
-
-    if (requests?.byteLength)
-      this.#in_requests_packets.add(requests)
   }
 
   definePreSystems(...fns: SceneSystem[]): void {
-    fns.forEach(this.#pre_systems.add, this.#pre_systems)
+    fns.forEach(fn => this.#pre_systems.add(defineSystem(fn)))
   }
 
   defineUpdateSystems(...fns: SceneSystem[]): void {
-    fns.forEach(this.#update_systems.add, this.#update_systems)
+    fns.forEach(fn => this.#update_systems.add(defineSystem(fn)))
   }
 
   definePostSystems(...fns: SceneSystem[]): void {
-    fns.forEach(this.#post_systems.add, this.#post_systems)
+    fns.forEach(fn => this.#post_systems.add(defineSystem(fn)))
   }
 
   preUpdate(time: number, delta: number): void {
-    if (this.#requests.size) {
-      for (const requestFn of this.#requests)
-        this.addEntity(requestFn)
-
-      this.#requests.clear()
-    }
-
-    if (this.#events.size) {
-      for (const eventFn of this.#events)
-        this.addEntity(eventFn)
-
-      this.#events.clear()
-    }
-
     this.#out_sync_resolver?.({
       sync: this.#serializer!(this.#syncQuery!(this.#world)),
-      requests: this.#serializer!(this.#requestsQuery!(this.#world)),
     })
 
     if (this.#in_sync_packets.size) {
@@ -104,17 +87,11 @@ export default class ScenePlugin extends Plugins.ScenePlugin {
       this.#in_sync_packets.clear()
 
       for (const packet of in_sync_packets) {
-        for (const entity of this.#deserializer!(this.#world, packet, DESERIALIZE_MODE.MAP))
+        for (const entity of this.#deserializer!(this.#world, packet, DESERIALIZE_MODE.MAP)) {
           removeComponent(this.#world, SyncTag, entity)
+          removeComponent(this.#world, PlayerTag, entity)
+        }
       }
-    }
-
-    if (this.#in_requests_packets.size) {
-      const in_requests_packets = Array.from(this.#in_requests_packets)
-      this.#in_requests_packets.clear()
-
-      for (const packet of in_requests_packets)
-        this.#deserializer!(this.#world, packet)
     }
 
     for (const systemFn of this.#pre_systems)
@@ -127,14 +104,23 @@ export default class ScenePlugin extends Plugins.ScenePlugin {
   }
 
   postUpdate(time: number, delta: number): void {
-    for (const systemFn of this.#post_systems)
-      systemFn(this.#world, time, delta)
-
     for (const entity of (this.#eventsQuery?.(this.#world)) || [])
       removeEntity(this.#world, entity)
 
     for (const entity of (this.#requestsQuery?.(this.#world)) || [])
       removeEntity(this.#world, entity)
+
+    for (const systemFn of this.#post_systems)
+      systemFn(this.#world, time, delta)
+
+    for (const requestFn of this.#requests)
+      this.addEntity(requestFn)
+
+    for (const eventFn of this.#events)
+      this.addEntity(eventFn)
+
+    this.#events.clear()
+    this.#requests.clear()
   }
 
   addEntity(...ext: (WorldEidFunction | null)[]): number {
@@ -164,7 +150,7 @@ export default class ScenePlugin extends Plugins.ScenePlugin {
     this.#serializer = defineSerializer(this.#world)
     this.#deserializer = defineDeserializer(this.#world)
 
-    this.#syncQuery = enterQuery(defineQuery([SyncTag]))
+    this.#syncQuery = defineQuery([SyncTag])
     this.#eventsQuery = defineQuery([EventTag])
     this.#requestsQuery = defineQuery([RequestTag])
 

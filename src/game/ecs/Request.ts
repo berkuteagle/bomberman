@@ -1,6 +1,6 @@
-import { addComponent, defineComponent } from 'bitecs'
-
-import type { WorldEidFunction } from './types'
+import { addComponent, addEntity, defineComponent } from 'bitecs'
+import type { ISceneWorld, WorldEidFunction } from './types'
+import { chain } from './chain'
 
 export const RequestTag = defineComponent()
 
@@ -10,4 +10,8 @@ export function withRequest(): WorldEidFunction {
 
     return eid
   }
+}
+
+export function sendRequest(world: ISceneWorld, ...ext: (WorldEidFunction | null)[]): number {
+  return chain(withRequest(), ...ext)(world, addEntity(world))
 }

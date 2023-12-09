@@ -1,4 +1,4 @@
-import { Changed, defineQuery, defineSystem, enterQuery, exitQuery } from 'bitecs'
+import { Changed, defineQuery, enterQuery, exitQuery } from 'bitecs'
 import { GameObjects } from 'phaser'
 import type { SceneSystem } from '..'
 import { position } from '..'
@@ -7,7 +7,7 @@ import { Sprite } from './Components'
 export function preSystem(textures: string[]): SceneSystem {
   const enterQ = enterQuery(defineQuery([Sprite]))
 
-  return defineSystem((world) => {
+  return (world) => {
     for (const entity of enterQ(world)) {
       const { scene, store } = world
 
@@ -25,14 +25,14 @@ export function preSystem(textures: string[]): SceneSystem {
     }
 
     return world
-  })
+  }
 }
 
 export function updateSystem(): SceneSystem {
   const changePositionQ = defineQuery([Changed(position.Position), Sprite])
   const changeDepthQ = defineQuery([Changed(Sprite)])
 
-  return defineSystem((world) => {
+  return (world) => {
     for (const entity of changePositionQ(world)) {
       const sprite = world.store.get<GameObjects.Sprite>(entity, 'sprite')
 
@@ -48,13 +48,13 @@ export function updateSystem(): SceneSystem {
     }
 
     return world
-  })
+  }
 }
 
 export function postSystem(): SceneSystem {
   const exitQ = exitQuery(defineQuery([Sprite]))
 
-  return defineSystem((world) => {
+  return (world) => {
     for (const entity of exitQ(world)) {
       const sprite = world.store.get<GameObjects.Sprite>(entity, 'sprite')
 
@@ -65,5 +65,5 @@ export function postSystem(): SceneSystem {
     }
 
     return world
-  })
+  }
 }

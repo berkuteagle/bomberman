@@ -150,14 +150,14 @@ export default class PeerjsGamePlugin extends Plugins.BasePlugin {
       this.#connection.send(message)
   }
 
-  outSync({ sync, requests }: { sync?: ArrayBuffer, requests?: ArrayBuffer }): void {
+  outSync({ sync }: { sync?: ArrayBuffer }): void {
     if (this.#enabled && this.#connection)
-      this.#connection.send({ type: 'sync', sync, requests })
+      this.#connection.send({ type: 'sync', sync })
   }
 
-  async *inSync(): AsyncGenerator<{ sync?: ArrayBuffer, requests?: ArrayBuffer }> {
+  async *inSync(): AsyncGenerator<{ sync?: ArrayBuffer }> {
     while (this.#peer && !this.#peer.disconnected) {
-      yield new Promise<{ sync?: ArrayBuffer, requests?: ArrayBuffer }>((resolve) => {
+      yield new Promise<{ sync?: ArrayBuffer }>((resolve) => {
         this.#in_sync_resolver = resolve
       })
     }

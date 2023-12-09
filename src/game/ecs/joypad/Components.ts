@@ -1,7 +1,7 @@
 import { Types, addComponent, defineComponent } from 'bitecs'
 import type { WorldEidFunction } from '..'
 import { vec2 } from '..'
-import type { IJoyPadState } from './Utils'
+import type { IJoyPadState } from './types'
 
 export const JoyPadState = defineComponent({
   leftStick: [Types.f32, 2],

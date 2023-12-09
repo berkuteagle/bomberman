@@ -1,4 +1,4 @@
-import { Changed, defineQuery, defineSystem, enterQuery, hasComponent } from 'bitecs'
+import { Changed, defineQuery, enterQuery, hasComponent } from 'bitecs'
 import type { Mat2, SceneSystem } from '..'
 import { vec2 } from '..'
 import { Position, PositionLimits, PositionRequest, PositionRequestType } from './Components'
@@ -6,7 +6,7 @@ import { Position, PositionLimits, PositionRequest, PositionRequestType } from '
 export function requestsSystem(limits?: Mat2): SceneSystem {
   const requestsQ = enterQuery(defineQuery([PositionRequest]))
 
-  return defineSystem((world) => {
+  return (world) => {
     for (const request of requestsQ(world)) {
       const entity = PositionRequest.eid[request]
 
@@ -37,13 +37,13 @@ export function requestsSystem(limits?: Mat2): SceneSystem {
     }
 
     return world
-  })
+  }
 }
 
 export function limitsPreSystem(): SceneSystem {
   const enterQ = enterQuery(defineQuery([Position, PositionLimits]))
 
-  return defineSystem((world) => {
+  return (world) => {
     for (const entity of enterQ(world)) {
       vec2.clamp(
         Position.vec2[entity],
@@ -52,13 +52,13 @@ export function limitsPreSystem(): SceneSystem {
     }
 
     return world
-  })
+  }
 }
 
 export function limitsPostSystem(): SceneSystem {
   const changedQ = defineQuery([Changed(Position), PositionLimits])
 
-  return defineSystem((world) => {
+  return (world) => {
     for (const entity of changedQ(world)) {
       vec2.clamp(
         Position.vec2[entity],
@@ -67,5 +67,5 @@ export function limitsPostSystem(): SceneSystem {
     }
 
     return world
-  })
+  }
 }

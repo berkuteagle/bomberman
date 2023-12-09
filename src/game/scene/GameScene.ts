@@ -2,12 +2,12 @@ import type {
   Time,
 } from 'phaser'
 import {
-  Math,
+  Input,
   Scene,
 } from 'phaser'
 
 import type { ScenePlugin as ECSScenePlugin } from '../ecs'
-import { animation, joypad, position, sprite, velocity, withSync } from '../ecs'
+import { animation, direction, joypad, player, position, sprite, velocity, walking, withSync } from '../ecs'
 import type { GamePlugin as PeerjsGamePlugin } from '../peerjs'
 
 enum TEXTURES {
@@ -68,7 +68,7 @@ export default class GameScene extends Scene {
     })
 
     this.ecs.definePreSystems(
-      velocity.requestsSystem(),
+      velocity.preUpdate(),
       position.requestsSystem(Float32Array.from([64, 64, 416, 416])),
       animation.requestsSystem(),
       position.limitsPreSystem(),
@@ -77,13 +77,20 @@ export default class GameScene extends Scene {
     )
 
     this.ecs.defineUpdateSystems(
-      velocity.updateSystem(),
+      joypad.keyboardSystem({
+        up: this.input.keyboard!.addKey(Input.Keyboard.KeyCodes.UP),
+        down: this.input.keyboard!.addKey(Input.Keyboard.KeyCodes.DOWN),
+        left: this.input.keyboard!.addKey(Input.Keyboard.KeyCodes.LEFT),
+        right: this.input.keyboard!.addKey(Input.Keyboard.KeyCodes.RIGHT),
+      }),
       sprite.updateSystem(),
     )
 
     this.ecs.definePostSystems(
       position.limitsPostSystem(),
       sprite.postSystem(),
+      player.joypadControlSystem(),
+      velocity.postUpdate(),
     )
 
     this.ecs.addEntity(joypad.withJoyPadState({
@@ -94,36 +101,42 @@ export default class GameScene extends Scene {
       rightStick: Float32Array.from([0, 0]),
     }))
 
-    const playerEntry = green === this.peerjs.id || mode === 'single'
-      ? this.ecs.addEntity(
+    if (green === this.peerjs.id || mode === 'single') {
+      this.ecs.addEntity(
         withSync(),
+        player.withPlayerTag(),
+        animation.withAnimationTag(),
+        walking.withWalkingAnimation({
+          up: ANIMATIONS.GreenNinjaWalkUp,
+          down: ANIMATIONS.GreenNinjaWalkDown,
+          left: ANIMATIONS.GreenNinjaWalkLeft,
+          right: ANIMATIONS.GreenNinjaWalkRight,
+        }),
         sprite.withSprite(10, TEXTURES.GreenNinja),
-        animation.withAnimation(ANIMATIONS.GreenNinjaWalkDown, animation.AnimationState.Play),
         position.withPosition(64, 64),
         velocity.withVelocity(0, 0, 100),
+        direction.withDirection(direction.DirectionValue.Down),
       )
-      : this.ecs.addEntity(
+    }
+    else {
+      this.ecs.addEntity(
         withSync(),
+        player.withPlayerTag(),
+        animation.withAnimationTag(),
+        walking.withWalkingAnimation({
+          up: ANIMATIONS.RedNinjaWalkUp,
+          down: ANIMATIONS.RedNinjaWalkDown,
+          left: ANIMATIONS.RedNinjaWalkLeft,
+          right: ANIMATIONS.RedNinjaWalkRight,
+        }),
         sprite.withSprite(10, TEXTURES.RedNinja),
         position.withPosition(416, 416),
         velocity.withVelocity(0, 0, 100),
+        direction.withDirection(direction.DirectionValue.Down),
       )
+    }
 
     if (mode === 'vs') {
-      this.timer = this.time.addEvent({
-        delay: 2000,
-        callback: () => {
-          this.ecs.request(
-            velocity.setRequest(
-              playerEntry,
-              Math.FloatBetween(-30, 30),
-              Math.FloatBetween(-30, 30),
-            ),
-          )
-        },
-        loop: true,
-      })
-
       this.outSync()
       this.inSync()
     }
@@ -146,14 +159,14 @@ export default class GameScene extends Scene {
 
   async outSync() {
     for await (const packet of this.ecs.outSync()) {
-      if (packet.sync?.byteLength || packet.requests?.byteLength)
+      if (packet.sync?.byteLength)
         this.peerjs.outSync(packet)
     }
   }
 
   async inSync() {
     for await (const packet of this.peerjs.inSync()) {
-      if (packet.sync?.byteLength || packet.requests?.byteLength)
+      if (packet.sync?.byteLength)
         this.ecs.inSync(packet)
     }
   }
