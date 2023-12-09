@@ -7,7 +7,7 @@ import {
 } from 'phaser'
 
 import type { ScenePlugin as ECSScenePlugin } from '../ecs'
-import { animation, position, sprite, velocity, withSync } from '../ecs'
+import { animation, joypad, position, sprite, velocity, withSync } from '../ecs'
 import type { GamePlugin as PeerjsGamePlugin } from '../peerjs'
 
 enum TEXTURES {
@@ -69,7 +69,7 @@ export default class GameScene extends Scene {
 
     this.ecs.definePreSystems(
       velocity.requestsSystem(),
-      position.requestsSystem(new Float32Array([64, 64, 416, 416])),
+      position.requestsSystem(Float32Array.from([64, 64, 416, 416])),
       animation.requestsSystem(),
       position.limitsPreSystem(),
       sprite.preSystem(TEXTURES_LIST),
@@ -85,6 +85,14 @@ export default class GameScene extends Scene {
       position.limitsPostSystem(),
       sprite.postSystem(),
     )
+
+    this.ecs.addEntity(joypad.withJoyPadState({
+      buttons: 0,
+      dPad: 0,
+      extraButtons: 0,
+      leftStick: Float32Array.from([0, 0]),
+      rightStick: Float32Array.from([0, 0]),
+    }))
 
     const playerEntry = green === this.peerjs.id || mode === 'single'
       ? this.ecs.addEntity(
