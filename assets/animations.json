@@ -1,456 +1,456 @@
 {
-    "anims": [
+  "anims": [
+    {
+      "key": "GreenNinjaWalkUp",
+      "type": "frame",
+      "frames": [
         {
-            "key": "GreenNinja_walk_up",
-            "type": "frame",
-            "frames": [
-                {
-                    "key": "GreenNinja",
-                    "frame": 1,
-                    "duration": 0,
-                    "visible": false
-                },
-                {
-                    "key": "GreenNinja",
-                    "frame": 5,
-                    "duration": 0,
-                    "visible": false
-                },
-                {
-                    "key": "GreenNinja",
-                    "frame": 9,
-                    "duration": 0,
-                    "visible": false
-                },
-                {
-                    "key": "GreenNinja",
-                    "frame": 13,
-                    "duration": 0,
-                    "visible": false
-                }
-            ],
-            "frameRate": 8,
-            "skipMissedFrames": true,
-            "delay": 0,
-            "repeat": -1,
-            "repeatDelay": 0,
-            "yoyo": false,
-            "showOnStart": false,
-            "hideOnComplete": false
+          "key": "GreenNinja",
+          "frame": 1,
+          "duration": 0,
+          "visible": false
         },
         {
-            "key": "GreenNinja_walk_down",
-            "type": "frame",
-            "frames": [
-                {
-                    "key": "GreenNinja",
-                    "frame": 0,
-                    "duration": 0,
-                    "visible": false
-                },
-                {
-                    "key": "GreenNinja",
-                    "frame": 4,
-                    "duration": 0,
-                    "visible": false
-                },
-                {
-                    "key": "GreenNinja",
-                    "frame": 8,
-                    "duration": 0,
-                    "visible": false
-                },
-                {
-                    "key": "GreenNinja",
-                    "frame": 12,
-                    "duration": 0,
-                    "visible": false
-                }
-            ],
-            "frameRate": 8,
-            "skipMissedFrames": true,
-            "delay": 0,
-            "repeat": -1,
-            "repeatDelay": 0,
-            "yoyo": false,
-            "showOnStart": false,
-            "hideOnComplete": false
+          "key": "GreenNinja",
+          "frame": 5,
+          "duration": 0,
+          "visible": false
         },
         {
-            "key": "GreenNinja_walk_left",
-            "type": "frame",
-            "frames": [
-                {
-                    "key": "GreenNinja",
-                    "frame": 2,
-                    "duration": 0,
-                    "visible": false
-                },
-                {
-                    "key": "GreenNinja",
-                    "frame": 6,
-                    "duration": 0,
-                    "visible": false
-                },
-                {
-                    "key": "GreenNinja",
-                    "frame": 10,
-                    "duration": 0,
-                    "visible": false
-                },
-                {
-                    "key": "GreenNinja",
-                    "frame": 14,
-                    "duration": 0,
-                    "visible": false
-                }
-            ],
-            "frameRate": 8,
-            "skipMissedFrames": true,
-            "delay": 0,
-            "repeat": -1,
-            "repeatDelay": 0,
-            "yoyo": false,
-            "showOnStart": false,
-            "hideOnComplete": false
+          "key": "GreenNinja",
+          "frame": 9,
+          "duration": 0,
+          "visible": false
         },
         {
-            "key": "GreenNinja_walk_right",
-            "type": "frame",
-            "frames": [
-                {
-                    "key": "GreenNinja",
-                    "frame": 3,
-                    "duration": 0,
-                    "visible": false
-                },
-                {
-                    "key": "GreenNinja",
-                    "frame": 7,
-                    "duration": 0,
-                    "visible": false
-                },
-                {
-                    "key": "GreenNinja",
-                    "frame": 11,
-                    "duration": 0,
-                    "visible": false
-                },
-                {
-                    "key": "GreenNinja",
-                    "frame": 15,
-                    "duration": 0,
-                    "visible": false
-                }
-            ],
-            "frameRate": 8,
-            "skipMissedFrames": true,
-            "delay": 0,
-            "repeat": -1,
-            "repeatDelay": 0,
-            "yoyo": false,
-            "showOnStart": false,
-            "hideOnComplete": false
-        },
-        {
-            "key": "RedNinja_walk_up",
-            "type": "frame",
-            "frames": [
-                {
-                    "key": "RedNinja",
-                    "frame": 1,
-                    "duration": 0,
-                    "visible": false
-                },
-                {
-                    "key": "RedNinja",
-                    "frame": 5,
-                    "duration": 0,
-                    "visible": false
-                },
-                {
-                    "key": "RedNinja",
-                    "frame": 9,
-                    "duration": 0,
-                    "visible": false
-                },
-                {
-                    "key": "RedNinja",
-                    "frame": 13,
-                    "duration": 0,
-                    "visible": false
-                }
-            ],
-            "frameRate": 8,
-            "skipMissedFrames": true,
-            "delay": 0,
-            "repeat": -1,
-            "repeatDelay": 0,
-            "yoyo": false,
-            "showOnStart": false,
-            "hideOnComplete": false
-        },
-        {
-            "key": "RedNinja_walk_down",
-            "type": "frame",
-            "frames": [
-                {
-                    "key": "RedNinja",
-                    "frame": 0,
-                    "duration": 0,
-                    "visible": false
-                },
-                {
-                    "key": "RedNinja",
-                    "frame": 4,
-                    "duration": 0,
-                    "visible": false
-                },
-                {
-                    "key": "RedNinja",
-                    "frame": 8,
-                    "duration": 0,
-                    "visible": false
-                },
-                {
-                    "key": "RedNinja",
-                    "frame": 12,
-                    "duration": 0,
-                    "visible": false
-                }
-            ],
-            "frameRate": 8,
-            "skipMissedFrames": true,
-            "delay": 0,
-            "repeat": -1,
-            "repeatDelay": 0,
-            "yoyo": false,
-            "showOnStart": false,
-            "hideOnComplete": false
-        },
-        {
-            "key": "RedNinja_walk_left",
-            "type": "frame",
-            "frames": [
-                {
-                    "key": "RedNinja",
-                    "frame": 2,
-                    "duration": 0,
-                    "visible": false
-                },
-                {
-                    "key": "RedNinja",
-                    "frame": 6,
-                    "duration": 0,
-                    "visible": false
-                },
-                {
-                    "key": "RedNinja",
-                    "frame": 10,
-                    "duration": 0,
-                    "visible": false
-                },
-                {
-                    "key": "RedNinja",
-                    "frame": 14,
-                    "duration": 0,
-                    "visible": false
-                }
-            ],
-            "frameRate": 8,
-            "skipMissedFrames": true,
-            "delay": 0,
-            "repeat": -1,
-            "repeatDelay": 0,
-            "yoyo": false,
-            "showOnStart": false,
-            "hideOnComplete": false
-        },
-        {
-            "key": "RedNinja_walk_right",
-            "type": "frame",
-            "frames": [
-                {
-                    "key": "RedNinja",
-                    "frame": 3,
-                    "duration": 0,
-                    "visible": false
-                },
-                {
-                    "key": "RedNinja",
-                    "frame": 7,
-                    "duration": 0,
-                    "visible": false
-                },
-                {
-                    "key": "RedNinja",
-                    "frame": 11,
-                    "duration": 0,
-                    "visible": false
-                },
-                {
-                    "key": "RedNinja",
-                    "frame": 15,
-                    "duration": 0,
-                    "visible": false
-                }
-            ],
-            "frameRate": 8,
-            "skipMissedFrames": true,
-            "delay": 0,
-            "repeat": -1,
-            "repeatDelay": 0,
-            "yoyo": false,
-            "showOnStart": false,
-            "hideOnComplete": false
-        },
-        {
-            "key": "Bomb",
-            "type": "frame",
-            "frames": [
-                {
-                    "key": "Bomb",
-                    "frame": 0,
-                    "duration": 0,
-                    "visible": false
-                },
-                {
-                    "key": "Bomb",
-                    "frame": 1,
-                    "duration": 0,
-                    "visible": false
-                },
-                {
-                    "key": "Bomb",
-                    "frame": 2,
-                    "duration": 0,
-                    "visible": false
-                },
-                {
-                    "key": "Bomb",
-                    "frame": 3,
-                    "duration": 0,
-                    "visible": false
-                },
-                {
-                    "key": "Bomb",
-                    "frame": 4,
-                    "duration": 0,
-                    "visible": false
-                },
-                {
-                    "key": "Bomb",
-                    "frame": 5,
-                    "duration": 0,
-                    "visible": false
-                },
-                {
-                    "key": "Bomb",
-                    "frame": 6,
-                    "duration": 0,
-                    "visible": false
-                },
-                {
-                    "key": "Bomb",
-                    "frame": 7,
-                    "duration": 0,
-                    "visible": false
-                },
-                {
-                    "key": "Bomb",
-                    "frame": 8,
-                    "duration": 0,
-                    "visible": false
-                },
-                {
-                    "key": "Bomb",
-                    "frame": 9,
-                    "duration": 0,
-                    "visible": false
-                }
-            ],
-            "frameRate": 8,
-            "skipMissedFrames": true,
-            "delay": 0,
-            "repeat": -1,
-            "repeatDelay": 0,
-            "yoyo": false,
-            "showOnStart": false,
-            "hideOnComplete": false
-        },
-        {
-            "key": "Explosion",
-            "type": "frame",
-            "frames": [
-                {
-                    "key": "Explosion",
-                    "frame": 0,
-                    "duration": 0,
-                    "visible": false
-                },
-                {
-                    "key": "Explosion",
-                    "frame": 1,
-                    "duration": 0,
-                    "visible": false
-                },
-                {
-                    "key": "Explosion",
-                    "frame": 2,
-                    "duration": 0,
-                    "visible": false
-                },
-                {
-                    "key": "Explosion",
-                    "frame": 3,
-                    "duration": 0,
-                    "visible": false
-                },
-                {
-                    "key": "Explosion",
-                    "frame": 4,
-                    "duration": 0,
-                    "visible": false
-                },
-                {
-                    "key": "Explosion",
-                    "frame": 5,
-                    "duration": 0,
-                    "visible": false
-                },
-                {
-                    "key": "Explosion",
-                    "frame": 6,
-                    "duration": 0,
-                    "visible": false
-                },
-                {
-                    "key": "Explosion",
-                    "frame": 7,
-                    "duration": 0,
-                    "visible": false
-                },
-                {
-                    "key": "Explosion",
-                    "frame": 8,
-                    "duration": 0,
-                    "visible": false
-                },
-                {
-                    "key": "Explosion",
-                    "frame": 9,
-                    "duration": 0,
-                    "visible": false
-                }
-            ],
-            "frameRate": 12,
-            "skipMissedFrames": true,
-            "delay": 0,
-            "repeat": 0,
-            "repeatDelay": 0,
-            "yoyo": false,
-            "showOnStart": false,
-            "hideOnComplete": true
+          "key": "GreenNinja",
+          "frame": 13,
+          "duration": 0,
+          "visible": false
         }
-    ]
+      ],
+      "frameRate": 8,
+      "skipMissedFrames": true,
+      "delay": 0,
+      "repeat": -1,
+      "repeatDelay": 0,
+      "yoyo": false,
+      "showOnStart": false,
+      "hideOnComplete": false
+    },
+    {
+      "key": "GreenNinjaWalkDown",
+      "type": "frame",
+      "frames": [
+        {
+          "key": "GreenNinja",
+          "frame": 0,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "GreenNinja",
+          "frame": 4,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "GreenNinja",
+          "frame": 8,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "GreenNinja",
+          "frame": 12,
+          "duration": 0,
+          "visible": false
+        }
+      ],
+      "frameRate": 8,
+      "skipMissedFrames": true,
+      "delay": 0,
+      "repeat": -1,
+      "repeatDelay": 0,
+      "yoyo": false,
+      "showOnStart": false,
+      "hideOnComplete": false
+    },
+    {
+      "key": "GreenNinjaWalkLeft",
+      "type": "frame",
+      "frames": [
+        {
+          "key": "GreenNinja",
+          "frame": 2,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "GreenNinja",
+          "frame": 6,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "GreenNinja",
+          "frame": 10,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "GreenNinja",
+          "frame": 14,
+          "duration": 0,
+          "visible": false
+        }
+      ],
+      "frameRate": 8,
+      "skipMissedFrames": true,
+      "delay": 0,
+      "repeat": -1,
+      "repeatDelay": 0,
+      "yoyo": false,
+      "showOnStart": false,
+      "hideOnComplete": false
+    },
+    {
+      "key": "GreenNinjaWalkRight",
+      "type": "frame",
+      "frames": [
+        {
+          "key": "GreenNinja",
+          "frame": 3,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "GreenNinja",
+          "frame": 7,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "GreenNinja",
+          "frame": 11,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "GreenNinja",
+          "frame": 15,
+          "duration": 0,
+          "visible": false
+        }
+      ],
+      "frameRate": 8,
+      "skipMissedFrames": true,
+      "delay": 0,
+      "repeat": -1,
+      "repeatDelay": 0,
+      "yoyo": false,
+      "showOnStart": false,
+      "hideOnComplete": false
+    },
+    {
+      "key": "RedNinjaWalkUp",
+      "type": "frame",
+      "frames": [
+        {
+          "key": "RedNinja",
+          "frame": 1,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "RedNinja",
+          "frame": 5,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "RedNinja",
+          "frame": 9,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "RedNinja",
+          "frame": 13,
+          "duration": 0,
+          "visible": false
+        }
+      ],
+      "frameRate": 8,
+      "skipMissedFrames": true,
+      "delay": 0,
+      "repeat": -1,
+      "repeatDelay": 0,
+      "yoyo": false,
+      "showOnStart": false,
+      "hideOnComplete": false
+    },
+    {
+      "key": "RedNinjaWalkDown",
+      "type": "frame",
+      "frames": [
+        {
+          "key": "RedNinja",
+          "frame": 0,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "RedNinja",
+          "frame": 4,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "RedNinja",
+          "frame": 8,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "RedNinja",
+          "frame": 12,
+          "duration": 0,
+          "visible": false
+        }
+      ],
+      "frameRate": 8,
+      "skipMissedFrames": true,
+      "delay": 0,
+      "repeat": -1,
+      "repeatDelay": 0,
+      "yoyo": false,
+      "showOnStart": false,
+      "hideOnComplete": false
+    },
+    {
+      "key": "RedNinjaWalkLeft",
+      "type": "frame",
+      "frames": [
+        {
+          "key": "RedNinja",
+          "frame": 2,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "RedNinja",
+          "frame": 6,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "RedNinja",
+          "frame": 10,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "RedNinja",
+          "frame": 14,
+          "duration": 0,
+          "visible": false
+        }
+      ],
+      "frameRate": 8,
+      "skipMissedFrames": true,
+      "delay": 0,
+      "repeat": -1,
+      "repeatDelay": 0,
+      "yoyo": false,
+      "showOnStart": false,
+      "hideOnComplete": false
+    },
+    {
+      "key": "RedNinjaWalkRight",
+      "type": "frame",
+      "frames": [
+        {
+          "key": "RedNinja",
+          "frame": 3,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "RedNinja",
+          "frame": 7,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "RedNinja",
+          "frame": 11,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "RedNinja",
+          "frame": 15,
+          "duration": 0,
+          "visible": false
+        }
+      ],
+      "frameRate": 8,
+      "skipMissedFrames": true,
+      "delay": 0,
+      "repeat": -1,
+      "repeatDelay": 0,
+      "yoyo": false,
+      "showOnStart": false,
+      "hideOnComplete": false
+    },
+    {
+      "key": "Bomb",
+      "type": "frame",
+      "frames": [
+        {
+          "key": "Bomb",
+          "frame": 0,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "Bomb",
+          "frame": 1,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "Bomb",
+          "frame": 2,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "Bomb",
+          "frame": 3,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "Bomb",
+          "frame": 4,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "Bomb",
+          "frame": 5,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "Bomb",
+          "frame": 6,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "Bomb",
+          "frame": 7,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "Bomb",
+          "frame": 8,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "Bomb",
+          "frame": 9,
+          "duration": 0,
+          "visible": false
+        }
+      ],
+      "frameRate": 8,
+      "skipMissedFrames": true,
+      "delay": 0,
+      "repeat": -1,
+      "repeatDelay": 0,
+      "yoyo": false,
+      "showOnStart": false,
+      "hideOnComplete": false
+    },
+    {
+      "key": "Explosion",
+      "type": "frame",
+      "frames": [
+        {
+          "key": "Explosion",
+          "frame": 0,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "Explosion",
+          "frame": 1,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "Explosion",
+          "frame": 2,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "Explosion",
+          "frame": 3,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "Explosion",
+          "frame": 4,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "Explosion",
+          "frame": 5,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "Explosion",
+          "frame": 6,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "Explosion",
+          "frame": 7,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "Explosion",
+          "frame": 8,
+          "duration": 0,
+          "visible": false
+        },
+        {
+          "key": "Explosion",
+          "frame": 9,
+          "duration": 0,
+          "visible": false
+        }
+      ],
+      "frameRate": 12,
+      "skipMissedFrames": true,
+      "delay": 0,
+      "repeat": 0,
+      "repeatDelay": 0,
+      "yoyo": false,
+      "showOnStart": false,
+      "hideOnComplete": true
+    }
+  ]
 }
