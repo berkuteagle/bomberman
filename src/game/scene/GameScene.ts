@@ -117,6 +117,8 @@ export default class GameScene extends Scene {
         }),
         sprite.withSprite(10, TEXTURES.GreenNinja),
         position.withPosition(64, 64),
+        collision.withCollisionTag(),
+        collision.withCollisionBox(16, 16),
         velocity.withVelocity(0, 0, 100),
         direction.withDirection(direction.DirectionValue.Down),
       )
@@ -134,10 +136,22 @@ export default class GameScene extends Scene {
         }),
         sprite.withSprite(10, TEXTURES.RedNinja),
         position.withPosition(416, 416),
+        collision.withCollisionTag(),
+        collision.withCollisionBox(16, 16),
         velocity.withVelocity(0, 0, 100),
         direction.withDirection(direction.DirectionValue.Down),
       )
     }
+
+    this.ecs.addEntity(
+      withSync(),
+      animation.withAnimationTag(),
+      animation.withAnimation(ANIMATIONS.Bomb, animation.AnimationState.Play),
+      sprite.withSprite(10, TEXTURES.Bomb),
+      position.withPosition(128, 128),
+      collision.withCollisionTag(),
+      collision.withCollisionBox(16, 16),
+    )
 
     if (mode === 'vs') {
       this.outSync()

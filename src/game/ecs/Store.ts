@@ -1,6 +1,7 @@
 export default class Data {
   #fieldEntityData = new Map()
   #entityFields = new Map()
+  #weak = new WeakMap()
 
   destroy() {
     this.#fieldEntityData.clear()
@@ -55,5 +56,13 @@ export default class Data {
         return result
       }
     }
+  }
+
+  setEid<T extends object>(object: T, eid: number): void {
+    this.#weak.set(object, eid)
+  }
+
+  getEid<T extends object>(object: T): number | void {
+    return this.#weak.get(object)
   }
 }

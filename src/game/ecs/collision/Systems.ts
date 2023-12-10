@@ -1,8 +1,8 @@
 import { Changed, defineQuery, enterQuery, exitQuery, hasComponent } from 'bitecs'
 import { Box } from 'detect-collisions'
 import type { SceneSystem } from '..'
-import { position } from '..'
-import { CollisionBox, CollisionTag } from './Components'
+import { emitEvent, position, velocity } from '..'
+import { CollisionBox, CollisionTag, withCollision } from './Components'
 
 export function preUpdate(): SceneSystem {
   const enterQ = enterQuery(defineQuery([CollisionTag, position.Position]))
@@ -10,12 +10,19 @@ export function preUpdate(): SceneSystem {
   return (world) => {
     for (const entity of enterQ(world)) {
       if (hasComponent(world, CollisionBox, entity)) {
-        const collisionBody = world.collision.createBox({
-          x: position.Position.vec2[entity][0],
-          y: position.Position.vec2[entity][1],
-        }, CollisionBox.width[entity], CollisionBox.height[entity])
+        const isStatic = !hasComponent(world, velocity.Velocity, entity)
+        const collisionBody = world.collision.createBox(
+          {
+            x: position.Position.vec2[entity][0],
+            y: position.Position.vec2[entity][1],
+          },
+          CollisionBox.width[entity],
+          CollisionBox.height[entity],
+          { isStatic },
+        )
 
         world.store.set(entity, 'collisionBody', collisionBody)
+        world.store.setEid(collisionBody, entity)
       }
     }
 
@@ -55,6 +62,14 @@ export function postUpdate(): SceneSystem {
         world.store.unset(entity, 'collisionBody')
       }
     }
+
+    world.collision.checkAll((res) => {
+      const entityA = world.store.getEid(res.a)
+      const entityB = world.store.getEid(res.b)
+
+      if (entityA !== undefined && entityB !== undefined)
+        emitEvent(world, withCollision([entityA, entityB]))
+    })
 
     return world
   }
