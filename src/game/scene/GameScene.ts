@@ -7,7 +7,7 @@ import {
 } from 'phaser'
 
 import type { ScenePlugin as ECSScenePlugin } from '../ecs'
-import { animation, direction, joypad, player, position, sprite, velocity, walking, withSync } from '../ecs'
+import { animation, collision, direction, joypad, player, position, sprite, velocity, walking, withSync } from '../ecs'
 import type { GamePlugin as PeerjsGamePlugin } from '../peerjs'
 
 enum TEXTURES {
@@ -74,6 +74,7 @@ export default class GameScene extends Scene {
       position.limitsPreSystem(),
       sprite.preSystem(TEXTURES_LIST),
       animation.preSystem(ANIMATIONS_LIST),
+      collision.preUpdate(),
     )
 
     this.ecs.defineUpdateSystems(
@@ -84,6 +85,7 @@ export default class GameScene extends Scene {
         right: this.input.keyboard!.addKey(Input.Keyboard.KeyCodes.RIGHT),
       }),
       sprite.updateSystem(),
+      collision.update(),
     )
 
     this.ecs.definePostSystems(
@@ -91,6 +93,7 @@ export default class GameScene extends Scene {
       sprite.postSystem(),
       player.joypadControlSystem(),
       velocity.postUpdate(),
+      collision.postUpdate(),
     )
 
     this.ecs.addEntity(joypad.withJoyPadState({
