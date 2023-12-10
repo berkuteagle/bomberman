@@ -18,11 +18,13 @@ import {
   removeQuery,
 } from 'bitecs'
 
+import { System } from 'detect-collisions'
+
 import { Plugins, Scenes } from 'phaser'
 import type { ISceneWorld, SceneSystem, WorldEidFunction } from './types'
 
-import { EventTag, withEvent } from './Event'
-import { RequestTag, withRequest } from './Request'
+import { EventTag } from './Event'
+import { RequestTag } from './Request'
 import Store from './Store'
 import { SyncTag } from './Sync'
 import { chain } from './chain'
@@ -34,9 +36,6 @@ export default class ScenePlugin extends Plugins.ScenePlugin {
   #pre_systems: Set<SceneSystem> = new Set()
   #update_systems: Set<SceneSystem> = new Set()
   #post_systems: Set<SceneSystem> = new Set()
-
-  #events: Set<WorldEidFunction> = new Set()
-  #requests: Set<WorldEidFunction> = new Set()
 
   #exitDataQuery: Query<ISceneWorld> | null = null
   #eventsQuery: Query<ISceneWorld> | null = null
@@ -51,9 +50,9 @@ export default class ScenePlugin extends Plugins.ScenePlugin {
 
   #destroyed: boolean = false
 
-  async *outSync(): AsyncGenerator<{ sync?: ArrayBuffer, requests?: ArrayBuffer }> {
+  async *outSync(): AsyncGenerator<{ sync?: ArrayBuffer }> {
     while (!this.#destroyed) {
-      yield new Promise<{ sync?: ArrayBuffer, requests?: ArrayBuffer }>((resolve) => {
+      yield new Promise<{ sync?: ArrayBuffer }>((resolve) => {
         this.#out_sync_resolver = resolve
       })
     }
@@ -109,17 +108,10 @@ export default class ScenePlugin extends Plugins.ScenePlugin {
     for (const entity of (this.#requestsQuery?.(this.#world)) || [])
       removeEntity(this.#world, entity)
 
+    this.#world.collision.update()
+
     for (const systemFn of this.#post_systems)
       systemFn(this.#world, time, delta)
-
-    for (const requestFn of this.#requests)
-      this.addEntity(requestFn)
-
-    for (const eventFn of this.#events)
-      this.addEntity(eventFn)
-
-    this.#events.clear()
-    this.#requests.clear()
   }
 
   addEntity(...ext: (WorldEidFunction | null)[]): number {
@@ -130,20 +122,11 @@ export default class ScenePlugin extends Plugins.ScenePlugin {
     removeEntity(this.#world, eid)
   }
 
-  emit(...ext: (WorldEidFunction | null)[]): void {
-    if (ext.length)
-      this.#events.add(chain(withEvent(), ...ext))
-  }
-
-  request(...ext: (WorldEidFunction | null)[]): void {
-    if (ext.length)
-      this.#requests.add(chain(withRequest(), ...ext))
-  }
-
   boot() {
     this.#world = createWorld<ISceneWorld>({
       scene: this.scene!,
       store: new Store(),
+      collision: new System(),
     })
 
     this.#serializer = defineSerializer(this.#world)
@@ -166,9 +149,6 @@ export default class ScenePlugin extends Plugins.ScenePlugin {
     this.#pre_systems.clear()
     this.#update_systems.clear()
     this.#post_systems.clear()
-
-    this.#events.clear()
-    this.#requests.clear()
 
     removeQuery(this.#world, this.#eventsQuery!)
     removeQuery(this.#world, this.#requestsQuery!)

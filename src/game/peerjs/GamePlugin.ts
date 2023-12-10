@@ -85,9 +85,9 @@ export default class PeerjsGamePlugin extends Plugins.BasePlugin {
     console.log('close')
   }
 
-  #onConnectionData({ type, sync, requests }: { type: string, sync?: ArrayBuffer, requests?: ArrayBuffer }): void {
-    if (type === 'sync' && (requests?.byteLength || sync?.byteLength))
-      this.#in_sync_resolver?.({ sync, requests })
+  #onConnectionData({ type, sync }: { type: string, sync?: ArrayBuffer }): void {
+    if (type === 'sync' && (sync?.byteLength))
+      this.#in_sync_resolver?.({ sync })
   }
 
   #onConnectionError(err: PeerError<`${DataConnectionErrorType | BaseConnectionErrorType}`>): void {

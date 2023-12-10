@@ -1,11 +1,13 @@
 import type { IWorld } from 'bitecs'
 import type { Scene } from 'phaser'
+import type { System } from 'detect-collisions'
 
 import type Store from './Store'
 
 export interface ISceneWorld extends IWorld {
   store: Store
   scene: Scene
+  collision: System
 }
 
 export type WorldUpdateFunction = (world: ISceneWorld, time: number, delta: number) => void
