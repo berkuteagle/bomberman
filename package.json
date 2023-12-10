@@ -27,6 +27,7 @@
     "@antfu/eslint-config": "^2.4.3",
     "@types/qrcode": "^1.5.5",
     "bitecs": "^0.3.40",
+    "detect-collisions": "^9.2.2",
     "eslint": "^8.55.0",
     "gh-pages": "^6.1.0",
     "peerjs": "^1.5.1",

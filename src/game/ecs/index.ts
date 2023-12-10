@@ -13,6 +13,7 @@ export * as joypad from './joypad'
 export * as player from './player'
 export * as direction from './direction'
 export * as walking from './walking'
+export * as collision from './collision'
 
 export * as mat2 from './mat2'
 export * as vec2 from './vec2'
